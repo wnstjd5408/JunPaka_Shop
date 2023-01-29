@@ -6,10 +6,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Type;
-import pakaCoding.flower.service.repository.FlowerRepository;
+import pakaCoding.flower.repository.FlowerRepository;
 
 import java.util.List;
 
@@ -23,8 +24,6 @@ import static org.assertj.core.api.Assertions.*;
 //@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class FlowerServiceTest {
 
-    @Autowired
-    EntityManager em;
 
     @Autowired
     FlowerRepository repository;
@@ -52,10 +51,9 @@ class FlowerServiceTest {
         List<Flower> flowerList = repository.findAll();
         Flower flower = flowerList.get(0);
 
-        assertThat(fs.getName()).isEqualTo(repository.findOne(fs.getId()).get().getName());
+        assertThat(fs.getName()).isEqualTo(repository.findById(fs.getId()).get().getName());
         assertThat(flower.getName()).isEqualTo(fs.getName());
-//        log.info("사이즈 = {}", repository.findAll().size());
-//        assertThat(repository.findAll().size()).isEqualTo(2);
+
 
     }
 
