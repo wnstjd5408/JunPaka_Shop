@@ -5,13 +5,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pakaCoding.flower.domain.entity.Flower;
-import pakaCoding.flower.service.repository.FlowerRepository;
+import pakaCoding.flower.repository.FlowerRepository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional
 @Slf4j
 @RequiredArgsConstructor
 public class FlowerService {
@@ -24,7 +23,7 @@ public class FlowerService {
     }
 
     public Optional<Flower> findOne(Long flowerId){
-        return flowerRepository.findOne(flowerId);
+        return flowerRepository.findById(flowerId);
     }
 
     public List<Flower> findFlowers(){
