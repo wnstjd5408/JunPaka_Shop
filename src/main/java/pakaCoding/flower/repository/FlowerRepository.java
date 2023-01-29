@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import pakaCoding.flower.domain.entity.Flower;
+import pakaCoding.flower.domain.entity.Type;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,8 @@ import java.util.Optional;
 @Repository
 @Transactional
 public interface FlowerRepository extends JpaRepository<Flower, Long> {
+     List<Flower> findByTypeContaining(Long typeId);
+
 
 //    private final EntityManager em;
 //

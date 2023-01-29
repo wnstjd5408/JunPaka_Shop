@@ -31,6 +31,11 @@ public class FlowerService {
         return flowerRepository.findAll();
     }
 
+    public List<Flower> findFlowersType(Long typeId){
+        log.info("service respoitory 개수 ={}", flowerRepository.findByTypeContaining(typeId).stream().count());
+        return flowerRepository.findByTypeContaining(typeId);
+    }
+
 
 
 }

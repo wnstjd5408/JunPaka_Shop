@@ -7,7 +7,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import pakaCoding.flower.domain.entity.Flower;
+import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.service.FlowerService;
+import pakaCoding.flower.service.TypeService;
 
 import java.util.List;
 
@@ -17,15 +19,26 @@ import java.util.List;
 public class FlowerController {
 
     private final FlowerService flowerService;
-
+    private final TypeService typeService;
 
     @GetMapping("/flowers")
     public String list(Model model){
 
-
+        List<Type> types = typeService.allType();
         List<Flower> flowers = flowerService.findFlowers();
 
-        model.addAttribute("flowers", flowers);;
+        model.addAttribute("flowers", flowers);
+        model.addAttribute("types", types);
+
+        return "flowers/flowerList";
+    }
+    @GetMapping("/flowers/{typeid}")
+    public String typeContain(@PathVariable long typeId, Model model){
+        List<Flower> flowersType = flowerService.findFlowersType(typeId);
+        List<Type> types = typeService.allType();
+
+        model.addAttribute("types", types);
+        model.addAttribute("flower", flowersType);
         return "flowers/flowerList";
     }
 
