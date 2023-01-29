@@ -1,15 +1,14 @@
 package pakaCoding.flower.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Flower extends TimeEntity {
 
     @Id
@@ -30,14 +29,7 @@ public class Flower extends TimeEntity {
     @ColumnDefault("0")
     private Integer hitCount;
 
-    @Builder
-    public Flower( String name, int price, int stockQuantity, Type type, Integer hitCount) {
-        this.name = name;
-        this.price = price;
-        this.stockQuantity = stockQuantity;
-        this.type = type;
-        this.hitCount = hitCount;
-    }
+
 
 }
 
