@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,7 @@ import java.util.Optional;
 @Repository
 @Transactional
 public interface FlowerRepository extends JpaRepository<Flower, Long> {
-     List<Flower> findByTypeContaining(Long typeId);
+     List<Flower> findByTypeContaining(Long typeId, Sort sort);
 
 
 //    private final EntityManager em;

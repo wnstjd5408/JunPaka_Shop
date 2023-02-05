@@ -2,6 +2,7 @@ package pakaCoding.flower.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pakaCoding.flower.domain.entity.Flower;
@@ -27,13 +28,13 @@ public class FlowerService {
     }
 
     public List<Flower> findFlowers(){
-        log.info("service respoitory 개수 ={}", flowerRepository.findAll().stream().count());
-        return flowerRepository.findAll();
+        log.info("service repository 개수 ={}", flowerRepository.findAll().stream().count());
+        return flowerRepository.findAll(Sort.by(Sort.Direction.DESC, "createDate"));
     }
 
     public List<Flower> findFlowersType(Long typeId){
-        log.info("service respoitory 개수 ={}", flowerRepository.findByTypeContaining(typeId).stream().count());
-        return flowerRepository.findByTypeContaining(typeId);
+        log.info("service repository 개수 ={}", flowerRepository.findByTypeContaining(typeId, Sort.by(Sort.Direction.DESC, "name")).stream().count());
+        return flowerRepository.findByTypeContaining(typeId, Sort.by(Sort.Direction.DESC, "name"));
     }
 
 

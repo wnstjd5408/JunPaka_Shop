@@ -24,15 +24,15 @@ public class FlowerController {
     @GetMapping("/flowers")
     public String list(Model model){
 
-        List<Type> types = typeService.allType();
         List<Flower> flowers = flowerService.findFlowers();
+        List<Type> types = typeService.allType();
 
         model.addAttribute("flowers", flowers);
         model.addAttribute("types", types);
 
         return "flowers/flowerList";
     }
-    @GetMapping("/flowers/{typeid}")
+    @GetMapping("/types/{typeid}")
     public String typeContain(@PathVariable long typeId, Model model){
         List<Flower> flowersType = flowerService.findFlowersType(typeId);
         List<Type> types = typeService.allType();
