@@ -17,7 +17,7 @@ import java.util.Optional;
 @Repository
 @Transactional
 public interface FlowerRepository extends JpaRepository<Flower, Long> {
-     List<Flower> findByTypeContaining(Long typeId, Sort sort);
+     List<Flower> findByTypeContainingOrderByNameDesc(Long typeId);
 
 
 //    private final EntityManager em;

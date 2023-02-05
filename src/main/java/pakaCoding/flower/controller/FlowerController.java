@@ -32,8 +32,8 @@ public class FlowerController {
 
         return "flowers/flowerList";
     }
-    @GetMapping("/types/{typeid}")
-    public String typeContain(@PathVariable long typeId, Model model){
+    @GetMapping("/types/{typeId}")
+    public String typeIdContain(@PathVariable long typeId, Model model){
         List<Flower> flowersType = flowerService.findFlowersType(typeId);
         List<Type> types = typeService.allType();
 
