@@ -1,12 +1,14 @@
 package pakaCoding.flower.domain.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter @Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Flower extends TimeEntity {
 
     @Id
@@ -26,6 +28,9 @@ public class Flower extends TimeEntity {
 
     @ColumnDefault("0")
     private Integer hitCount;
+
+
+
 }
 
 
