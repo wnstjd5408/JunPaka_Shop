@@ -1,5 +1,6 @@
 package pakaCoding.flower.repository;
 
+import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,7 @@ import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Type;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,9 +20,13 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Slf4j
 class FlowerRepositoryTest {
     @Autowired
     FlowerRepository flowerRepository;
+
+    @Autowired
+    TypeRepository typeRepository;
 
     @BeforeEach
     void beforeEach() {
@@ -31,6 +37,18 @@ class FlowerRepositoryTest {
     void afterEach(){
         flowerRepository.deleteAll();
     }
+
+    @Test
+    public void typeMatch(){
+        int id = typeRepository.findById(1).get().getId();
+
+        log.info("id  = {}", id);
+        List<Flower> flowers = flowerRepository.findAllByTypeIdQuery(id);
+        log.info("flowers size = {}", flowers.size());
+
+    }
+
+
 
     @Test
     public void save() {

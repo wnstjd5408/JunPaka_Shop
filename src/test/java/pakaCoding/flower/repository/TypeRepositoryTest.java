@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import pakaCoding.flower.domain.entity.Type;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,5 +32,10 @@ class TypeRepositoryTest {
         Assertions.assertThat(all.size()).isEqualTo(3);
     }
 
+    @Test
+    void typeNameTest(){
+        Optional<Type> type = repository.findById(1);
+        log.info("typeName = {}", type.get().getTypename());
+    }
 
 }

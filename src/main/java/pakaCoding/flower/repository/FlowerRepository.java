@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import pakaCoding.flower.domain.entity.Flower;
@@ -17,7 +19,9 @@ import java.util.Optional;
 @Repository
 @Transactional
 public interface FlowerRepository extends JpaRepository<Flower, Long> {
-     List<Flower> findByTypeContainingOrderByNameDesc(Long typeId);
+
+     @Query(value = "SELECT f FROM Flower f where f.type.id = :typeId order by f.createDate")
+     List<Flower> findAllByTypeIdQuery(@Param("typeId") int typeId);
 
 
 //    private final EntityManager em;

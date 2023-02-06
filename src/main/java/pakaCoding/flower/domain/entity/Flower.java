@@ -12,7 +12,7 @@ import org.hibernate.annotations.ColumnDefault;
 public class Flower extends TimeEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name ="flower_id")
     private Long id;
 

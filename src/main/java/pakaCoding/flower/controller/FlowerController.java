@@ -12,6 +12,7 @@ import pakaCoding.flower.service.FlowerService;
 import pakaCoding.flower.service.TypeService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @Slf4j
@@ -33,19 +34,27 @@ public class FlowerController {
         return "flowers/flowerList";
     }
     @GetMapping("/types/{typeId}")
-    public String typeIdContain(@PathVariable long typeId, Model model){
+    public String typeIdContain(@PathVariable int typeId, Model model){
+        log.info("FlowerController 실행");
         List<Flower> flowersType = flowerService.findFlowersType(typeId);
         List<Type> types = typeService.allType();
 
         model.addAttribute("types", types);
-        model.addAttribute("flower", flowersType);
+        model.addAttribute("flowers", flowersType);
         return "flowers/flowerList";
     }
 
     @GetMapping("/flowers/{flowerId}")
     public String oneFlower(@PathVariable long flowerId, Model model){
         Flower flower = flowerService.findOne(flowerId).get();
+        List<Type> types = typeService.allType();
+//        String typeName = flowerService.findTypeName(flower.getType().getId());
+        String typeName = typeService.findTypeName(flower.getType().getId());
+
+        model.addAttribute("types", types);
         model.addAttribute("flower", flower);
+        model.addAttribute("typeName", typeName);
+
         return "flowers/flower";
     }
 
