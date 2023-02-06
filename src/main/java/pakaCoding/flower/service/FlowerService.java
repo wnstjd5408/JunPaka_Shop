@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pakaCoding.flower.domain.entity.Flower;
+import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.repository.FlowerRepository;
 
 import java.util.List;
@@ -31,13 +32,15 @@ public class FlowerService {
     }
 
     public List<Flower> findFlowers(){
+        log.info("Flower Service findFlowers 시작");
         log.info("service repository 개수 ={}", flowerRepository.findAll().stream().count());
         return flowerRepository.findAll(Sort.by(DESC, "createDate"));
     }
 
-    public List<Flower> findFlowersType(Long typeId){
-        log.info("service repository 개수 ={}", flowerRepository.findByTypeContainingOrderByNameDesc(typeId).stream().count());
-        return flowerRepository.findByTypeContainingOrderByNameDesc(typeId);
+    public List<Flower> findFlowersType(int typeId){
+        log.info("Flower Service findFlowersType 시작");
+        log.info("service repository 개수 ={}", flowerRepository.findAllByTypeIdQuery(typeId).stream().count());
+        return flowerRepository.findAllByTypeIdQuery(typeId);
     }
 
 

@@ -4,6 +4,10 @@ import jakarta.persistence.EntityManager;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
@@ -16,20 +20,14 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
-@Slf4j
-@Transactional
-@SpringBootTest
-//@DataJpaTest
-//@ActiveProfiles("test")
-//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ExtendWith(MockitoExtension.class)
 class FlowerServiceTest {
 
+    @InjectMocks
+    private FlowerService flowerService;
 
-    @Autowired
+    @Mock
     FlowerRepository repository;
-
-
-
 
     @BeforeEach
     void beforeEach(){
