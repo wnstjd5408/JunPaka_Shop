@@ -7,6 +7,7 @@ import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.repository.TypeRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,4 +20,9 @@ public class TypeService {
         log.info("typeRepository 의 개수 = {}", typeRepository.findAll().stream().count());
         return typeRepository.findAll();
     }
+    public String findTypeName(int typeId){
+        Optional<Type> type = typeRepository.findById(typeId);
+        return type.get().getTypename();
+    }
+
 }

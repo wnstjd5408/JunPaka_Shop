@@ -20,7 +20,7 @@ import java.util.Optional;
 @Transactional
 public interface FlowerRepository extends JpaRepository<Flower, Long> {
 
-     @Query(value = "SELECT f FROM Flower f where f.type.id = :typeId")
+     @Query(value = "SELECT f FROM Flower f where f.type.id = :typeId order by f.createDate")
      List<Flower> findAllByTypeIdQuery(@Param("typeId") int typeId);
 
 

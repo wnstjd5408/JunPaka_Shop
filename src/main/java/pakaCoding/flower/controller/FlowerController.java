@@ -48,9 +48,13 @@ public class FlowerController {
     public String oneFlower(@PathVariable long flowerId, Model model){
         Flower flower = flowerService.findOne(flowerId).get();
         List<Type> types = typeService.allType();
+//        String typeName = flowerService.findTypeName(flower.getType().getId());
+        String typeName = typeService.findTypeName(flower.getType().getId());
 
         model.addAttribute("types", types);
         model.addAttribute("flower", flower);
+        model.addAttribute("typeName", typeName);
+
         return "flowers/flower";
     }
 

@@ -48,6 +48,8 @@ class FlowerRepositoryTest {
 
     }
 
+
+
     @Test
     public void save() {
         Type flowerBasket = new Type(1, "꽃바구니", 0);

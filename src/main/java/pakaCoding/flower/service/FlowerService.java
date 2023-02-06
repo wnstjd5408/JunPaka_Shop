@@ -33,15 +33,20 @@ public class FlowerService {
 
     public List<Flower> findFlowers(){
         log.info("Flower Service findFlowers 시작");
-        log.info("service repository 개수 ={}", flowerRepository.findAll().stream().count());
+        log.info("findFlowers를 사용한 service repository 개수 ={}",
+                flowerRepository.findAll().stream().count());
         return flowerRepository.findAll(Sort.by(DESC, "createDate"));
     }
 
+
     public List<Flower> findFlowersType(int typeId){
         log.info("Flower Service findFlowersType 시작");
-        log.info("service repository 개수 ={}", flowerRepository.findAllByTypeIdQuery(typeId).stream().count());
+        log.info("findFlowersType 함수를 사용한 service repository 개수 ={}",
+                flowerRepository.findAllByTypeIdQuery(typeId).stream().count());
         return flowerRepository.findAllByTypeIdQuery(typeId);
     }
+
+
 
 
 
