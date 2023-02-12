@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="layout/basic">
+    <th:block layout:fragment="title">
+        <title>Flower 등록</title>
+    </th:block>
+
+    <!--Section    -->
+    <th:block layout:fragment="section" class="py-5">
+        <div class="container-sm w-50 px-4 px-lg-4 mt-4">
+            <div class="py-5 text-center">
+                <h3>상품등록</h3>
+            </div>
+            <form th:action method="post" enctype="multipart/form-data">
+
+                <div class="mb-3">
+                    <label for="flowerName" class="form-label">꽃 이름</label>
+                    <input type="text" class="form-control" id="flowerName">
+                </div>
+                <div class="mb-3">
+                    <label for="flowerPrice" class="form-label">가격</label>
+                    <input type="text" class="form-control" id="flowerPrice">
+                </div>
+                <div class="mb-3">
+                    <label for="flowerStockQuantity" class="form-label">수량</label>
+                    <input type="text" class="form-control" id="flowerStockQuantity">
+                </div>
+                <div class="mb-3">
+                    <label for="flowerImage" class="form-label">이미지</label>
+                    <input type="file" class="form-control" id="flowerImage">
+                </div>
+                <div class="mb-2">
+                    <button type="submit" class="btn btn-sm btn-secondary form-control">등록하기</button>
+                </div>
+            </form>
+        </div>
+    </th:block>
+</html>
