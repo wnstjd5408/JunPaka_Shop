@@ -26,9 +26,8 @@ public class FlowerService {
 
     @Transactional
     public Long saveFlower(FlowerDto flowerDto) throws IOException {
-        List<Flower> flowerList = flowerRepository.findAll();
         Flower flower = null;
-
+        log.info("flowerDto.getId() = {}" , flowerDto.getId());
 
         //insert
         if(flowerDto.getId() == null){

@@ -6,11 +6,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Type;
+import pakaCoding.flower.dto.FlowerDto;
 import pakaCoding.flower.service.FlowerService;
 import pakaCoding.flower.service.TypeService;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,8 +26,20 @@ public class FlowerController {
     private final TypeService typeService;
 
     @GetMapping("/flowers/create")
-    public String newFlower(){
+    public String newFlower(Model model){
+        List<Type> types = typeService.allType();
+
+        model.addAttribute("flowerDto", new FlowerDto());
+        model.addAttribute("types", types);
         return "forms/FlowerForm";
+    }
+
+    @PostMapping("/flowers/create")
+    public String save(FlowerDto flowerDto) throws IOException {
+
+        log.info("FlowerController save 호출");
+        flowerService.saveFlower(flowerDto);
+        return "redirect:/";
     }
 
     @GetMapping("/flowers")

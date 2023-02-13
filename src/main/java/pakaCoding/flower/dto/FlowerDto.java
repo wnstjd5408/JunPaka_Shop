@@ -26,6 +26,9 @@ public class FlowerDto extends TimeEntity {
     private UploadFile uploadFile;
     private List<MultipartFile> multipartFile;
 
+    public FlowerDto() {
+    }
+
     public FlowerDto(String name, int price, int stockQuantity) {
         this.name = name;
         this.price = price;
@@ -52,6 +55,8 @@ public class FlowerDto extends TimeEntity {
                 .name(name)
                 .price(price)
                 .stockQuantity(stockQuantity)
+                .delYn("N")
+                .hitCount(0L)
                 .build();
     }
 }
