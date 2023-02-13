@@ -39,8 +39,8 @@ class FlowerServiceTest {
 
         //given
         Type flowerBasket = new Type(1, "꽃바구니", 0);
-        Flower fs = registerFLower("장미꽃다발", 15000, 1, flowerBasket, 0);
-        Flower fBasket = registerFLower("장미꽃바구니", 35000, 1, flowerBasket, 0);
+        Flower fs = registerFLower("장미꽃다발", 15000, 1, flowerBasket, 0L);
+        Flower fBasket = registerFLower("장미꽃바구니", 35000, 1, flowerBasket, 0L);
 
         repository.save(fs);
         repository.save(fBasket);
@@ -56,7 +56,7 @@ class FlowerServiceTest {
     }
 
 
-    private Flower registerFLower(String name, int price, int stockQuantity, Type type, int hitCount){
+    private Flower registerFLower(String name, int price, int stockQuantity, Type type, Long hitCount){
         return Flower.builder()
                 .name(name)
                 .price(price)

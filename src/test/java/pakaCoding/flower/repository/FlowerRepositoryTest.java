@@ -52,10 +52,12 @@ class FlowerRepositoryTest {
 
     @Test
     public void save() {
-        Type flowerBasket = new Type(1, "꽃바구니", 0);
+        Type type1 = typeRepository.findById(1).get();
 
-        Flower fs = registerFLower("장미꽃다발", 15000, 1, flowerBasket, 0);
-        Flower fBasket = registerFLower("장미꽃바구니", 35000, 1, flowerBasket, 0);
+        log.info("id = {}",  type1.getId());
+
+        Flower fs = registerFLower("장미꽃다발", 15000, 1, type1, 0L);
+        Flower fBasket = registerFLower("장미꽃바구니", 35000, 1, type1, 0L);
         flowerRepository.save(fs);
         flowerRepository.save(fBasket);
         //when
@@ -69,12 +71,13 @@ class FlowerRepositoryTest {
         assertThat(flowerRepository.findAll().size()).isEqualTo(2);
     }
 
-    private Flower registerFLower(String name, int price, int stockQuantity, Type type, int hitCount){
+    private Flower registerFLower(String name, int price, int stockQuantity, Type type, Long hitCount){
         return Flower.builder()
                 .name(name)
                 .price(price)
                 .stockQuantity(stockQuantity)
                 .type(type)
+                .delYn("N")
                 .hitCount(hitCount)
                 .build();
     }
