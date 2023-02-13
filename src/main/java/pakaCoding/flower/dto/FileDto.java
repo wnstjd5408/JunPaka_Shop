@@ -1,15 +1,8 @@
 package pakaCoding.flower.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 import pakaCoding.flower.domain.entity.UploadFile;
-
-import java.io.File;
 
 @Data
 public class FileDto {

@@ -57,7 +57,7 @@ public class FileService {
                         File targetFile = new File(uploadDir + saveFileName);
 
 
-                        //초기값으로 fail 서렂ㅇ
+                        //초기값으로 fail 설정
                         result.put("result", "FAIL");
 
                         FileDto fileDto = FileDto.builder()
@@ -80,7 +80,7 @@ public class FileService {
 
                             //배열에 담기
                             fileIds.add(fileId);
-                            result.put("fileIdxs", fileIds.toString());
+                            result.put("fileIds", fileIds.toString());
                             result.put("result", "OK");
                         }
                         catch (Exception e)
@@ -90,9 +90,6 @@ public class FileService {
                             result.put("result", "FAIL");
                             break;
                         }
-
-
-
 
                     }
                 }

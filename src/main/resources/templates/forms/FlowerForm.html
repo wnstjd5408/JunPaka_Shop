@@ -10,7 +10,7 @@
             <div class="py-5 text-center">
                 <h3>상품등록</h3>
             </div>
-            <form th:action method="post" enctype="multipart/form-data">
+            <form th:action th:object="${flowerDto}" method="post" enctype="multipart/form-data">
 
                 <div class="mb-3">
                     <label for="flowerName" class="form-label">꽃 이름</label>
