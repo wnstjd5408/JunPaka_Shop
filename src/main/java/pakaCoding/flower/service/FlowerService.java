@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Type;
+import pakaCoding.flower.dto.FlowerDto;
 import pakaCoding.flower.repository.FlowerRepository;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,10 +22,24 @@ import static org.springframework.data.domain.Sort.Direction.*;
 @RequiredArgsConstructor
 public class FlowerService {
     private final FlowerRepository flowerRepository;
+    private final FileService fileService;
 
     @Transactional
-    public Long saveFlower(Flower flower){
-        flowerRepository.save(flower);
+    public Long saveFlower(FlowerDto flowerDto) throws IOException {
+        List<Flower> flowerList = flowerRepository.findAll();
+        Flower flower = null;
+
+
+        //insert
+        if(flowerDto.getId() == null){
+            flower = flowerDto.toEntity();
+            flowerRepository.save(flower);
+        }
+
+        //파일저장
+        fileService.saveFile(flowerDto);
+
+
         return flower.getId();
     }
 

@@ -22,6 +22,11 @@ public class FlowerController {
     private final FlowerService flowerService;
     private final TypeService typeService;
 
+    @GetMapping("/flowers/create")
+    public String newFlower(){
+        return "forms/FlowerForm";
+    }
+
     @GetMapping("/flowers")
     public String list(Model model){
 
