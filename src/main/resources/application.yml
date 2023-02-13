@@ -4,10 +4,11 @@ spring:
     username : ENC(g5gYia4h9g3THpuMbwqoVHEGif+LQpTw)
     password: ENC(IbmNAQwCG0lXRSZSpTObuA==)
     driver-class-name: org.mariadb.jdbc.Driver
+
   jpa:
     generate-ddl: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
        format_sql:true

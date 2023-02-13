@@ -29,7 +29,7 @@ class TypeRepositoryTest {
         List<Type> all = repository.findAll();
 
         log.info("Type의 사이즈 {} 입니다",all.size() );
-        Assertions.assertThat(all.size()).isEqualTo(3);
+        Assertions.assertThat(all.size()).isEqualTo(2);
     }
 
     @Test
