@@ -30,4 +30,4 @@ servlet:
     max-request-size: 10MB
 
 upload:
-  path: D:/file
+  path: D:/file/
