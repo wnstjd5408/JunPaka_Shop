@@ -9,7 +9,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "file")
-public class UploadFile extends TimeEntity {
+public class File extends TimeEntity {
 
     @Id
     @GeneratedValue
@@ -35,7 +35,7 @@ public class UploadFile extends TimeEntity {
     private String contentType; //ContentType
 
     @Builder
-    public UploadFile(Long id, String originFileName, String savedFileName, String uploadDir, String extension, Long size, String contentType) {
+    public File(Long id, String originFileName, String savedFileName, String uploadDir, String extension, Long size, String contentType) {
         this.id = id;
         this.originFileName = originFileName;
         this.savedFileName = savedFileName;

@@ -2,7 +2,7 @@ package pakaCoding.flower.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import pakaCoding.flower.domain.entity.UploadFile;
+import pakaCoding.flower.domain.entity.File;
 
 @Data
 public class FileDto {
@@ -37,8 +37,8 @@ public class FileDto {
         this.contentType = contentType;
     }
 
-    public UploadFile toEntity(){
-        return UploadFile.builder()
+    public File toEntity(){
+        return File.builder()
                 .originFileName(originFileName)
                 .savedFileName(savedFileName)
                 .uploadDir(uploadDir)

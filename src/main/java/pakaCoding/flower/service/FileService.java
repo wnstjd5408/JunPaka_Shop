@@ -2,18 +2,15 @@ package pakaCoding.flower.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
-import org.aspectj.util.FileUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import pakaCoding.flower.domain.entity.UploadFile;
+import pakaCoding.flower.domain.entity.File;
 import pakaCoding.flower.dto.FileDto;
 import pakaCoding.flower.dto.FlowerDto;
 import pakaCoding.flower.repository.FileRepository;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
@@ -34,9 +31,11 @@ public class FileService {
 
 
     @Transactional
-    public Map<String, Object> saveFile(FlowerDto flowerDto) throws IOException {
-
-        List<MultipartFile> multipartFileList = flowerDto.getMultipartFile();
+    public Map<String, Object> saveFile(FlowerDto flowerDto) throws Exception {
+        log.info("FileService에서 saveFile 실행");
+        List<MultipartFile> multipartFile  = flowerDto.getMultipartFile();
+        log.info("multipartFileList ={}", multipartFile);
+        log.info("multipartFileList ={}", multipartFile.get(0).getOriginalFilename());
 
 
         //결과 map
@@ -46,15 +45,16 @@ public class FileService {
         List<Long> fileIds = new ArrayList<Long>();
 
         try{
-            if(multipartFileList != null){
-                if(multipartFileList.size() > 0 && !multipartFileList.get(0).getOriginalFilename().equals("")){
-                    for (MultipartFile file1 : multipartFileList) {
+            if(multipartFile  != null){
+                if(multipartFile.size() > 0 && !multipartFile.get(0).getOriginalFilename().equals("")){
+                    for (MultipartFile file1 : multipartFile) {
+                        log.info("file1 = {}", file1.getOriginalFilename());
                         String originalFilename = file1.getOriginalFilename();
                         String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
                         String saveFileName = UUID.randomUUID() + extension;
 
 
-                        File targetFile = new File(uploadDir + saveFileName);
+                        java.io.File targetFile = new java.io.File(uploadDir + saveFileName);
 
 
                         //초기값으로 fail 설정
@@ -80,7 +80,7 @@ public class FileService {
 
                             //배열에 담기
                             fileIds.add(fileId);
-                            result.put("fileIds", fileIds.toString());
+                            result.put("fileIdxs", fileIds.toString());
                             result.put("result", "OK");
                         }
                         catch (Exception e)
@@ -103,7 +103,7 @@ public class FileService {
 
     //** 파일 저장 db **//
     @Transactional
-    public Long insertFile(UploadFile uploadFile){
+    public Long insertFile(File uploadFile){
         return fileRepository.save(uploadFile).getId();
     }
 }

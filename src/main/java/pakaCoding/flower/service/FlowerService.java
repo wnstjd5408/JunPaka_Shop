@@ -25,7 +25,8 @@ public class FlowerService {
     private final FileService fileService;
 
     @Transactional
-    public Long saveFlower(FlowerDto flowerDto) throws IOException {
+    public Long saveFlower(FlowerDto flowerDto) throws Exception {
+        log.info("FlowerService에서 saveFlower 실행");
         Flower flower = null;
         log.info("flowerDto.getId() = {}" , flowerDto.getId());
 
