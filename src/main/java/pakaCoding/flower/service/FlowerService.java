@@ -37,7 +37,8 @@ public class FlowerService {
         }
 
         //파일저장
-        fileService.saveFile(flowerDto);
+        log.info("flower.getId() = {}", flower.getId());
+        fileService.saveFile(flowerDto, flower.getId());
 
 
         return flower.getId();

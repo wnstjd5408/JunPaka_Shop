@@ -6,12 +6,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import pakaCoding.flower.domain.entity.FlowerFile;
 import pakaCoding.flower.domain.entity.File;
+import pakaCoding.flower.dto.FlowerFileDto;
 import pakaCoding.flower.dto.FileDto;
 import pakaCoding.flower.dto.FlowerDto;
 import pakaCoding.flower.repository.FileRepository;
+import pakaCoding.flower.repository.FlowerFileRepository;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.*;
 
@@ -28,10 +30,11 @@ public class FileService {
 
 
     private final FileRepository fileRepository;
+    private final FlowerFileRepository flowerFileRepository;
 
 
     @Transactional
-    public Map<String, Object> saveFile(FlowerDto flowerDto) throws Exception {
+    public Map<String, Object> saveFile(FlowerDto flowerDto, Long flowerId) throws Exception {
         log.info("FileService에서 saveFile 실행");
         List<MultipartFile> multipartFile  = flowerDto.getMultipartFile();
         log.info("multipartFileList ={}", multipartFile);
@@ -70,7 +73,8 @@ public class FileService {
                                 .build();
 
                         //파일 insert
-                        Long fileId = insertFile(fileDto.toEntity());
+                        File file = fileDto.toEntity();
+                        Long fileId = insertFile(file);
                         log.info("fileId ={}" ,fileId);
 
 
@@ -90,6 +94,13 @@ public class FileService {
                             result.put("result", "FAIL");
                             break;
                         }
+                        log.info("fileservice 에서 flowerId {}", flowerId);
+                        FlowerFileDto flowerFileDto = FlowerFileDto.builder()
+                                .flowerId(flowerId)
+                                .build();
+
+                        FlowerFile flowerFile = flowerFileDto.toEntity(file);
+                        insertFlowerFile(flowerFile);
 
                     }
                 }
@@ -105,5 +116,10 @@ public class FileService {
     @Transactional
     public Long insertFile(File uploadFile){
         return fileRepository.save(uploadFile).getId();
+    }
+
+    @Transactional
+    public Long insertFlowerFile(FlowerFile flowerFile){
+        return flowerFileRepository.save(flowerFile).getId();
     }
 }

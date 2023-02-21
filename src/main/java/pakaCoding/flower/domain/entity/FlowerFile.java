@@ -11,12 +11,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EntityListeners(AuditingEntityListener.class)
-public class BoardFile {
+public class FlowerFile {
 
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="board_file_id")
+    @Column(name="flower_file_id")
     private Long id; //번호
 
 
@@ -30,7 +30,7 @@ public class BoardFile {
 
 
     @Builder
-    public BoardFile(Long flowerId,  File file) {
+    public FlowerFile(Long flowerId, File file) {
         this.flowerId = flowerId;
         this.delYn = "N";
         this.file = file;

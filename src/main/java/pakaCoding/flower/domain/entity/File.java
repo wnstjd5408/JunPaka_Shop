@@ -35,7 +35,7 @@ public class File extends TimeEntity {
     private String contentType; //ContentType
 
     @OneToOne(mappedBy = "file")
-    private BoardFile boardFile;
+    private FlowerFile flowerFile;
 
     @Builder
     public File(Long id, String originFileName, String savedFileName, String uploadDir, String extension, Long size, String contentType) {
