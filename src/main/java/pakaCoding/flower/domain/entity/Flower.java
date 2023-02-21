@@ -29,7 +29,6 @@ public class Flower extends TimeEntity {
     @JoinColumn(name ="type_id")
     private Type type;
 
-    @ColumnDefault("0L")
     private Long hitCount;      //조회수
 
 
