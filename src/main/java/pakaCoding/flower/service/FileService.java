@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.FlowerFile;
 import pakaCoding.flower.domain.entity.File;
 import pakaCoding.flower.dto.FlowerFileDto;
@@ -34,18 +35,19 @@ public class FileService {
 
 
     @Transactional
-    public Map<String, Object> saveFile(FlowerDto flowerDto, Long flowerId) throws Exception {
-        log.info("FileService에서 saveFile 실행");
+    public FlowerFile saveFile(FlowerDto flowerDto) throws Exception {
+        log.info("saveFile 실행");
         List<MultipartFile> multipartFile  = flowerDto.getMultipartFile();
         log.info("multipartFileList ={}", multipartFile);
-        log.info("multipartFileList ={}", multipartFile.get(0).getOriginalFilename());
 
 
         //결과 map
-        Map<String, Object> result = new HashMap<String, Object>();
+        Map<String, Object> result = new HashMap<>();
+        FlowerFile flowerFile = null;
+
 
         //파일 시퀀스 리스트
-        List<Long> fileIds = new ArrayList<Long>();
+        List<Long> fileIds = new ArrayList<>();
 
         try{
             if(multipartFile  != null){
@@ -94,13 +96,18 @@ public class FileService {
                             result.put("result", "FAIL");
                             break;
                         }
-                        log.info("fileservice 에서 flowerId {}", flowerId);
-                        FlowerFileDto flowerFileDto = FlowerFileDto.builder()
-                                .flowerId(flowerId)
-                                .build();
 
-                        FlowerFile flowerFile = flowerFileDto.toEntity(file);
-                        insertFlowerFile(flowerFile);
+                        Flower flower = flowerDto.toEntity();
+
+                        FlowerFileDto flowerFileDto =
+                                FlowerFileDto.builder().
+                                flower(flower).
+                                        build();
+
+
+                        flowerFile = flowerFileDto.toEntity(file);
+                        Long flowerFileId = insertFlowerFile(flowerFile);
+                        log.info("flowerFileId = {}", flowerFileId);
 
                     }
                 }
@@ -108,7 +115,7 @@ public class FileService {
         }catch (Exception e){
             e.printStackTrace();
         }
-        return result;
+        return flowerFile;
     }
 
 

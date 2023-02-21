@@ -34,20 +34,29 @@ public class Flower extends TimeEntity {
 
     private String delYn;       //삭제여부
 
+    @OneToOne
+    @JoinColumn(name="flower_file_id")
+    private FlowerFile flowerFile;
+
 
     public Flower delete(String delYn){
         this.delYn = delYn;
         return this;
     }
 
+    public Flower update(FlowerFile flowerFile){
+        this.flowerFile = flowerFile;
+        return this;
+    }
+
 
 
     @Builder
-    public Flower(FlowerDto flowerDto, Type type) {
+    public Flower(FlowerDto flowerDto) {
         this.name = flowerDto.getName();
         this.price = flowerDto.getPrice();
         this.stockQuantity = flowerDto.getStockQuantity();
-        this.type = type;
+        this.type = flowerDto.getType();
         this.hitCount = 0L;
         this.delYn = "N";
     }

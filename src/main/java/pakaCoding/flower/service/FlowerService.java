@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pakaCoding.flower.domain.entity.Flower;
+import pakaCoding.flower.domain.entity.FlowerFile;
 import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.dto.FlowerDto;
 import pakaCoding.flower.repository.FlowerRepository;
@@ -35,12 +36,14 @@ public class FlowerService {
             flower = flowerDto.toEntity();
             flowerRepository.save(flower);
         }
+        else{
+            flower = flowerRepository.findById(flowerDto.getId()).get();
+        }
 
         //파일저장
+        FlowerFile flowerFile = fileService.saveFile(flowerDto);
+
         log.info("flower.getId() = {}", flower.getId());
-        fileService.saveFile(flowerDto, flower.getId());
-
-
         return flower.getId();
     }
 

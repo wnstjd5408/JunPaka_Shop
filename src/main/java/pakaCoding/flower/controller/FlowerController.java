@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.dto.FlowerDto;
@@ -37,11 +38,14 @@ public class FlowerController {
     }
 
     @PostMapping("/flowers/create")
-    public String save(@Valid FlowerDto flowerDto) throws Exception {
+    public String save(@Valid FlowerDto flowerDto, RedirectAttributes redirectAttributes) throws Exception {
 
         log.info("FlowerController save 호출");
-        flowerService.saveFlower(flowerDto);
-        return "redirect:/";
+        Long flowerId = flowerService.saveFlower(flowerDto);
+
+        redirectAttributes.addAttribute("flowerId", flowerId);
+
+        return "redirect:/flowers/{flowerId}";
     }
 
     @GetMapping("/flowers")
@@ -52,6 +56,7 @@ public class FlowerController {
 
         model.addAttribute("flowers", flowers);
         model.addAttribute("types", types);
+
 
         return "flowers/flowerList";
     }

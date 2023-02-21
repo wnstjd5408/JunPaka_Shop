@@ -4,9 +4,9 @@ import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 import pakaCoding.flower.domain.entity.Flower;
+import pakaCoding.flower.domain.entity.FlowerFile;
 import pakaCoding.flower.domain.entity.TimeEntity;
 import pakaCoding.flower.domain.entity.Type;
-import pakaCoding.flower.domain.entity.File;
 
 import java.util.List;
 
@@ -20,25 +20,23 @@ public class FlowerDto extends TimeEntity {
     private int stockQuantity;
     private Type type;
     private Long hitCount;
+    private FlowerFile flowerFile;
+
     private List<MultipartFile> multipartFile;
 
     public FlowerDto() {
     }
 
-    public FlowerDto(String name, int price, int stockQuantity) {
-        this.name = name;
-        this.price = price;
-        this.stockQuantity = stockQuantity;
-    }
 
     @Builder
-    public FlowerDto(Long id, String name, int price, int stockQuantity, Type type, Long hitCount, List<MultipartFile> multipartFile) {
+    public FlowerDto(Long id, String name, int price, int stockQuantity, Type type, Long hitCount, FlowerFile flowerFile, List<MultipartFile> multipartFile) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.stockQuantity = stockQuantity;
         this.type = type;
         this.hitCount = hitCount;
+        this.flowerFile = flowerFile;
         this.multipartFile = multipartFile;
     }
 
@@ -47,6 +45,7 @@ public class FlowerDto extends TimeEntity {
     public Flower toEntity(){
         return Flower.builder()
                 .type(type)
+                .flowerFile(flowerFile)
                 .name(name)
                 .price(price)
                 .stockQuantity(stockQuantity)

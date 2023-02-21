@@ -3,6 +3,7 @@ package pakaCoding.flower.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.FlowerFile;
 import pakaCoding.flower.domain.entity.File;
 
@@ -11,21 +12,24 @@ public class FlowerFileDto {
 
     private Long id;
 
-    private Long flowerId;
+    private Flower flower;
 
 
     public FlowerFileDto() {
     }
 
     @Builder
-    public FlowerFileDto(Long flowerId) {
-        this.flowerId = flowerId;
+    public FlowerFileDto(Flower flower) {
+        this.flower = flower;
     }
+
+
+
 
     //entity로 바꿔줄때 file 받는 부분을 추가
     public FlowerFile toEntity(File file){
         return FlowerFile.builder()
-                .flowerId(flowerId)
+                .flower(flower)
                 .file(file)
                 .build();
     }

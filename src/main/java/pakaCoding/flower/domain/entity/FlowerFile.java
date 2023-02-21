@@ -19,8 +19,9 @@ public class FlowerFile {
     @Column(name="flower_file_id")
     private Long id; //번호
 
+    @OneToOne(mappedBy = "flowerFile", cascade = CascadeType.PERSIST)
+    private Flower flower;
 
-    private Long flowerId;
     private String delYn;
 
 
@@ -30,8 +31,8 @@ public class FlowerFile {
 
 
     @Builder
-    public FlowerFile(Long flowerId, File file) {
-        this.flowerId = flowerId;
+    public FlowerFile(Flower flower, File file) {
+        this.flower = flower;
         this.delYn = "N";
         this.file = file;
     }
