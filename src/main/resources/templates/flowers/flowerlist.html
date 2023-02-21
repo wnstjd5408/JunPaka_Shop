@@ -28,6 +28,46 @@
                     </div>
                 </div>
             </div>
+
+            <!-- page-->
+            <div th:if="${!flowers.isEmpty()}" class="justify-content-end">
+                <nav class="container d-flex align-items-center justify-content-center" aria-label="Page navigation example"
+                     th:with="start=${(flowers.number/maxPage)*maxPage + 1},
+                              end=(${(flowers.totalPages == 0) ? 1 : (start + (maxPage - 1) < flowers.totalPages ? start + (maxPage - 1) : flowers.totalPages)})">
+                    <ul class="pagination">
+
+                        <li th:if="${start > 1}" class="page-item">
+                            <a th:href="@{/flowers?(page=0)}" class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;&laquo;</span>
+                            </a>
+                        </li>
+
+                        <li th:if="${start > 1}" class="page-item">
+                            <a th:href="@{/flowers?(page=${start - maxPage-1})}" class="page-link" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+
+                        <li th:each="page: ${#numbers.sequence(start, end)}" class="page-item" th:classappend="${flowers.number+1 == page} ? active">
+                            <a th:href="@{/flowers?(page=${page-1})}" th:text="${page}" class="page-link" href="#">1</a>
+                        </li>
+
+                        <li th:if="${end < flowers.totalPages}" class="page-item">
+                            <a th:href="@{/flowers?(page=${start + maxPage -1})}" class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+
+                        <li th:if="${end < flowers.totalPages}" class="page-item">
+                            <a th:href="@{/flowers?(page=${flowers.totalPages-1})}" class="page-link" href="#" aria-label="Next">
+                                <span aria-hidden="true">&raquo;&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+
         </div>
     </th:block>
 </html>
