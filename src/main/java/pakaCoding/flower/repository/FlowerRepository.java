@@ -18,7 +18,7 @@ public interface FlowerRepository extends JpaRepository<Flower, Long> {
      Page<Flower> findAllByOrderByCreateDateDesc(Pageable pageable);
 
      @Query(value = "SELECT f FROM Flower f where f.type.id = :typeId order by f.createDate")
-     List<Flower> findAllByTypeIdQuery(@Param("typeId") int typeId);
+     Page<Flower> findAllByTypeIdQuery(@Param("typeId") int typeId, Pageable pageable);
 
 
 //    private final EntityManager em;

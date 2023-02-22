@@ -2,10 +2,7 @@ package pakaCoding.flower.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,11 +57,12 @@ public class FlowerService {
 //        return flowerRepository.findAll(Sort.by(DESC, "createDate"));
 //    }
 
-    public Page<FlowerDto> findAllFlowers(Pageable pageable){
+    public Page<FlowerDto> findAllFlowers(int page){
+        Pageable pageable = PageRequest.of(page, 12);
         log.info("findAllFlowers 시작");
         log.info("findAllFlowers 사용한 service repository 개수 ={}",
                 flowerRepository.findAllByOrderByCreateDateDesc(pageable).stream().count());
-        Page<Flower> flowerList = flowerRepository.findAllByOrderByCreateDateDesc(pageable);
+        Page<Flower> flowerList = flowerRepository.findAll(pageable);
         List<FlowerDto> flowerDtoList = flowerList.stream()
                 .map(m -> FlowerDto.builder()
                         .id(m.getId())
@@ -75,16 +73,27 @@ public class FlowerService {
                         .build())
                 .collect(Collectors.toList());
 
-        log.info("flowerDtoList.size()= {}", flowerDtoList.size());
-        return new PageImpl<>(flowerDtoList, pageable, flowerDtoList.size());
+        log.info("flowerList.getTotalElements()= {}", flowerList.getTotalElements());
+        return new PageImpl<>(flowerDtoList, pageable, flowerList.getTotalElements());
     }
 
 
-    public List<Flower> findFlowersType(int typeId){
+    public Page<FlowerDto> findFlowersType(int typeId, int page){
+        Pageable pageable = PageRequest.of(page, 12);
         log.info("Flower Service findFlowersType 시작");
         log.info("findFlowersType 함수를 사용한 service repository 개수 ={}",
-                flowerRepository.findAllByTypeIdQuery(typeId).stream().count());
-        return flowerRepository.findAllByTypeIdQuery(typeId);
+                flowerRepository.findAllByTypeIdQuery(typeId, pageable).stream().count());
+        Page<Flower> flowerList = flowerRepository.findAllByTypeIdQuery(typeId, pageable);
+        List<FlowerDto> flowerDtoList = flowerList.stream()
+                .map(m -> FlowerDto.builder()
+                        .id(m.getId())
+                        .name(m.getName())
+                        .price(m.getPrice())
+                        .stockQuantity(m.getStockQuantity())
+                        .hitCount(m.getHitCount())
+                        .build())
+                .collect(Collectors.toList());
+        return new PageImpl<>(flowerDtoList, pageable, flowerList.getTotalElements());
     }
 
 

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.dto.FlowerDto;
@@ -31,14 +32,13 @@ public class FlowerController {
     }
 
     @GetMapping("/flowers")
-    public String list(Model model, @PageableDefault(page = 0 , size = 12) Pageable pageable){
+    public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page){
 
-        Page<FlowerDto> flowers = flowerService.findAllFlowers(pageable);
+        Page<FlowerDto> flowers = flowerService.findAllFlowers(page);
         List<Type> types = typeService.allType();
 
-        log.info("flower.getNumbers = {}", flowers.getNumber());
+        log.info("flower.getNumbers = {}", flowers.getTotalPages());
         model.addAttribute("flowers", flowers);
-        model.addAttribute("maxPage", 10);
         model.addAttribute("types", types);
         pageModelPut(flowers, model);
         return "flowers/flowerList";
@@ -51,9 +51,10 @@ public class FlowerController {
     }
 
     @GetMapping("/types/{typeId}")
-    public String typeIdContain(@PathVariable int typeId, Model model){
+    public String typeIdContain(@PathVariable int typeId, Model model,
+                                @RequestParam(value="page", defaultValue = "0") int page){
         log.info("FlowerController 실행");
-        List<Flower> flowersType = flowerService.findFlowersType(typeId);
+        Page<FlowerDto> flowersType = flowerService.findFlowersType(typeId, page);
         List<Type> types = typeService.allType();
 
         model.addAttribute("types", types);
