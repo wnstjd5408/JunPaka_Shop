@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="layout/basic">
+      layout:decorate="~{layout/basic}">
     <th:block layout:fragment="title">
         <title>Jun Flower</title>
     </th:block>
@@ -28,6 +28,33 @@
                     </div>
                 </div>
             </div>
+
+            <!-- page-->
+            <div th:if="${!flowers.isEmpty()}">
+                <nav class="container d-flex align-items-center justify-content-center" aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li th:classappend="${!flowers.hasPrevious} ? 'disabled'" class="page-item">
+                            <a class="page-link"
+                               th:href="@{|?page=${flowers.number -1}|}">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        <li th:each="page : ${#numbers.sequence(0, flowers.totalPages-1)}"
+                            th:if="${page >= flowers.number-5 and page <= flowers.number+5}"
+                            th:classappend="${page == flowers.number} ? 'active'"
+                            class="page-item">
+                            <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+                        </li>
+                        <li class ="page-item" th:classappend="${!flowers.hasNext} ? 'disabled'">
+                            <a class="page-link" th:href="@{|?page=${flowers.number + 1}|}">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+
         </div>
     </th:block>
 </html>
