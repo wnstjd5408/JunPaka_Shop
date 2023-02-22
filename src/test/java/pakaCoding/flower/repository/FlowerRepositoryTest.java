@@ -8,8 +8,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Type;
+import pakaCoding.flower.dto.FlowerDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,8 +47,9 @@ class FlowerRepositoryTest {
         int id = typeRepository.findById(1).get().getId();
 
         log.info("id  = {}", id);
-        List<Flower> flowers = flowerRepository.findAllByTypeIdQuery(id);
-        log.info("flowers size = {}", flowers.size());
+        Pageable pageable = PageRequest.of(0, 10);
+        Page<Flower> flowers = flowerRepository.findAllByTypeIdQuery(id, pageable);
+        log.info("flowers.getTotalElements = {}", flowers.getTotalElements());
 
     }
 
