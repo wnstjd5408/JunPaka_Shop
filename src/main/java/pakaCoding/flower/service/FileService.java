@@ -50,7 +50,7 @@ public class FileService {
         List<Long> fileIds = new ArrayList<>();
 
         try{
-            if(multipartFile  != null){
+            if(!multipartFile.isEmpty()){
                 if(multipartFile.size() > 0 && !multipartFile.get(0).getOriginalFilename().equals("")){
                     for (MultipartFile file1 : multipartFile) {
                         log.info("file1 = {}", file1.getOriginalFilename());
@@ -65,14 +65,7 @@ public class FileService {
                         //초기값으로 fail 설정
                         result.put("result", "FAIL");
 
-                        FileDto fileDto = FileDto.builder()
-                                .originFileName(originalFilename)
-                                .savedFileName(saveFileName)
-                                .uploadDir(uploadDir)
-                                .extension(extension)
-                                .size(file1.getSize())
-                                .contentType(file1.getContentType())
-                                .build();
+                        FileDto fileDto = buildFileDto(file1, originalFilename, extension, saveFileName);
 
                         //파일 insert
                         File file = fileDto.toEntity();
@@ -116,6 +109,17 @@ public class FileService {
             e.printStackTrace();
         }
         return flowerFile;
+    }
+
+    private FileDto buildFileDto(MultipartFile file1, String originalFilename, String extension, String saveFileName) {
+        return FileDto.builder()
+                .originFileName(originalFilename)
+                .savedFileName(saveFileName)
+                .uploadDir(uploadDir)
+                .extension(extension)
+                .size(file1.getSize())
+                .contentType(file1.getContentType())
+                .build();
     }
 
 

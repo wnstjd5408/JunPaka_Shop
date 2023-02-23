@@ -38,7 +38,7 @@ public class FlowerController {
     }
 
     @PostMapping("/flowers/create")
-    public String save(@Valid FlowerDto flowerDto, RedirectAttributes redirectAttributes) throws Exception {
+    public String save(@ModelAttribute FlowerDto flowerDto, RedirectAttributes redirectAttributes) throws Exception {
 
         log.info("FlowerController save 호출");
         Long flowerId = flowerService.saveFlower(flowerDto);
