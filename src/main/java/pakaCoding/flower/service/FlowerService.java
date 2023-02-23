@@ -58,7 +58,7 @@ public class FlowerService {
 //    }
 
     public Page<FlowerDto> findAllFlowers(int page){
-        Pageable pageable = PageRequest.of(page, 12);
+        Pageable pageable = PageRequest.of(page, 16);
         log.info("findAllFlowers 시작");
         log.info("findAllFlowers 사용한 service repository 개수 ={}",
                 flowerRepository.findAllByOrderByCreateDateDesc(pageable).stream().count());
@@ -79,7 +79,7 @@ public class FlowerService {
 
 
     public Page<FlowerDto> findFlowersType(int typeId, int page){
-        Pageable pageable = PageRequest.of(page, 12);
+        Pageable pageable = PageRequest.of(page, 16);
         log.info("Flower Service findFlowersType 시작");
         log.info("findFlowersType 함수를 사용한 service repository 개수 ={}",
                 flowerRepository.findAllByTypeIdQuery(typeId, pageable).stream().count());

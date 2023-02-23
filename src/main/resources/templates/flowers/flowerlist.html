@@ -31,23 +31,36 @@
 
             <!-- page-->
             <div th:if="${!flowers.isEmpty()}">
-                <nav class="container d-flex align-items-center justify-content-center" aria-label="Page navigation example">
+                <nav class="container d-flex align-items-center justify-content-center navbar-light" aria-label="Page navigation example"
+                    th:with="start=${(flowers.number/maxPage)*maxPage + 1},
+                  end=(${(flowers.totalPages == 0) ? 1 : (start + (maxPage - 1) < flowers.totalPages ? start + (maxPage - 1) : flowers.totalPages)})">
+
                     <ul class="pagination justify-content-center">
-                        <li th:classappend="${!flowers.hasPrevious} ? 'disabled'" class="page-item">
+                        <li th:classappend="${start > 1}" class="page-item">
                             <a class="page-link"
-                               th:href="@{|?page=${flowers.number -1}|}">
+                               th:href="@{?(page=0)}" href="#" aria-label="Previous">
+                                <span aria-hidden="true">&laquo;&laquo;</span>
+                            </a>
+                        </li>
+                        <li th:classappend="${start > 1}" class="page-item">
+                            <a class="page-link"
+                               th:href="@{?(page=${start - maxPage-1})}" href="#" aria-label="Previous">
                                 <span aria-hidden="true">&laquo;</span>
                             </a>
                         </li>
-                        <li th:each="page : ${#numbers.sequence(0, flowers.totalPages-1)}"
-                            th:if="${page >= flowers.number-5 and page <= flowers.number+5}"
-                            th:classappend="${page == flowers.number} ? 'active'"
+                        <li th:each="page : ${#numbers.sequence(start, end)}"
+                            th:classappend="${page == flowers.number+1} ? 'active'"
                             class="page-item">
-                            <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+                            <a th:text="${page}" class="page-link" th:href="@{|?page=${page-1}|}">1</a>
                         </li>
-                        <li class ="page-item" th:classappend="${!flowers.hasNext} ? 'disabled'">
-                            <a class="page-link" th:href="@{|?page=${flowers.number + 1}|}">
+                        <li th:if="${end < flowers.totalPages}" class ="page-item">
+                            <a class="page-link" th:href="@{?(page=${start + maxPage - 1})}" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        <li th:if="${end < flowers.totalPages}" class ="page-item">
+                            <a class="page-link" th:href="@{?(page=${flowers.totalPages - 1})}" aria-label="Next">
+                                <span aria-hidden="true">&raquo;&raquo;</span>
                             </a>
                         </li>
                     </ul>

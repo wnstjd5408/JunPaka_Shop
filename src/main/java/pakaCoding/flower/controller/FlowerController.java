@@ -38,6 +38,8 @@ public class FlowerController {
         List<Type> types = typeService.allType();
 
         log.info("flower.getNumbers = {}", flowers.getTotalPages());
+
+        model.addAttribute("maxPage", 5);
         model.addAttribute("flowers", flowers);
         model.addAttribute("types", types);
         pageModelPut(flowers, model);
@@ -58,6 +60,7 @@ public class FlowerController {
         List<Type> types = typeService.allType();
 
         model.addAttribute("types", types);
+        model.addAttribute("maxPage", 5);
         model.addAttribute("flowers", flowersType);
         return "flowers/flowerList";
     }
