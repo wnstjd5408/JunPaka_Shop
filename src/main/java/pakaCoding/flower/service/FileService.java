@@ -83,6 +83,10 @@ public class FileService {
 
                     }
                 }
+
+            }
+            else{
+                files = Collections.emptyList();
             }
         }catch (Exception e){
             e.printStackTrace();
