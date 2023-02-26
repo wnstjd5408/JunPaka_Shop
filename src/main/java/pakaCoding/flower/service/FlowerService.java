@@ -47,7 +47,6 @@ public class FlowerService {
             //파일저장
             List<File> files = fileService.saveFile(flowerDto);
             flower.addFiles(files);
-            log.info("flower.getFiles ={}", flower.getFiles().get(0).getOriginFileName());
             flowerRepository.save(flower);
         }
         //update
