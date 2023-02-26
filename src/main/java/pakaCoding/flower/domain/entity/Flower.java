@@ -6,6 +6,9 @@ import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import pakaCoding.flower.dto.FlowerDto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -34,9 +37,8 @@ public class Flower extends TimeEntity {
 
     private String delYn;       //삭제여부
 
-    @OneToOne
-    @JoinColumn(name="flower_file_id")
-    private FlowerFile flowerFile;
+    @OneToMany(mappedBy = "flower",  cascade = CascadeType.PERSIST, orphanRemoval = true)
+    private List<File> files = new ArrayList<>();
 
 
     public Flower delete(String delYn){
@@ -44,11 +46,20 @@ public class Flower extends TimeEntity {
         return this;
     }
 
-    public Flower update(FlowerFile flowerFile){
-        this.flowerFile = flowerFile;
+    public Flower update(List<File> files){
+        this.files = files;
         return this;
     }
 
+
+    public void addFlowerUploadFiles(File file){
+        file.setFlower(this);
+    }
+
+    public void addFiles(List<File> files){
+        this.files = files;
+        files.forEach(file -> file.setFlower(this));
+    }
 
 
     @Builder

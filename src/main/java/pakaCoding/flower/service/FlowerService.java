@@ -3,20 +3,17 @@ package pakaCoding.flower.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pakaCoding.flower.domain.entity.File;
 import pakaCoding.flower.domain.entity.Flower;
-import pakaCoding.flower.domain.entity.FlowerFile;
-import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.dto.FlowerDto;
 import pakaCoding.flower.repository.FlowerRepository;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import static org.springframework.data.domain.Sort.Direction.*;
+import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Service
 @Slf4j
@@ -31,17 +28,25 @@ public class FlowerService {
         Flower flower = null;
         log.info("flowerDto.getId() = {}" , flowerDto.getId());
 
+
+
         //insert
         if(flowerDto.getId() == null){
             flower = flowerDto.toEntity();
+
+            //파일저장
+            List<File> files = fileService.saveFile(flowerDto);
+            flower.addFiles(files);
+            log.info("flower.getFiles ={}", flower.getFiles().get(0).getOriginFileName());
             flowerRepository.save(flower);
         }
+        //update
         else{
             flower = flowerRepository.findById(flowerDto.getId()).get();
         }
 
-        //파일저장
-        FlowerFile flowerFile = fileService.saveFile(flowerDto);
+
+
 
         log.info("flower.getId() = {}", flower.getId());
         return flower.getId();

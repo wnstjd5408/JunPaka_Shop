@@ -6,19 +6,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import pakaCoding.flower.domain.entity.Flower;
-import pakaCoding.flower.domain.entity.FlowerFile;
 import pakaCoding.flower.domain.entity.File;
-import pakaCoding.flower.dto.FlowerFileDto;
-import pakaCoding.flower.dto.FileDto;
+import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.dto.FlowerDto;
-import pakaCoding.flower.repository.FileRepository;
-import pakaCoding.flower.repository.FlowerFileRepository;
 
 import java.io.InputStream;
 import java.util.*;
 
-import static org.apache.commons.io.FileUtils.*;
+import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
+import static org.apache.commons.io.FileUtils.deleteQuietly;
 
 @Service
 @RequiredArgsConstructor
@@ -30,27 +26,25 @@ public class FileService {
     private String uploadDir;
 
 
-    private final FileRepository fileRepository;
-    private final FlowerFileRepository flowerFileRepository;
-
 
     @Transactional
-    public FlowerFile saveFile(FlowerDto flowerDto) throws Exception {
+    public List<File> saveFile(FlowerDto flowerDto) throws Exception {
         log.info("saveFile 실행");
         List<MultipartFile> multipartFile  = flowerDto.getMultipartFile();
+        List<File> files = new ArrayList<>();
         log.info("multipartFileList ={}", multipartFile);
 
+        Flower flower = flowerDto.toEntity();
 
         //결과 map
         Map<String, Object> result = new HashMap<>();
-        FlowerFile flowerFile = null;
 
-
+        Long fileId = null;
         //파일 시퀀스 리스트
         List<Long> fileIds = new ArrayList<>();
 
         try{
-            if(!multipartFile.isEmpty()){
+            if(!multipartFile.isEmpty() && multipartFile != null){
                 if(multipartFile.size() > 0 && !multipartFile.get(0).getOriginalFilename().equals("")){
                     for (MultipartFile file1 : multipartFile) {
                         log.info("file1 = {}", file1.getOriginalFilename());
@@ -58,19 +52,15 @@ public class FileService {
                         String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
                         String saveFileName = UUID.randomUUID() + extension;
 
-
                         java.io.File targetFile = new java.io.File(uploadDir + saveFileName);
 
 
                         //초기값으로 fail 설정
                         result.put("result", "FAIL");
 
-                        FileDto fileDto = buildFileDto(file1, originalFilename, extension, saveFileName);
 
-                        //파일 insert
-                        File file = fileDto.toEntity();
-                        Long fileId = insertFile(file);
-                        log.info("fileId ={}" ,fileId);
+                        File file = buildFileDto(file1, originalFilename, extension, saveFileName, flower);
+                        files.add(file);
 
 
                         try{
@@ -90,17 +80,6 @@ public class FileService {
                             break;
                         }
 
-                        Flower flower = flowerDto.toEntity();
-
-                        FlowerFileDto flowerFileDto =
-                                FlowerFileDto.builder().
-                                flower(flower).
-                                        build();
-
-
-                        flowerFile = flowerFileDto.toEntity(file);
-                        Long flowerFileId = insertFlowerFile(flowerFile);
-                        log.info("flowerFileId = {}", flowerFileId);
 
                     }
                 }
@@ -108,29 +87,21 @@ public class FileService {
         }catch (Exception e){
             e.printStackTrace();
         }
-        return flowerFile;
+        return files;
     }
 
-    private FileDto buildFileDto(MultipartFile file1, String originalFilename, String extension, String saveFileName) {
-        return FileDto.builder()
+    private File buildFileDto(MultipartFile file1, String originalFilename, String extension, String saveFileName, Flower flower) {
+        return File.builder()
                 .originFileName(originalFilename)
                 .savedFileName(saveFileName)
                 .uploadDir(uploadDir)
                 .extension(extension)
                 .size(file1.getSize())
                 .contentType(file1.getContentType())
+                .flower(flower)
                 .build();
     }
 
 
-    //** 파일 저장 db **//
-    @Transactional
-    public Long insertFile(File uploadFile){
-        return fileRepository.save(uploadFile).getId();
-    }
 
-    @Transactional
-    public Long insertFlowerFile(FlowerFile flowerFile){
-        return flowerFileRepository.save(flowerFile).getId();
-    }
 }
