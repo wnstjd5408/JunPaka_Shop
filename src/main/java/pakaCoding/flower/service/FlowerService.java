@@ -2,22 +2,28 @@ package pakaCoding.flower.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
+import org.springframework.data.domain.Sort;
+
 import org.springframework.data.domain.*;
 import org.springframework.data.domain.Sort.Direction;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pakaCoding.flower.domain.entity.File;
 import pakaCoding.flower.domain.entity.Flower;
-import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.dto.FlowerDto;
 import pakaCoding.flower.repository.FlowerRepository;
 
+
 import java.io.IOException;
 import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static org.springframework.data.domain.Sort.Direction.*;
+import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Service
 @Slf4j
@@ -27,21 +33,32 @@ public class FlowerService {
     private final FileService fileService;
 
     @Transactional
-    public Long saveFlower(FlowerDto flowerDto) throws IOException {
-        List<Flower> flowerList = flowerRepository.findAll();
+    public Long saveFlower(FlowerDto flowerDto) throws Exception {
+        log.info("FlowerService에서 saveFlower 실행");
         Flower flower = null;
+        log.info("flowerDto.getId() = {}" , flowerDto.getId());
+
 
 
         //insert
         if(flowerDto.getId() == null){
             flower = flowerDto.toEntity();
+
+            //파일저장
+            List<File> files = fileService.saveFile(flowerDto);
+            flower.addFiles(files);
+            log.info("flower.getFiles ={}", flower.getFiles().get(0).getOriginFileName());
             flowerRepository.save(flower);
         }
+        //update
+        else{
+            flower = flowerRepository.findById(flowerDto.getId()).get();
+        }
 
-        //파일저장
-        fileService.saveFile(flowerDto);
 
 
+
+        log.info("flower.getId() = {}", flower.getId());
         return flower.getId();
     }
 

@@ -37,10 +37,10 @@ public class Comment {
     private String modifiedDate;
 
     @ManyToOne
-    @JoinColumn(name="flower_id")
+    @JoinColumn(name="flower_id") //외래키
     private Flower flower;
 
     @ManyToOne
-    @JoinColumn(name ="member_id")
+    @JoinColumn(name ="member_id")//외래키
     private Member member;
 }

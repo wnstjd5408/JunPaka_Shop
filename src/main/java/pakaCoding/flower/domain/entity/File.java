@@ -5,14 +5,15 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "file")
-public class UploadFile extends TimeEntity {
+public class File extends TimeEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="file_id")
     private Long id;
 
@@ -34,14 +35,19 @@ public class UploadFile extends TimeEntity {
 
     private String contentType; //ContentType
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "flower_id")
+    private Flower flower;
+
     @Builder
-    public UploadFile(Long id, String originFileName, String savedFileName, String uploadDir, String extension, Long size, String contentType) {
+    public File(Long id, String originFileName, String savedFileName, String uploadDir, String extension, Long size, String contentType, Flower flower) {
         this.id = id;
         this.originFileName = originFileName;
         this.savedFileName = savedFileName;
         this.uploadDir = uploadDir;
         this.extension = extension;
         this.size = size;
+        this.flower = flower;
         this.contentType = contentType;
     }
 }

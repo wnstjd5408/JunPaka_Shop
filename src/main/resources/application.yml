@@ -8,7 +8,7 @@ spring:
   jpa:
     generate-ddl: true
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
         format_sql: true
@@ -30,4 +30,4 @@ servlet:
     max-request-size: 10MB
 
 upload:
-  path: D:/file
+  path: D:/file/

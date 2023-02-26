@@ -2,7 +2,8 @@ package pakaCoding.flower.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import pakaCoding.flower.domain.entity.UploadFile;
+import pakaCoding.flower.domain.entity.File;
+import pakaCoding.flower.domain.entity.Flower;
 
 @Data
 public class FileDto {
@@ -22,12 +23,13 @@ public class FileDto {
 
     private String contentType; //ContentType
 
+    private Flower flower;
 
     public FileDto() {
     }
 
     @Builder
-    public FileDto(Long id, String originFileName, String savedFileName, String uploadDir, String extension, Long size, String contentType) {
+    public FileDto(Long id, String originFileName, String savedFileName, String uploadDir, String extension, Long size, String contentType, Flower flower) {
         this.id = id;
         this.originFileName = originFileName;
         this.savedFileName = savedFileName;
@@ -35,16 +37,18 @@ public class FileDto {
         this.extension = extension;
         this.size = size;
         this.contentType = contentType;
+        this.flower = flower;
     }
 
-    public UploadFile toEntity(){
-        return UploadFile.builder()
+    public File toEntity(){
+        return File.builder()
                 .originFileName(originFileName)
                 .savedFileName(savedFileName)
                 .uploadDir(uploadDir)
                 .extension(extension)
                 .size(size)
                 .contentType(contentType)
+                .flower(flower)
                 .build();
     }
 }

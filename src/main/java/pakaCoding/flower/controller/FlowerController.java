@@ -1,5 +1,6 @@
 package pakaCoding.flower.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -8,7 +9,11 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.RequestParam;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Type;
@@ -16,6 +21,7 @@ import pakaCoding.flower.dto.FlowerDto;
 import pakaCoding.flower.service.FlowerService;
 import pakaCoding.flower.service.TypeService;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -27,8 +33,23 @@ public class FlowerController {
     private final TypeService typeService;
 
     @GetMapping("/flowers/create")
-    public String newFlower(){
+    public String newFlower(Model model){
+        List<Type> types = typeService.allType();
+
+        model.addAttribute("flowerDto", new FlowerDto());
+        model.addAttribute("types", types);
         return "forms/FlowerForm";
+    }
+
+    @PostMapping("/flowers/create")
+    public String save(@ModelAttribute FlowerDto flowerDto, RedirectAttributes redirectAttributes) throws Exception {
+
+        log.info("FlowerController save 호출");
+        Long flowerId = flowerService.saveFlower(flowerDto);
+
+        redirectAttributes.addAttribute("flowerId", flowerId);
+
+        return "redirect:/flowers/{flowerId}";
     }
 
     @GetMapping("/flowers")
@@ -42,6 +63,7 @@ public class FlowerController {
         model.addAttribute("maxPage", 5);
         model.addAttribute("flowers", flowers);
         model.addAttribute("types", types);
+
         pageModelPut(flowers, model);
         return "flowers/flowerList";
     }
