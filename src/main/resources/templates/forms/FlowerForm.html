@@ -11,19 +11,19 @@
             <div class="py-5 text-center">
                 <h3>상품등록</h3>
             </div>
-            <form th:action th:object="${flowerDto}" method="post" enctype="multipart/form-data">
+            <form th:action th:object="${flowerFormDto}" method="post" enctype="multipart/form-data">
 
                 <div class="mb-3">
                     <label for="flowerName" class="form-label">꽃 이름</label>
-                    <input type="text" class="form-control" name="name" id="flowerName">
+                    <input type="text" class="form-control" th:field="*{name}" id="flowerName">
                 </div>
                 <div class="mb-3">
                     <label for="flowerPrice" class="form-label">가격</label>
-                    <input type="text" class="form-control" name="price" id="flowerPrice">
+                    <input type="text" class="form-control" th:field="*{price}" id="flowerPrice">
                 </div>
                 <div class="mb-3">
                     <label for="flowerStockQuantity" class="form-label">수량</label>
-                    <input type="text" class="form-control" name="stockQuantity" id="flowerStockQuantity">
+                    <input type="text" class="form-control" th:field="*{stockQuantity}" id="flowerStockQuantity">
                 </div>
                 <div class="mb-3">
                     <label for="type" class="form-label">타입</label>
@@ -32,11 +32,16 @@
                         <option th:each="type : ${types}" th:value="${type.id}" th:text="${type.typename}" ></option>
                     </select>
                 </div>
-                <div class="mb-3">
-                    <label for="flowerImage" class="form-label">이미지</label>
-                    <input type="file" class="form-control" name="multipartFile" multiple id="flowerImage">
+                <div class="mb-3" th:if="${#lists.isEmpty(flowerFormDto.fileImgDtoList)}">
+                    <div th:each="num: ${#numbers.sequence(1,3)}">
+                        <label for = "flowerImage" class="form-label" th:text="꽃이미지 + ${num}"></label>
+                        <input type="file" class="form-control" name="flowerImgFile"  id="flowerImage">
+                    </div>
                 </div>
-                <div class="mb-2">
+
+
+                </div>
+                <div class="mb-3">
                     <button type="submit" class="btn btn-sm btn-secondary form-control">등록하기</button>
                 </div>
             </form>

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.RequestParam;
 import pakaCoding.flower.domain.entity.Flower;
@@ -33,28 +34,30 @@ public class FlowerController {
     public String newFlower(Model model){
         List<Type> types = typeService.allType();
 
-        model.addAttribute("flowerDto", new FlowerFormDto());
+        model.addAttribute("flowerFormDto", new FlowerFormDto());
         model.addAttribute("types", types);
         return "forms/FlowerForm";
     }
 
     @PostMapping("/flowers/create")
-    public String save(@Valid FlowerFormDto flowerDto, Model model, BindingResult bindingResult,
-                       RedirectAttributes redirectAttributes) throws Exception {
-
+    public String save(@Valid FlowerFormDto flowerFormDto, Model model, BindingResult bindingResult,
+                       RedirectAttributes redirectAttributes,
+                       @RequestParam(name="flowerImgFile") List<MultipartFile> flowerImgFileList) throws Exception {
+        log.info("FlowerController save 호출");
         if(bindingResult.hasErrors()){
+            log.info("bindingResult.error");
             return "forms/FlowerForm";
         }
 
-        if(flowerDto.getId() == null){
+        if(flowerImgFileList.get(0).isEmpty() && flowerFormDto.getId() == null){
+            log.info("빈리스트 에러");
             model.addAttribute("errorMessage", "첫번째 상품 이미지는 필수 입력값입니다.");
             return "forms/FlowerForm";
         }
 
 
-        log.info("FlowerController save 호출");
         try {
-            Long flowerId = flowerService.saveFlower(flowerDto);
+            Long flowerId = flowerService.saveFlower(flowerFormDto, flowerImgFileList);
             redirectAttributes.addAttribute("flowerId", flowerId);
         }catch (Exception e){
             model.addAttribute("errorMessage", "상품 등록 중 에러가 발생하였습니다.");

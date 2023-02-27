@@ -6,7 +6,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "fileImage")
@@ -41,6 +41,7 @@ public class FileImage extends TimeEntity {
     @JoinColumn(name = "flower_id")
     private Flower flower;
 
+
     @Builder
     public FileImage(Long id, String originFileImgName, String savedFileImgName, String uploadDir, String extension, Long size, String contentType, String reimgYn, Flower flower) {
         this.id = id;
@@ -52,5 +53,15 @@ public class FileImage extends TimeEntity {
         this.contentType = contentType;
         this.reimgYn = reimgYn;
         this.flower = flower;
+    }
+
+
+    public void updateFlowerImg(String originFileImgName, String savedFileImgName, String uploadDir, String extension, Long size, String contentType){
+        this.originFileImgName = originFileImgName;
+        this.savedFileImgName = savedFileImgName;
+        this.uploadDir = uploadDir;
+        this.extension = extension;
+        this.size = size;
+        this.contentType = contentType;
     }
 }

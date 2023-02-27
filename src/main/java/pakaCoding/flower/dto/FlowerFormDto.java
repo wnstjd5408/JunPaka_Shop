@@ -1,9 +1,11 @@
 package pakaCoding.flower.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
+import pakaCoding.flower.domain.constant.ItemSellStatus;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.TimeEntity;
 import pakaCoding.flower.domain.entity.Type;
@@ -20,14 +22,14 @@ public class FlowerFormDto extends TimeEntity {
 
     @NotBlank(message = "상품명은 필수 입력 값입니다.")
     private String name;
-    @NotBlank(message = "가격은 필수 입력 값입니다.")
-    private int price;
-    @NotBlank(message = "재고는 필수 입력 값입니다.")
-    private int stockQuantity;
+    @NotNull(message = "가격은 필수 입력 값입니다.")
+    private Integer price;
+    @NotNull(message = "재고는 필수 입력 값입니다.")
+    private Integer stockQuantity;
     private Type type;
 
 
-    // 상품 수정 시 사용되는 멤버 변수들
+    // 꽃 수정 시 사용되는 멤버 변수들
     private List<FileImgDto> fileImgDtoList = new ArrayList<>();
     private List<Long> flowerImgIds = new ArrayList<>();
 
@@ -35,7 +37,7 @@ public class FlowerFormDto extends TimeEntity {
 
     }
 
-    public FlowerFormDto(String name, int price, int stockQuantity) {
+    public FlowerFormDto(String name, Integer price, Integer stockQuantity) {
         this.name = name;
         this.price = price;
         this.stockQuantity = stockQuantity;
@@ -43,7 +45,7 @@ public class FlowerFormDto extends TimeEntity {
     }
 
     @Builder
-    public FlowerFormDto(Long id, String name, int price, int stockQuantity, Type type, Long hitCount, List<MultipartFile> multipartFile) {
+    public FlowerFormDto(Long id, String name, Integer price, Integer stockQuantity, Type type) {
         this.id = id;
         this.name = name;
         this.price = price;
@@ -59,8 +61,11 @@ public class FlowerFormDto extends TimeEntity {
         return Flower.builder()
                 .type(type)
                 .name(name)
-                .price(price)
-                .stockQuantity(stockQuantity)
+                .price(price.intValue())
+                .stockQuantity(stockQuantity.intValue())
+                .itemSellStatus(ItemSellStatus.SELL)
+                .hitCount(0L)
+                .delYn("N")
                 .build();
     }
 }
