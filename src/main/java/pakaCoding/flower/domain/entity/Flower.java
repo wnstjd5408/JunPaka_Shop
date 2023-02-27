@@ -3,8 +3,8 @@ package pakaCoding.flower.domain.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import pakaCoding.flower.domain.constant.ItemSellStatus;
-import pakaCoding.flower.dto.FlowerDto;
+import pakaCoding.flower.domain.constant.FlowerSellStatus;
+import pakaCoding.flower.dto.FlowerFormDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ public class Flower extends TimeEntity {
     private List<FileImage> files = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
-    private ItemSellStatus itemSellStatus;
+    private FlowerSellStatus flowerSellStatus;
 
 
     public Flower delete(String delYn){
@@ -62,12 +62,12 @@ public class Flower extends TimeEntity {
 
 
     @Builder
-    public Flower(FlowerDto flowerDto) {
+    public Flower(FlowerFormDto flowerDto) {
         this.name = flowerDto.getName();
         this.price = flowerDto.getPrice();
         this.stockQuantity = flowerDto.getStockQuantity();
         this.type = flowerDto.getType();
-        this.itemSellStatus =
+        this.flowerSellStatus =flowerDto.getFlowerSellStatus();
         this.hitCount = 0L;
         this.delYn = "N";
     }

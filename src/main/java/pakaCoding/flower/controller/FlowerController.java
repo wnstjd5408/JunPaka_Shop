@@ -4,12 +4,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,11 +15,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.RequestParam;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Type;
-import pakaCoding.flower.dto.FlowerDto;
+import pakaCoding.flower.dto.FlowerFormDto;
 import pakaCoding.flower.service.FlowerService;
 import pakaCoding.flower.service.TypeService;
 
-import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -36,16 +33,21 @@ public class FlowerController {
     public String newFlower(Model model){
         List<Type> types = typeService.allType();
 
-        model.addAttribute("flowerDto", new FlowerDto());
+        model.addAttribute("flowerFormDto", new FlowerFormDto());
         model.addAttribute("types", types);
         return "forms/FlowerForm";
     }
 
     @PostMapping("/flowers/create")
-    public String save(@ModelAttribute FlowerDto flowerDto, RedirectAttributes redirectAttributes) throws Exception {
+    public String save(@Valid FlowerFormDto flowerFormDto,
+                       BindingResult bindingResult,
+                       RedirectAttributes redirectAttributes) throws Exception {
+        if(bindingResult.hasErrors()){
+            return "forms/FlowerForm";
+        }
 
         log.info("FlowerController save 호출");
-        Long flowerId = flowerService.saveFlower(flowerDto);
+        Long flowerId = flowerService.saveFlower(flowerFormDto);
 
         redirectAttributes.addAttribute("flowerId", flowerId);
 
@@ -55,7 +57,7 @@ public class FlowerController {
     @GetMapping("/flowers")
     public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page){
 
-        Page<FlowerDto> flowers = flowerService.findAllFlowers(page);
+        Page<FlowerFormDto> flowers = flowerService.findAllFlowers(page);
         List<Type> types = typeService.allType();
 
         log.info("flower.getNumbers = {}", flowers.getTotalPages());
@@ -68,7 +70,7 @@ public class FlowerController {
         return "flowers/flowerList";
     }
 
-    private void pageModelPut(Page<FlowerDto> results, Model model){
+    private void pageModelPut(Page<FlowerFormDto> results, Model model){
         model.addAttribute("totalCount", results.getTotalElements());
         model.addAttribute("size", results.getPageable().getPageSize());
         model.addAttribute("number", results.getPageable().getPageNumber());
@@ -78,7 +80,7 @@ public class FlowerController {
     public String typeIdContain(@PathVariable int typeId, Model model,
                                 @RequestParam(value="page", defaultValue = "0") int page){
         log.info("FlowerController 실행");
-        Page<FlowerDto> flowersType = flowerService.findFlowersType(typeId, page);
+        Page<FlowerFormDto> flowersType = flowerService.findFlowersType(typeId, page);
         List<Type> types = typeService.allType();
 
         model.addAttribute("types", types);

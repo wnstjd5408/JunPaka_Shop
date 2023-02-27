@@ -1,5 +1,5 @@
 package pakaCoding.flower.domain.constant;
 
-public enum ItemSellStatus {
+public enum FlowerSellStatus {
     SELL, SOLD_OUT
 }

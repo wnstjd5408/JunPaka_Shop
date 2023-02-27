@@ -11,8 +11,14 @@
             <div class="py-5 text-center">
                 <h3>상품등록</h3>
             </div>
-            <form th:action th:object="${flowerDto}" method="post" enctype="multipart/form-data">
-
+            <form th:object="${flowerFormDto}" method="post" enctype="multipart/form-data">
+                <div class="mb-3">
+                    <label for="flowerSell" class="form-label">타입</label>
+                    <select name="flowerSellStatus" class="form-control, form-select" id="flowerSell">
+                        <option value="SELL">판매중</option>
+                        <option value="SOLD_OUT">품절</option>
+                    </select>
+                </div>
                 <div class="mb-3">
                     <label for="flowerName" class="form-label">꽃 이름</label>
                     <input type="text" class="form-control" name="name" id="flowerName">
@@ -31,6 +37,10 @@
                         <option value="">==타입 선택==</option>
                         <option th:each="type : ${types}" th:value="${type.id}" th:text="${type.typename}" ></option>
                     </select>
+                </div>
+                <div class="mb-3">
+                    <label for="thumbnails" class="form-label">썸네일 - 메인 사진</label>
+                    <input type="file" class="form-control" name="thumbnails" id="thumbnails">
                 </div>
                 <div class="mb-3">
                     <label for="flowerImage" class="form-label">이미지</label>

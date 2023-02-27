@@ -1,7 +1,6 @@
 package pakaCoding.flower.repository;
 
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,13 +12,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Type;
-import pakaCoding.flower.dto.FlowerDto;
-
-import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 
 @DataJpaTest

@@ -26,11 +26,13 @@ public class FileImageDto {
 
     private Flower flower;
 
+    private String repimgYn;
+
     public FileImageDto() {
     }
 
     @Builder
-    public FileImageDto(Long id, String originFileName, String savedFileName, String uploadDir, String extension, Long size, String contentType, Flower flower) {
+    public FileImageDto(Long id, String originFileName, String savedFileName, String uploadDir, String extension, Long size, String contentType, Flower flower, String repimgYn) {
         this.id = id;
         this.originFileName = originFileName;
         this.savedFileName = savedFileName;
@@ -39,6 +41,7 @@ public class FileImageDto {
         this.size = size;
         this.contentType = contentType;
         this.flower = flower;
+        this.repimgYn = repimgYn;
     }
 
     public FileImage toEntity(){
@@ -50,6 +53,7 @@ public class FileImageDto {
                 .size(size)
                 .contentType(contentType)
                 .flower(flower)
+                .repimgYn(repimgYn)
                 .build();
     }
 }
