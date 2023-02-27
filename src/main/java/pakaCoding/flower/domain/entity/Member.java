@@ -7,6 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.validator.constraints.Length;
+import pakaCoding.flower.domain.constant.Gender;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

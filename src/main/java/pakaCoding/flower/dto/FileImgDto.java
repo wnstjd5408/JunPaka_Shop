@@ -3,52 +3,51 @@ package pakaCoding.flower.dto;
 import lombok.Builder;
 import lombok.Data;
 import pakaCoding.flower.domain.entity.FileImage;
-import pakaCoding.flower.domain.entity.Flower;
 
 @Data
-public class FileDto {
+public class FileImgDto {
 
 
     private Long id;
 
-    private String originFileName;
+    private String originFileImgName;
 
-    private String savedFileName;
+    private String savedFileImgName;
 
-    private String uploadDir;   //경로명
+    private String uploadDir;
 
-    private String extension;   //확장자
+    private String extension;
 
     private Long size;          //파일사이즈
 
     private String contentType; //ContentType
 
-    private Flower flower;
 
-    public FileDto() {
-    }
+    private String reimgYn;  //대표 이미지 여부
 
     @Builder
-    public FileDto(Long id, String originFileName, String savedFileName, String uploadDir, String extension, Long size, String contentType, Flower flower) {
+    public FileImgDto(Long id, String originFileImgName, String savedFileImgName, String uploadDir, String extension,
+                      Long size, String contentType, String reimgYn) {
         this.id = id;
-        this.originFileName = originFileName;
-        this.savedFileName = savedFileName;
+        this.originFileImgName = originFileImgName;
+        this.savedFileImgName = savedFileImgName;
         this.uploadDir = uploadDir;
         this.extension = extension;
         this.size = size;
         this.contentType = contentType;
-        this.flower = flower;
+        this.reimgYn = reimgYn;
     }
 
     public FileImage toEntity(){
         return FileImage.builder()
-                .originFileName(originFileName)
-                .savedFileName(savedFileName)
+                .originFileImgName(originFileImgName)
+                .savedFileImgName(savedFileImgName)
                 .uploadDir(uploadDir)
                 .extension(extension)
                 .size(size)
                 .contentType(contentType)
-                .flower(flower)
+                .reimgYn(reimgYn)
                 .build();
     }
+
 }
