@@ -4,13 +4,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.web.multipart.MultipartFile;
 import pakaCoding.flower.domain.constant.ItemSellStatus;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.TimeEntity;
 import pakaCoding.flower.domain.entity.Type;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 

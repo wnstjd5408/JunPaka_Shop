@@ -8,16 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 import pakaCoding.flower.domain.entity.FileImage;
-import pakaCoding.flower.domain.entity.Flower;
-import pakaCoding.flower.dto.FlowerFormDto;
 import pakaCoding.flower.repository.FileImgRepository;
 
 import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.util.*;
-
-import static org.apache.commons.io.FileUtils.copyInputStreamToFile;
-import static org.apache.commons.io.FileUtils.deleteQuietly;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -36,15 +30,11 @@ public class FileImageService {
     public void saveFile(FileImage fileImage, MultipartFile flowerImgFile) throws Exception {
         log.info("saveFile 실행");
 
-        //결과 map
-        Map<String, Object> result = new HashMap<>();
         String originalFilename = flowerImgFile.getOriginalFilename();
 
         String saveFileName = "";
         String imgUrl = "";
         String extension = "";
-        //파일 시퀀스 리스트
-        List<Long> fileIds = new ArrayList<>();
 
 
         try{
