@@ -3,6 +3,7 @@ package pakaCoding.flower.domain.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
@@ -35,15 +36,18 @@ public class FileImage extends TimeEntity {
 
     private String contentType; //ContentType
 
-    private String reimgYn;  //대표 이미지 여부
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    private String repimgYn; //대표이미지 여부
+
+
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "flower_id")
     private Flower flower;
 
 
     @Builder
-    public FileImage(Long id, String originFileImgName, String savedFileImgName, String uploadDir, String extension, Long size, String contentType, String reimgYn, Flower flower) {
+    public FileImage(Long id, String originFileName, String savedFileName, String uploadDir, String extension, Long size, String contentType, Flower flower, String repimgYn) {
+
         this.id = id;
         this.originFileImgName = originFileImgName;
         this.savedFileImgName = savedFileImgName;
@@ -63,5 +67,10 @@ public class FileImage extends TimeEntity {
         this.extension = extension;
         this.size = size;
         this.contentType = contentType;
+        this.repimgYn =repimgYn;
+    }
+
+    public void recipeThumbNail(MultipartFile multipartFile){
+        this.repimgYn = "Y";
     }
 }

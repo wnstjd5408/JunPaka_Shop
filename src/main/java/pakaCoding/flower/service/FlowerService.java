@@ -2,9 +2,10 @@ package pakaCoding.flower.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import org.springframework.data.domain.*;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -12,7 +13,6 @@ import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.dto.FlowerFormDto;
 import pakaCoding.flower.repository.FlowerRepository;
-
 
 import java.util.List;
 import java.util.Optional;
@@ -26,11 +26,12 @@ public class FlowerService {
     private final FileImageService fileImageService;
 
     @Transactional
-    public Long saveFlower(FlowerFormDto flowerFormDto, List<MultipartFile> flowerImgFileList) throws Exception {
+    public Long saveFlower(FlowerFormDto flowerFormDto) throws Exception {
         log.info("FlowerService에서 saveFlower 실행");
-
         Flower flower = null;
-        //상품 insert
+        log.info("flowerFormDto.getId() = {}" , flowerFormDto.getId());
+
+        //insert
         if(flowerFormDto.getId() == null){
             flower = flowerFormDto.toEntity();
             flowerRepository.save(flower);
@@ -40,21 +41,9 @@ public class FlowerService {
             flower = flowerRepository.findById(flowerFormDto.getId()).get();
         }
 
-        log.info("flowerImgFileList.size() = {}", flowerImgFileList.size());
-        //이미지 등록
-        for (int i = 0; i < flowerImgFileList.size(); i++) {
-            FileImage  fileImage = new FileImage();
-            fileImage.setFlower(flower);
-            if (i == 0){
-                fileImage.setReimgYn("Y");
-            }
-            else{
-                fileImage.setReimgYn("N");
-            }
-            fileImageService.saveFile(fileImage, flowerImgFileList.get(i));
-        }
-
-
+        //파일저장
+        List<FileImage> files = fileImageService.saveFile(flowerFormDto);
+        flower.addFiles(files);
 
         log.info("flower.getId() = {}", flower.getId());
         return flower.getId();
@@ -63,7 +52,6 @@ public class FlowerService {
     public Optional<Flower> findOne(Long flowerId){
         return flowerRepository.findById(flowerId);
     }
-
 
 
     public Page<FlowerFormDto> findAllFlowers(int page){

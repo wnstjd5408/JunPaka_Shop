@@ -40,29 +40,18 @@ public class FlowerController {
     }
 
     @PostMapping("/flowers/create")
-    public String save(@Valid FlowerFormDto flowerFormDto, Model model, BindingResult bindingResult,
-                       RedirectAttributes redirectAttributes,
-                       @RequestParam(name="flowerImgFile") List<MultipartFile> flowerImgFileList) throws Exception {
-        log.info("FlowerController save 호출");
+    public String save(@Valid FlowerFormDto flowerFormDto,
+                       BindingResult bindingResult,
+                       RedirectAttributes redirectAttributes) throws Exception {
         if(bindingResult.hasErrors()){
-            log.info("bindingResult.error");
             return "forms/FlowerForm";
         }
 
-        if(flowerImgFileList.get(0).isEmpty() && flowerFormDto.getId() == null){
-            log.info("빈리스트 에러");
-            model.addAttribute("errorMessage", "첫번째 상품 이미지는 필수 입력값입니다.");
-            return "forms/FlowerForm";
-        }
+        log.info("FlowerController save 호출");
+        Long flowerId = flowerService.saveFlower(flowerFormDto);
 
+        redirectAttributes.addAttribute("flowerId", flowerId);
 
-        try {
-            Long flowerId = flowerService.saveFlower(flowerFormDto, flowerImgFileList);
-            redirectAttributes.addAttribute("flowerId", flowerId);
-        }catch (Exception e){
-            model.addAttribute("errorMessage", "상품 등록 중 에러가 발생하였습니다.");
-            return "forms/FlowerForm";
-        }
 
         return "redirect:/flowers/{flowerId}";
     }
