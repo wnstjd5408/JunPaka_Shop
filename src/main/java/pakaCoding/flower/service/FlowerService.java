@@ -60,8 +60,8 @@ public class FlowerService {
         Pageable pageable = PageRequest.of(page, 16);
         log.info("findAllFlowers 시작");
         log.info("findAllFlowers 사용한 service repository 개수 ={}",
-                flowerRepository.findAll(pageable).stream().count());
-        Page<Flower> flowerList = flowerRepository.findAll(pageable);
+                flowerRepository.findAllByOrderByCreateDateDesc(pageable).stream().count());
+        Page<Flower> flowerList = flowerRepository.findAllByOrderByCreateDateDesc(pageable);
         return getFlowerFormDtos(flowerList, pageable);
     }
 

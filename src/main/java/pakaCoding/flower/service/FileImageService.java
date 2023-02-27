@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.dto.FlowerFormDto;
+import pakaCoding.flower.repository.FileImageRepository;
 
 import java.io.InputStream;
 import java.util.*;
@@ -23,10 +24,11 @@ import static org.apache.commons.io.FileUtils.deleteQuietly;
 public class FileImageService {
 
 
+
     @Value("${upload.path}")
     private String uploadDir;
 
-    private String repimgYn;
+    private final FileImageRepository fileImageRepository;
 
     @Transactional
     public List<FileImage> saveFile(FlowerFormDto flowerDto) throws Exception {
@@ -72,7 +74,6 @@ public class FileImageService {
                         }
 
                         files.add(file);
-
                         try{
                             InputStream fileStream = file1.getInputStream();
                             copyInputStreamToFile(fileStream, targetFile); //파일저장
@@ -104,10 +105,10 @@ public class FileImageService {
         return files;
     }
 
-    private FileImage buildFileDto(MultipartFile file1, String originalFilename, String extension, String saveFileName, Flower flower, String repimgYn) {
+    private FileImage buildFileDto(MultipartFile file1, String originFileImgName, String extension, String savedFileImgName, Flower flower, String repimgYn) {
         return FileImage.builder()
-                .originFileName(originalFilename)
-                .savedFileName(saveFileName)
+                .originFileImgName(originFileImgName)
+                .savedFileImgName(savedFileImgName)
                 .uploadDir(uploadDir)
                 .extension(extension)
                 .size(file1.getSize())

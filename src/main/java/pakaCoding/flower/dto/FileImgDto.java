@@ -23,11 +23,11 @@ public class FileImgDto {
     private String contentType; //ContentType
 
 
-    private String reimgYn;  //대표 이미지 여부
+    private String repimgYn;  //대표 이미지 여부
 
     @Builder
     public FileImgDto(Long id, String originFileImgName, String savedFileImgName, String uploadDir, String extension,
-                      Long size, String contentType, String reimgYn) {
+                      Long size, String contentType, String repimgYn) {
         this.id = id;
         this.originFileImgName = originFileImgName;
         this.savedFileImgName = savedFileImgName;
@@ -35,7 +35,7 @@ public class FileImgDto {
         this.extension = extension;
         this.size = size;
         this.contentType = contentType;
-        this.reimgYn = reimgYn;
+        this.repimgYn = repimgYn;
     }
 
     public FileImage toEntity(){
@@ -46,7 +46,7 @@ public class FileImgDto {
                 .extension(extension)
                 .size(size)
                 .contentType(contentType)
-                .reimgYn(reimgYn)
+                .repimgYn(repimgYn)
                 .build();
     }
 

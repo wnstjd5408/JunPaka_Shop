@@ -47,7 +47,7 @@ public class FileImage extends TimeEntity {
 
 
     @Builder
-    public FileImage(Long id, String originFileName, String savedFileName, String uploadDir, String extension, Long size, String contentType, Flower flower, String repimgYn) {
+    public FileImage(Long id, String originFileImgName, String savedFileImgName, String uploadDir, String extension, Long size, String contentType, Flower flower, String repimgYn) {
 
         this.id = id;
         this.originFileImgName = originFileImgName;
@@ -56,12 +56,12 @@ public class FileImage extends TimeEntity {
         this.extension = extension;
         this.size = size;
         this.contentType = contentType;
-        this.reimgYn = reimgYn;
+        this.repimgYn = repimgYn;
         this.flower = flower;
     }
 
 
-    public void updateFlowerImg(String originFileImgName, String savedFileImgName, String uploadDir, String extension, Long size, String contentType){
+    public void updateFlowerImg(String originFileImgName, String savedFileImgName, String uploadDir, String extension, Long size, String contentType, String repimgYn){
         this.originFileImgName = originFileImgName;
         this.savedFileImgName = savedFileImgName;
         this.uploadDir = uploadDir;

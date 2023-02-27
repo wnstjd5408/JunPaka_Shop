@@ -59,10 +59,10 @@ public class Flower extends TimeEntity {
 //    }
 
 
-//    public void addFiles(List<FileImage> files){
-//        this.files = files;
-//        files.forEach(file -> file.setFlower(this));
-//    }
+    public void addFiles(List<FileImage> files){
+        this.files = files;
+        files.forEach(file -> file.setFlower(this));
+    }
 
 
     @Builder
