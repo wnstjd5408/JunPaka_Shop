@@ -31,6 +31,7 @@ public class FlowerFormDto extends TimeEntity {
     private List<MultipartFile> multipartFile;
     private FlowerSellStatus flowerSellStatus;
 
+
     public FlowerFormDto() {
 
     }
@@ -49,6 +50,7 @@ public class FlowerFormDto extends TimeEntity {
         this.multipartFile = multipartFile;
         this.flowerSellStatus =flowerSellStatus;
     }
+
 
 
 

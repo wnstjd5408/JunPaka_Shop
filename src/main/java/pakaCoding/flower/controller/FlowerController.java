@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.bind.annotation.RequestParam;
 import pakaCoding.flower.domain.entity.Flower;
@@ -50,6 +51,7 @@ public class FlowerController {
         Long flowerId = flowerService.saveFlower(flowerFormDto);
 
         redirectAttributes.addAttribute("flowerId", flowerId);
+
 
         return "redirect:/flowers/{flowerId}";
     }

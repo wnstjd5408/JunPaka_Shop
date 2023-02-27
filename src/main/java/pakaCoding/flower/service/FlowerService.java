@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.dto.FlowerFormDto;
@@ -35,7 +36,7 @@ public class FlowerService {
             flower = flowerFormDto.toEntity();
             flowerRepository.save(flower);
         }
-        //update
+        //상품 update
         else{
             flower = flowerRepository.findById(flowerFormDto.getId()).get();
         }
@@ -43,7 +44,6 @@ public class FlowerService {
         //파일저장
         List<FileImage> files = fileImageService.saveFile(flowerFormDto);
         flower.addFiles(files);
-
 
         log.info("flower.getId() = {}", flower.getId());
         return flower.getId();
@@ -53,13 +53,6 @@ public class FlowerService {
         return flowerRepository.findById(flowerId);
     }
 
-    //Pageing 전
-//    public List<Flower> findFlowers(){
-//        log.info("Flower Service findFlowers 시작");
-//        log.info("findFlowers를 사용한 service repository 개수 ={}",
-//                flowerRepository.findAll().stream().count());
-//        return flowerRepository.findAll(Sort.by(DESC, "createDate"));
-//    }
 
     public Page<FlowerFormDto> findAllFlowers(int page){
         Pageable pageable = PageRequest.of(page, 16);
@@ -73,7 +66,6 @@ public class FlowerService {
                         .name(m.getName())
                         .price(m.getPrice())
                         .stockQuantity(m.getStockQuantity())
-                        .hitCount(m.getHitCount())
                         .build())
                 .collect(Collectors.toList());
 
@@ -94,7 +86,6 @@ public class FlowerService {
                         .name(m.getName())
                         .price(m.getPrice())
                         .stockQuantity(m.getStockQuantity())
-                        .hitCount(m.getHitCount())
                         .build())
                 .collect(Collectors.toList());
         return new PageImpl<>(flowerDtoList, pageable, flowerList.getTotalElements());
