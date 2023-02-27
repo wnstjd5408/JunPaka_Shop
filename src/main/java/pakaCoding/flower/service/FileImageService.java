@@ -19,7 +19,7 @@ import static org.apache.commons.io.FileUtils.deleteQuietly;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class FileService {
+public class FileImageService {
 
 
     @Value("${upload.path}")

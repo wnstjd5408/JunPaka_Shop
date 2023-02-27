@@ -6,7 +6,7 @@ import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
 
 @Data
-public class FileDto {
+public class FileImageDto {
 
 
     private Long id;
@@ -23,13 +23,14 @@ public class FileDto {
 
     private String contentType; //ContentType
 
+
     private Flower flower;
 
-    public FileDto() {
+    public FileImageDto() {
     }
 
     @Builder
-    public FileDto(Long id, String originFileName, String savedFileName, String uploadDir, String extension, Long size, String contentType, Flower flower) {
+    public FileImageDto(Long id, String originFileName, String savedFileName, String uploadDir, String extension, Long size, String contentType, Flower flower) {
         this.id = id;
         this.originFileName = originFileName;
         this.savedFileName = savedFileName;

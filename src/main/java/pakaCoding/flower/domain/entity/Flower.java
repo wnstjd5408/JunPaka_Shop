@@ -3,6 +3,7 @@ package pakaCoding.flower.domain.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import pakaCoding.flower.domain.constant.ItemSellStatus;
 import pakaCoding.flower.dto.FlowerDto;
 
 import java.util.ArrayList;
@@ -39,6 +40,9 @@ public class Flower extends TimeEntity {
     @OneToMany(mappedBy = "flower",  cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<FileImage> files = new ArrayList<>();
 
+    @Enumerated(EnumType.STRING)
+    private ItemSellStatus itemSellStatus;
+
 
     public Flower delete(String delYn){
         this.delYn = delYn;
@@ -63,6 +67,7 @@ public class Flower extends TimeEntity {
         this.price = flowerDto.getPrice();
         this.stockQuantity = flowerDto.getStockQuantity();
         this.type = flowerDto.getType();
+        this.itemSellStatus =
         this.hitCount = 0L;
         this.delYn = "N";
     }
