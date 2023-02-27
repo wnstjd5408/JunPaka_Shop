@@ -7,25 +7,26 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "file")
+@Table(name = "fileImage")
 public class FileImage extends TimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "file_id")
+
+    @Column(name="file_image_id")
     private Long id;
 
 
     //고객이 업로드한 파일명
     @Column(nullable = false)
-    private String originFileName;
+    private String originFileImgName;
 
     //서버 내부에서 관리하는 파일명명
     @Column(nullable = false)
-    private String savedFileName;
+    private String savedFileImgName;
 
 
     private String uploadDir;   //경로명
@@ -36,23 +37,36 @@ public class FileImage extends TimeEntity {
 
     private String contentType; //ContentType
 
-    private String repimgYn;
-    ; //대표이미지 여부
 
+
+    private String repimgYn; //대표이미지 여부
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "flower_id")
     private Flower flower;
 
+
     @Builder
     public FileImage(Long id, String originFileName, String savedFileName, String uploadDir, String extension, Long size, String contentType, Flower flower, String repimgYn) {
+
         this.id = id;
-        this.originFileName = originFileName;
-        this.savedFileName = savedFileName;
+        this.originFileImgName = originFileImgName;
+        this.savedFileImgName = savedFileImgName;
         this.uploadDir = uploadDir;
         this.extension = extension;
         this.size = size;
+        this.contentType = contentType;
+        this.reimgYn = reimgYn;
         this.flower = flower;
+    }
+
+
+    public void updateFlowerImg(String originFileImgName, String savedFileImgName, String uploadDir, String extension, Long size, String contentType){
+        this.originFileImgName = originFileImgName;
+        this.savedFileImgName = savedFileImgName;
+        this.uploadDir = uploadDir;
+        this.extension = extension;
+        this.size = size;
         this.contentType = contentType;
         this.repimgYn = repimgYn;
     }

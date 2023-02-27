@@ -8,6 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.dto.FlowerFormDto;
@@ -37,7 +38,7 @@ public class FlowerService {
             flower = flowerFormDto.toEntity();
             flowerRepository.save(flower);
         }
-        //update
+        //상품 update
         else{
             flower = flowerRepository.findById(flowerFormDto.getId()).get();
         }
@@ -46,7 +47,6 @@ public class FlowerService {
         List<FileImage> files = fileImageService.saveFile(flowerFormDto);
         flower.addFiles(files);
 
-
         log.info("flower.getId() = {}", flower.getId());
         return flower.getId();
     }
@@ -54,7 +54,6 @@ public class FlowerService {
     public Optional<Flower> findOne(Long flowerId){
         return flowerRepository.findById(flowerId);
     }
-
 
 
     public Page<FlowerFormDto> findAllFlowers(int page){
@@ -86,7 +85,6 @@ public class FlowerService {
                         .name(m.getName())
                         .price(m.getPrice())
                         .stockQuantity(m.getStockQuantity())
-                        .hitCount(m.getHitCount())
                         .build())
                 .collect(Collectors.toList());
 

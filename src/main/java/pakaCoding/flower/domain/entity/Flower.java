@@ -9,6 +9,7 @@ import pakaCoding.flower.dto.FlowerFormDto;
 import java.util.ArrayList;
 import java.util.List;
 
+
 @Entity
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -25,7 +26,10 @@ public class Flower extends TimeEntity {
     @Column(name = "flower_name")
     private String name;        //이름
 
+    @Column(nullable = false)
     private int price;          //가격
+
+    @Column(nullable = false)
     private int stockQuantity;  //수량
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -49,16 +53,16 @@ public class Flower extends TimeEntity {
         return this;
     }
 
-    public Flower update(List<FileImage> files){
-        this.files = files;
-        return this;
-    }
+//    public Flower update(List<FileImage> files){
+//        this.files = files;
+//        return this;
+//    }
 
 
-    public void addFiles(List<FileImage> files){
-        this.files = files;
-        files.forEach(file -> file.setFlower(this));
-    }
+//    public void addFiles(List<FileImage> files){
+//        this.files = files;
+//        files.forEach(file -> file.setFlower(this));
+//    }
 
 
     @Builder

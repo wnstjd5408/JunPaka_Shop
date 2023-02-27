@@ -19,17 +19,18 @@
                         <option value="SOLD_OUT">품절</option>
                     </select>
                 </div>
+
                 <div class="mb-3">
                     <label for="flowerName" class="form-label">꽃 이름</label>
-                    <input type="text" class="form-control" name="name" id="flowerName">
+                    <input type="text" class="form-control" th:field="*{name}" id="flowerName">
                 </div>
                 <div class="mb-3">
                     <label for="flowerPrice" class="form-label">가격</label>
-                    <input type="text" class="form-control" name="price" id="flowerPrice">
+                    <input type="text" class="form-control" th:field="*{price}" id="flowerPrice">
                 </div>
                 <div class="mb-3">
                     <label for="flowerStockQuantity" class="form-label">수량</label>
-                    <input type="text" class="form-control" name="stockQuantity" id="flowerStockQuantity">
+                    <input type="text" class="form-control" th:field="*{stockQuantity}" id="flowerStockQuantity">
                 </div>
                 <div class="mb-3">
                     <label for="type" class="form-label">타입</label>
@@ -45,8 +46,12 @@
                 <div class="mb-3">
                     <label for="flowerImage" class="form-label">이미지</label>
                     <input type="file" class="form-control" name="multipartFile" multiple id="flowerImage">
+
                 </div>
-                <div class="mb-2">
+
+
+                </div>
+                <div class="mb-3">
                     <button type="submit" class="btn btn-sm btn-secondary form-control">등록하기</button>
                 </div>
             </form>
