@@ -7,48 +7,55 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import pakaCoding.flower.domain.constant.FlowerSellStatus;
 import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Type;
-import pakaCoding.flower.dto.MainFlowerDto;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-
+import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Slf4j
-class FlowerRepositoryTest {
+class FileImageRepositoryTest {
+
+    @Autowired
+    FileImageRepository fileImageRepository;
     @Autowired
     FlowerRepository flowerRepository;
 
     @Autowired
     TypeRepository typeRepository;
 
-    @Autowired
-    FileImageRepository fileImageRepository;
 
     @BeforeEach
     void beforeEach() {
 
     }
 
-//    @AfterEach
+    @AfterEach
     void afterEach(){
-        flowerRepository.deleteAll();
+        fileImageRepository.deleteAll();
+    }
+
+
+    @Test
+    public void fileImageTest(){
+        Flower flower1 = flowerRepository.findById(1L).get();
+
+        List<FileImage> byFlowerIdOrderByIdDesc = fileImageRepository.findByFlowerIdOrderByIdDesc(flower1.getId());
+
+        log.info("1번의 개수 = {}", byFlowerIdOrderByIdDesc.size());
+
     }
 
     @Test
-    public void typeMatch(){
+    public void fileImageTest2(){
         Type type1 = typeRepository.findById(1).get();
 
-        for(int i = 1; i<=100; i++){
+        for (int i = 1; i <= 100; i++) {
             Flower fs = registerFLower("장미꽃다발", 15000, 1, type1);
             flowerRepository.save(fs);
             FileImage fileImage = FileImage.builder()
@@ -63,40 +70,17 @@ class FlowerRepositoryTest {
                     .build();
             fileImageRepository.save(fileImage);
         }
+        List<FileImage> fileImageList = new ArrayList<>();
 
+        for(Long i = 1L; i<=100L; i+= 1L){
 
+            Flower flower = flowerRepository.findById(i).get();
+            FileImage fileImage = fileImageRepository.findByFlowerIdAndRepimgYn(flower.getId(), "Y");
+            fileImageList.add(fileImage);
+        }
 
+        log.info("file = {}", fileImageList.size());
 
-
-        log.info("id  = {}", type1.getId());
-        Pageable pageable = PageRequest.of(0, 10);
-        Page<Flower> flowers = flowerRepository.findAllByTypeIdQuery(type1.getId(), pageable);
-        log.info("flowers.getTotalElements = {}", flowers.getTotalElements());
-        List<FileImage> byFlowerIdOrderByIdDesc = fileImageRepository.findByFlowerIdOrderByIdDesc(flowers.getContent().get(0).getId());
-        log.info("FileImage 0번의 개수 = {}", byFlowerIdOrderByIdDesc.size());
-    }
-
-
-
-    @Test
-    public void save() {
-        Type type1 = typeRepository.findById(1).get();
-
-        log.info("id = {}",  type1.getId());
-
-        Flower fs = registerFLower("장미꽃다발", 15000, 1, type1);
-        Flower fBasket = registerFLower("장미꽃바구니", 35000, 1, type1);
-        flowerRepository.save(fs);
-        flowerRepository.save(fBasket);
-        //when
-        Flower findFlower = flowerRepository.findById(fs.getId()).orElseThrow(() ->
-                new IllegalArgumentException("Wrong MemberId:<" + fs.getId() + ">"));
-
-
-        assertThat(fs.getName()).isEqualTo(findFlower.getName());
-        assertThat(fs.getPrice()).isEqualTo(findFlower.getPrice());
-
-        assertThat(flowerRepository.findAll().size()).isEqualTo(2);
     }
 
     private Flower registerFLower(String name, int price, int stockQuantity, Type type){

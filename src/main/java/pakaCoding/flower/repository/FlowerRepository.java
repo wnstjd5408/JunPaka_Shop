@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import pakaCoding.flower.domain.entity.Flower;
+import pakaCoding.flower.dto.MainFlowerDto;
 
 import java.util.List;
 
