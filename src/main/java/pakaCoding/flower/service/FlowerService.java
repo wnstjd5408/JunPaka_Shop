@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
-import pakaCoding.flower.dto.FlowerDto;
+import pakaCoding.flower.dto.FlowerFormDto;
 import pakaCoding.flower.repository.FlowerRepository;
 
 
@@ -25,7 +25,7 @@ public class FlowerService {
     private final FileService fileService;
 
     @Transactional
-    public Long saveFlower(FlowerDto flowerDto) throws Exception {
+    public Long saveFlower(FlowerFormDto flowerDto) throws Exception {
         log.info("FlowerService에서 saveFlower 실행");
         Flower flower = null;
         log.info("flowerDto.getId() = {}" , flowerDto.getId());
@@ -65,14 +65,14 @@ public class FlowerService {
 //        return flowerRepository.findAll(Sort.by(DESC, "createDate"));
 //    }
 
-    public Page<FlowerDto> findAllFlowers(int page){
+    public Page<FlowerFormDto> findAllFlowers(int page){
         Pageable pageable = PageRequest.of(page, 16);
         log.info("findAllFlowers 시작");
         log.info("findAllFlowers 사용한 service repository 개수 ={}",
                 flowerRepository.findAllByOrderByCreateDateDesc(pageable).stream().count());
         Page<Flower> flowerList = flowerRepository.findAll(pageable);
-        List<FlowerDto> flowerDtoList = flowerList.stream()
-                .map(m -> FlowerDto.builder()
+        List<FlowerFormDto> flowerDtoList = flowerList.stream()
+                .map(m -> FlowerFormDto.builder()
                         .id(m.getId())
                         .name(m.getName())
                         .price(m.getPrice())
@@ -86,14 +86,14 @@ public class FlowerService {
     }
 
 
-    public Page<FlowerDto> findFlowersType(int typeId, int page){
+    public Page<FlowerFormDto> findFlowersType(int typeId, int page){
         Pageable pageable = PageRequest.of(page, 16);
         log.info("Flower Service findFlowersType 시작");
         log.info("findFlowersType 함수를 사용한 service repository 개수 ={}",
                 flowerRepository.findAllByTypeIdQuery(typeId, pageable).stream().count());
         Page<Flower> flowerList = flowerRepository.findAllByTypeIdQuery(typeId, pageable);
-        List<FlowerDto> flowerDtoList = flowerList.stream()
-                .map(m -> FlowerDto.builder()
+        List<FlowerFormDto> flowerDtoList = flowerList.stream()
+                .map(m -> FlowerFormDto.builder()
                         .id(m.getId())
                         .name(m.getName())
                         .price(m.getPrice())

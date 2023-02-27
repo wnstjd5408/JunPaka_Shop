@@ -8,7 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
-import pakaCoding.flower.dto.FlowerDto;
+import pakaCoding.flower.dto.FlowerFormDto;
 
 import java.io.InputStream;
 import java.util.*;
@@ -28,7 +28,7 @@ public class FileService {
 
 
     @Transactional
-    public List<FileImage> saveFile(FlowerDto flowerDto) throws Exception {
+    public List<FileImage> saveFile(FlowerFormDto flowerDto) throws Exception {
         log.info("saveFile 실행");
         List<MultipartFile> multipartFile  = flowerDto.getMultipartFile();
         List<FileImage> files = new ArrayList<>();
