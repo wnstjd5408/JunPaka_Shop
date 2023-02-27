@@ -3,6 +3,7 @@ package pakaCoding.flower.domain.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import pakaCoding.flower.domain.constant.DeliveryStatus;
 
 @Entity
 @Getter

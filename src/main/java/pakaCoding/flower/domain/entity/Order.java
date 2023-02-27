@@ -3,8 +3,8 @@ package pakaCoding.flower.domain.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.CreatedDate;
+import pakaCoding.flower.domain.constant.OrderStatus;
 
 import java.time.LocalDateTime;
 
