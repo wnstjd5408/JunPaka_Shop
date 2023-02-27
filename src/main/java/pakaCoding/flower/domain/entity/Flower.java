@@ -2,7 +2,6 @@ package pakaCoding.flower.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import pakaCoding.flower.dto.FlowerDto;
 
@@ -38,7 +37,7 @@ public class Flower extends TimeEntity {
     private String delYn;       //삭제여부
 
     @OneToMany(mappedBy = "flower",  cascade = CascadeType.PERSIST, orphanRemoval = true)
-    private List<File> files = new ArrayList<>();
+    private List<FileImage> files = new ArrayList<>();
 
 
     public Flower delete(String delYn){
@@ -46,13 +45,13 @@ public class Flower extends TimeEntity {
         return this;
     }
 
-    public Flower update(List<File> files){
+    public Flower update(List<FileImage> files){
         this.files = files;
         return this;
     }
 
 
-    public void addFiles(List<File> files){
+    public void addFiles(List<FileImage> files){
         this.files = files;
         files.forEach(file -> file.setFlower(this));
     }

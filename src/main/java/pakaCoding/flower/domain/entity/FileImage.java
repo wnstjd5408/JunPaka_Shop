@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "file")
-public class File extends TimeEntity {
+public class FileImage extends TimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +40,7 @@ public class File extends TimeEntity {
     private Flower flower;
 
     @Builder
-    public File(Long id, String originFileName, String savedFileName, String uploadDir, String extension, Long size, String contentType, Flower flower) {
+    public FileImage(Long id, String originFileName, String savedFileName, String uploadDir, String extension, Long size, String contentType, Flower flower) {
         this.id = id;
         this.originFileName = originFileName;
         this.savedFileName = savedFileName;

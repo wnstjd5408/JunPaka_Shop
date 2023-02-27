@@ -3,7 +3,6 @@ package pakaCoding.flower.dto;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
-import pakaCoding.flower.domain.entity.File;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.TimeEntity;
 import pakaCoding.flower.domain.entity.Type;

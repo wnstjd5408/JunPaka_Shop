@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import pakaCoding.flower.domain.entity.File;
+import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.dto.FlowerDto;
 
@@ -28,10 +28,10 @@ public class FileService {
 
 
     @Transactional
-    public List<File> saveFile(FlowerDto flowerDto) throws Exception {
+    public List<FileImage> saveFile(FlowerDto flowerDto) throws Exception {
         log.info("saveFile 실행");
         List<MultipartFile> multipartFile  = flowerDto.getMultipartFile();
-        List<File> files = new ArrayList<>();
+        List<FileImage> files = new ArrayList<>();
         log.info("multipartFileList ={}", multipartFile);
 
         Flower flower = flowerDto.toEntity();
@@ -59,7 +59,7 @@ public class FileService {
                         result.put("result", "FAIL");
 
 
-                        File file = buildFileDto(file1, originalFilename, extension, saveFileName, flower);
+                        FileImage file = buildFileDto(file1, originalFilename, extension, saveFileName, flower);
                         files.add(file);
 
 
@@ -94,8 +94,8 @@ public class FileService {
         return files;
     }
 
-    private File buildFileDto(MultipartFile file1, String originalFilename, String extension, String saveFileName, Flower flower) {
-        return File.builder()
+    private FileImage buildFileDto(MultipartFile file1, String originalFilename, String extension, String saveFileName, Flower flower) {
+        return FileImage.builder()
                 .originFileName(originalFilename)
                 .savedFileName(saveFileName)
                 .uploadDir(uploadDir)

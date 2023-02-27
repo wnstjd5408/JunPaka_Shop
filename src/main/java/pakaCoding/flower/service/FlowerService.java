@@ -3,27 +3,19 @@ package pakaCoding.flower.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
-import org.springframework.data.domain.Sort;
-
 import org.springframework.data.domain.*;
-import org.springframework.data.domain.Sort.Direction;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pakaCoding.flower.domain.entity.File;
+import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.dto.FlowerDto;
 import pakaCoding.flower.repository.FlowerRepository;
 
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
-import static org.springframework.data.domain.Sort.Direction.DESC;
 
 @Service
 @Slf4j
@@ -45,7 +37,7 @@ public class FlowerService {
             flower = flowerDto.toEntity();
 
             //파일저장
-            List<File> files = fileService.saveFile(flowerDto);
+            List<FileImage> files = fileService.saveFile(flowerDto);
             flower.addFiles(files);
             flowerRepository.save(flower);
         }
