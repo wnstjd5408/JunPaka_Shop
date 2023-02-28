@@ -42,7 +42,7 @@ public class Flower extends TimeEntity {
     private String delYn;       //삭제여부
 
     @OneToMany(mappedBy = "flower",  cascade = CascadeType.PERSIST)
-    private List<FileImage> files = new ArrayList<>();
+    private List<FileImage> fileImages = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private FlowerSellStatus flowerSellStatus;
@@ -59,9 +59,9 @@ public class Flower extends TimeEntity {
 //    }
 
 
-    public void addFiles(List<FileImage> files){
-        this.files = files;
-        files.forEach(file -> file.setFlower(this));
+    public void addFiles(List<FileImage> fileImages){
+        this.fileImages = fileImages;
+        fileImages.forEach(fileImage -> fileImage.setFlower(this));
     }
 
 

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.dto.FlowerFormDto;
+import pakaCoding.flower.dto.MainFlowerDto;
 import pakaCoding.flower.service.FlowerService;
 import pakaCoding.flower.service.TypeService;
 
@@ -59,7 +60,7 @@ public class FlowerController {
     @GetMapping("/flowers")
     public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page){
 
-        Page<FlowerFormDto> flowers = flowerService.findAllFlowers(page);
+        Page<MainFlowerDto> flowers = flowerService.findAllFlowers(page);
         List<Type> types = typeService.allType();
 
         log.info("flower.getNumbers = {}", flowers.getTotalPages());
@@ -72,7 +73,7 @@ public class FlowerController {
         return "flowers/flowerList";
     }
 
-    private void pageModelPut(Page<FlowerFormDto> results, Model model){
+    private void pageModelPut(Page<MainFlowerDto> results, Model model){
         model.addAttribute("totalCount", results.getTotalElements());
         model.addAttribute("size", results.getPageable().getPageSize());
         model.addAttribute("number", results.getPageable().getPageNumber());
@@ -82,7 +83,7 @@ public class FlowerController {
     public String typeIdContain(@PathVariable int typeId, Model model,
                                 @RequestParam(value="page", defaultValue = "0") int page){
         log.info("FlowerController 실행");
-        Page<FlowerFormDto> flowersType = flowerService.findFlowersType(typeId, page);
+        Page<MainFlowerDto> flowersType = flowerService.findFlowersType(typeId, page);
         List<Type> types = typeService.allType();
 
         model.addAttribute("types", types);

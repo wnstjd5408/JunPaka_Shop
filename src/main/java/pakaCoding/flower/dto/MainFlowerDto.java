@@ -15,11 +15,15 @@ public class MainFlowerDto {
     private Integer price;
 
     @Builder
-    public MainFlowerDto(Long id, String flowerName, String imgURL, Integer price) {
+    public MainFlowerDto(Long id, String flowerName, String imgURL, String uploadDir, Integer price) {
         this.id = id;
         this.flowerName = flowerName;
         this.imgURL = imgURL;
+        this.uploadDir = uploadDir;
         this.price = price;
     }
 
+    public String getFullPath(String uploadDir, String imgURL){
+        return uploadDir + imgURL;
+    }
 }
