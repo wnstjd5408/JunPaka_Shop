@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.dto.FlowerFormDto;
+import pakaCoding.flower.dto.MainFlowerDto;
 import pakaCoding.flower.repository.FileImageRepository;
 import pakaCoding.flower.repository.FlowerRepository;
 
@@ -56,26 +57,39 @@ public class FlowerService {
     }
 
 
-    public Page<FlowerFormDto> findAllFlowers(int page){
+    public Page<MainFlowerDto> findAllFlowers(int page){
         Pageable pageable = PageRequest.of(page, 16);
         log.info("findAllFlowers 시작");
         log.info("findAllFlowers 사용한 service repository 개수 ={}",
-                flowerRepository.findAllByOrderByCreateDateDesc(pageable).stream().count());
-        Page<Flower> flowerList = flowerRepository.findAllByOrderByCreateDateDesc(pageable);
-        return getFlowerFormDtos(flowerList, pageable);
+                flowerRepository.findAll(pageable).stream().count());
+        Page<Flower> flowerList = flowerRepository.findAll(pageable);
+        return getMainFlowerDtos(flowerList, pageable);
     }
 
-
-
-
-    public Page<FlowerFormDto> findFlowersType(int typeId, int page){
+    public Page<MainFlowerDto> findFlowersType(int typeId, int page){
         Pageable pageable = PageRequest.of(page, 16);
         log.info("Flower Service findFlowersType 시작");
         log.info("findFlowersType 함수를 사용한 service repository 개수 ={}",
                 flowerRepository.findAllByTypeIdQuery(typeId, pageable).stream().count());
         Page<Flower> flowerList = flowerRepository.findAllByTypeIdQuery(typeId, pageable);
-        return getFlowerFormDtos(flowerList, pageable);
+        return getMainFlowerDtos(flowerList, pageable);
     }
+
+
+
+    private PageImpl<MainFlowerDto> getMainFlowerDtos(Page<Flower> flowerList, Pageable pageable){
+        List<MainFlowerDto> flowerDtoList = flowerList.stream()
+                .map(m -> MainFlowerDto.builder()
+                        .id(m.getId())
+                        .flowerName(m.getName())
+                        .price(m.getPrice())
+                        .uploadDir(m.getFileImages().get(0).getUploadDir())
+                        .imgURL(m.getFileImages().get(0).getSavedFileImgName())
+                        .build())
+                .collect(Collectors.toList());
+        return new PageImpl<>(flowerDtoList, pageable, flowerList.getTotalElements());
+    }
+
 
 
     private PageImpl<FlowerFormDto> getFlowerFormDtos(Page<Flower> flowerList, Pageable pageable) {
