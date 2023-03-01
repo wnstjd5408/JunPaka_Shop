@@ -46,7 +46,12 @@ class FlowerRepositoryTest {
 
     @Test
     public void typeMatch(){
-        Type type1 = typeRepository.findById(1).get();
+        Type type1 = Type.builder()
+                .count(0)
+                .id(1)
+                .typename("꽃바구니")
+                .build();
+        typeRepository.save(type1);
 
         for(int i = 1; i<=100; i++){
             Flower fs = registerFLower("장미꽃다발", 15000, 1, type1);
@@ -80,7 +85,12 @@ class FlowerRepositoryTest {
 
     @Test
     public void save() {
-        Type type1 = typeRepository.findById(1).get();
+        Type type1 = Type.builder()
+                .count(0)
+                .id(1)
+                .typename("꽃바구니")
+                .build();
+        typeRepository.save(type1);
 
         log.info("id = {}",  type1.getId());
 
