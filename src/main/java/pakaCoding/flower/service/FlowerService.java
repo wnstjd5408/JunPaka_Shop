@@ -54,7 +54,7 @@ public class FlowerService {
         return flowerRepository.findById(flowerId);
     }
 
-
+    //list에 기본 페이지 Select
     public Page<MainFlowerDto> findAllFlowers(int page){
         Pageable pageable = PageRequest.of(page, 16);
         log.info("findAllFlowers 시작");
@@ -64,6 +64,7 @@ public class FlowerService {
         return getMainFlowerDtos(flowerList, pageable);
     }
 
+    //type별로 출력
     public Page<MainFlowerDto> findFlowersType(int typeId, int page){
         Pageable pageable = PageRequest.of(page, 16);
         log.info("Flower Service findFlowersType 시작");

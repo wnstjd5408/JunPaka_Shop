@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/basic}">
+      layout:decorate="~{layout/layout}">
+<head>
     <th:block layout:fragment="title">
         <title>Jun Flower</title>
     </th:block>
+</head>
     <!-- Section-->
     <th:block layout:fragment="section" class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
@@ -28,7 +30,7 @@
                     </div>
                 </div>
             </div>
-
+            <th:block layout:fragment="paging" class="py-5">
             <!-- page-->
             <div th:if="${!flowers.isEmpty()}">
                 <nav class="container d-flex align-items-center justify-content-center navbar-light" aria-label="Page navigation example"
@@ -66,8 +68,7 @@
                     </ul>
                 </nav>
             </div>
-
-
+            </th:block>
         </div>
     </th:block>
 </html>
