@@ -26,13 +26,11 @@ import java.util.stream.Collectors;
 public class FlowerService {
     private final FlowerRepository flowerRepository;
     private final FileImageService fileImageService;
-    private final FileImageRepository fileImageRepository;
 
     @Transactional
     public Long saveFlower(FlowerFormDto flowerFormDto) throws Exception {
-        log.info("FlowerService에서 saveFlower 실행");
         Flower flower = null;
-        log.info("flowerFormDto.getId() = {}" , flowerFormDto.getId());
+        log.info("FlowerService에서 saveFlower 실행");
 
         //insert
         if(flowerFormDto.getId() == null){
@@ -91,19 +89,6 @@ public class FlowerService {
     }
 
 
-
-    private PageImpl<FlowerFormDto> getFlowerFormDtos(Page<Flower> flowerList, Pageable pageable) {
-        List<FlowerFormDto> flowerDtoList = flowerList.stream()
-                .map(m -> FlowerFormDto.builder()
-                        .id(m.getId())
-                        .name(m.getName())
-                        .price(m.getPrice())
-                        .stockQuantity(m.getStockQuantity())
-                        .build())
-                .collect(Collectors.toList());
-
-        return new PageImpl<>(flowerDtoList, pageable, flowerList.getTotalElements());
-    }
 
 
 }

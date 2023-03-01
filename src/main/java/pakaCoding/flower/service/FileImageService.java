@@ -28,7 +28,6 @@ public class FileImageService {
     @Value("${upload.path}")
     private String uploadDir;
 
-    private final FileImageRepository fileImageRepository;
 
     @Transactional
     public List<FileImage> saveFile(FlowerFormDto flowerDto) throws Exception {
@@ -73,7 +72,9 @@ public class FileImageService {
                              file = buildFileDto(file1, originalFilename, extension, saveFileName, flower, "Y");
                         }
 
+                        //List 파일 추가
                         files.add(file);
+
                         try{
                             InputStream fileStream = file1.getInputStream();
                             copyInputStreamToFile(fileStream, targetFile); //파일저장
