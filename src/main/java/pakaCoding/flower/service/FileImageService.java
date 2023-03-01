@@ -23,7 +23,7 @@ import static org.apache.commons.io.FileUtils.deleteQuietly;
 @Slf4j
 public class FileImageService {
 
-
+    private final FileImageRepository fileImageRepository;
 
     @Value("${upload.path}")
     private String uploadDir;
@@ -104,6 +104,10 @@ public class FileImageService {
             e.printStackTrace();
         }
         return files;
+    }
+
+    public List<FileImage> oneFlowerImageFile(Long flowerId){
+        return fileImageRepository.findByFlowerId(flowerId);
     }
 
     private FileImage buildFileDto(MultipartFile file1, String originFileImgName, String extension, String savedFileImgName, Flower flower, String repimgYn) {

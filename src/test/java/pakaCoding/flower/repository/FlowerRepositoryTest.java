@@ -1,7 +1,6 @@
 package pakaCoding.flower.repository;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import pakaCoding.flower.domain.constant.FlowerSellStatus;
 import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Type;
-import pakaCoding.flower.dto.MainFlowerDto;
 
 import java.util.List;
 
@@ -77,7 +75,7 @@ class FlowerRepositoryTest {
         Pageable pageable = PageRequest.of(0, 10);
         Page<Flower> flowers = flowerRepository.findAllByTypeIdQuery(type1.getId(), pageable);
         log.info("flowers.getTotalElements = {}", flowers.getTotalElements());
-        List<FileImage> byFlowerIdOrderByIdDesc = fileImageRepository.findByFlowerIdOrderByIdDesc(flowers.getContent().get(0).getId());
+        List<FileImage> byFlowerIdOrderByIdDesc = fileImageRepository.findByFlowerId(flowers.getContent().get(0).getId());
         log.info("FileImage 0번의 개수 = {}", byFlowerIdOrderByIdDesc.size());
     }
 

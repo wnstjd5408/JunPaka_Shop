@@ -15,7 +15,6 @@ import pakaCoding.flower.domain.entity.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @Slf4j
@@ -45,7 +44,7 @@ class FileImageRepositoryTest {
     public void fileImageTest(){
         Flower flower1 = flowerRepository.findById(1L).get();
 
-        List<FileImage> byFlowerIdOrderByIdDesc = fileImageRepository.findByFlowerIdOrderByIdDesc(flower1.getId());
+        List<FileImage> byFlowerIdOrderByIdDesc = fileImageRepository.findByFlowerId(flower1.getId());
 
         log.info("1번의 개수 = {}", byFlowerIdOrderByIdDesc.size());
 
