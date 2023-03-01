@@ -28,7 +28,7 @@ public class FileImageService {
     @Value("${upload.path}")
     private String uploadDir;
 
-
+    //파일 저장
     @Transactional
     public List<FileImage> saveFile(FlowerFormDto flowerDto) throws Exception {
         log.info("saveFile 실행");
@@ -106,9 +106,12 @@ public class FileImageService {
         return files;
     }
 
+    //Flower 별로 이미지 파일 들고오기
     public List<FileImage> oneFlowerImageFile(Long flowerId){
         return fileImageRepository.findByFlowerId(flowerId);
     }
+
+
 
     private FileImage buildFileDto(MultipartFile file1, String originFileImgName, String extension, String savedFileImgName, Flower flower, String repimgYn) {
         return FileImage.builder()

@@ -22,8 +22,4 @@ public class MainFlowerDto {
         this.uploadDir = uploadDir;
         this.price = price;
     }
-
-    public String getFullPath(String uploadDir, String imgURL){
-        return uploadDir + imgURL;
-    }
 }

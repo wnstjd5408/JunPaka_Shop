@@ -75,7 +75,7 @@ public class FlowerService {
     }
 
 
-
+    //FlowerList를 Dto로 변경
     private PageImpl<MainFlowerDto> getMainFlowerDtos(Page<Flower> flowerList, Pageable pageable){
         List<MainFlowerDto> flowerDtoList = flowerList.stream()
                 .map(m -> MainFlowerDto.builder()

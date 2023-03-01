@@ -16,10 +16,13 @@ public class TypeService {
 
     private final TypeRepository typeRepository;
 
+    //전체 Type 조회
     public List<Type> allType(){
         log.info("typeRepository 의 개수 = {}", typeRepository.findAll().stream().count());
         return typeRepository.findAll();
     }
+
+    //Type에 이름 가졍기
     public String findTypeName(int typeId){
         Optional<Type> type = typeRepository.findById(typeId);
         return type.get().getTypename();
