@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
+import pakaCoding.flower.dto.FileImageDto;
 import pakaCoding.flower.dto.FlowerFormDto;
 import pakaCoding.flower.dto.MainFlowerDto;
 import pakaCoding.flower.repository.FileImageRepository;
@@ -43,8 +44,11 @@ public class FlowerService {
         }
 
         //파일저장
-        List<FileImage> files = fileImageService.saveFile(flowerFormDto);
-        flower.addFiles(files);
+        List<FileImageDto> files = fileImageService.saveFile(flowerFormDto);
+        List<FileImage> fileImages = files.stream()
+                .map(f -> f.toEntity())
+                .collect(Collectors.toList());
+        flower.addFiles(fileImages);
 
         log.info("flower.getId() = {}", flower.getId());
         return flower.getId();
