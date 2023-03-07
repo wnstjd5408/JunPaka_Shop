@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
+import pakaCoding.flower.dto.FileImageDto;
 import pakaCoding.flower.dto.FlowerFormDto;
 import pakaCoding.flower.repository.FileImageRepository;
 
@@ -30,13 +31,13 @@ public class FileImageService {
 
     //파일 저장
     @Transactional
-    public List<FileImage> saveFile(FlowerFormDto flowerDto) throws Exception {
+    public List<FileImageDto> saveFile(FlowerFormDto flowerDto) throws Exception {
         log.info("saveFile 실행");
         Flower flower = flowerDto.toEntity();
 
 
         List<MultipartFile> multipartFileList  = flowerDto.getMultipartFile();
-        List<FileImage> files = new ArrayList<>();
+        List<FileImageDto> files = new ArrayList<>();
         log.info("multipartFileList ={}", multipartFileList);
 
         MultipartFile thumbnails = flowerDto.getThumbnails();
@@ -44,7 +45,7 @@ public class FileImageService {
 
         //결과 map
         Map<String, Object> result = new HashMap<>();
-        FileImage file = null;
+        FileImageDto file = null;
         Long fileId = null;
         //파일 시퀀스 리스트
         List<Long> fileIds = new ArrayList<>();
@@ -113,10 +114,10 @@ public class FileImageService {
 
 
 
-    private FileImage buildFileDto(MultipartFile file1, String originFileImgName, String extension, String savedFileImgName, Flower flower, String repimgYn) {
-        return FileImage.builder()
-                .originFileImgName(originFileImgName)
-                .savedFileImgName(savedFileImgName)
+    private FileImageDto buildFileDto(MultipartFile file1, String originFileName, String extension, String savedFileName, Flower flower, String repimgYn) {
+        return FileImageDto.builder()
+                .originFileName(originFileName)
+                .savedFileName(savedFileName)
                 .uploadDir(uploadDir)
                 .extension(extension)
                 .size(file1.getSize())

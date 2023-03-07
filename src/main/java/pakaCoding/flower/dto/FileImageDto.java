@@ -44,4 +44,16 @@ public class FileImageDto {
         this.repimgYn = repimgYn;
     }
 
+    public FileImage toEntity(){
+        return FileImage.builder()
+                .originFileImgName(originFileName)
+                .savedFileImgName(savedFileName)
+                .uploadDir(uploadDir)
+                .extension(extension)
+                .size(size)
+                .contentType(contentType)
+                .repimgYn(repimgYn)
+                .flower(flower)
+                .build();
+    }
 }
