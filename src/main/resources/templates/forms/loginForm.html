@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+
+    <th:block layout:fragment="style">
+        <style>
+            .test{
+                accent-color:gray;
+            }
+            .test:active{
+                filter: brightness(90%);
+            }
+            .test:focus{
+                border-color: gray;
+                outline: 0;
+                box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+            }
+            .test:checked{
+                background-color: gray;
+                border-color: gray;
+            }
+            .test:disabled{
+                pointer-events: none;
+                filter: none;
+                opacity: 0.5;
+            }
+        </style>
+    </th:block>
+
+    <th:block layout:fragment="title">
+        <title>로그인></title>
+    </th:block>
+
+    <!--Section-->
+    <th:block layout:fragment="section" class="py-5">
+        <div class="container-sm w-50 px-4 px-lg-4 mt-4">
+            <div class="py-5 text-center">
+                <h3>Login</h3>
+            </div>
+        <form th:object="${memberFormDto}" method="post">
+            <!--     ID       -->
+            <div class="mb-4">
+                <label class="form-label" for="memberId">MemberId</label>
+                <input type="text" id="memberId" class="form-control">
+            </div>
+            <!--    PWD       -->
+            <div class="mb-4">
+                <label class="form-label" for="passwordID">Password</label>
+                <input type="password" id="passwordID" class="form-control"/>
+            </div>
+
+            <div class="row mb-4">
+                <div class="col d-flex justify-content-center">
+                <!--      checkBoX         -->
+                    <div class="form-check">
+                        <input class="test" type="checkbox" id="rememberCheckBox" checked/>
+                        <label class="form-check-label" for="rememberCheckBox">Remember Me</label>
+                    </div>
+<!--                    -->
+                </div>
+                <div class="col d-flex justify-content-center">
+                    <a href="#!" class="link-secondary">Forgot Password</a>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary btn-secondary form-control">로그인</button>
+            <div class="text-center">
+                <p>아이디가 없으신가요?</p><a href="#!" class="link-secondary">회원가입</a>
+
+            </div>
+        </form>
+        </div>
+    </th:block>
+
+</html>

@@ -40,7 +40,7 @@ public class FlowerController {
 
         model.addAttribute("flowerFormDto", new FlowerFormDto());
         model.addAttribute("types", types);
-        return "forms/FlowerForm";
+        return "forms/flowerForm";
     }
 
     @PostMapping("/flowers/create")
@@ -48,7 +48,7 @@ public class FlowerController {
                        BindingResult bindingResult,
                        RedirectAttributes redirectAttributes) throws Exception {
         if(bindingResult.hasErrors()){
-            return "forms/FlowerForm";
+            return "forms/flowerForm";
         }
 
         log.info("FlowerController save 호출");
