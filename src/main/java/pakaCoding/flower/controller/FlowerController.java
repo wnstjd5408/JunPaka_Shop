@@ -1,5 +1,6 @@
 package pakaCoding.flower.controller;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.dto.FlowerFormDto;
 import pakaCoding.flower.dto.MainFlowerDto;
+import pakaCoding.flower.dto.MemberSessionDto;
 import pakaCoding.flower.service.FileImageService;
 import pakaCoding.flower.service.FlowerService;
 import pakaCoding.flower.service.TypeService;
@@ -33,6 +35,7 @@ public class FlowerController {
     private final FlowerService flowerService;
     private final FileImageService fileImageService;
     private final TypeService typeService;
+    private final HttpSession session;
 
     @GetMapping("/flowers/create")
     public String newFlower(Model model){
@@ -46,8 +49,12 @@ public class FlowerController {
     @PostMapping("/flowers/create")
     public String save(@Valid FlowerFormDto flowerFormDto,
                        BindingResult bindingResult,
-                       RedirectAttributes redirectAttributes) throws Exception {
+                       RedirectAttributes redirectAttributes, Model model) throws Exception {
+
+        List<Type> types = typeService.allType();
+
         if(bindingResult.hasErrors()){
+            model.addAttribute("types", types);
             return "forms/flowerForm";
         }
 
@@ -60,8 +67,12 @@ public class FlowerController {
         return "redirect:/flowers/{flowerId}";
     }
 
-    @GetMapping("/flowers")
+    @GetMapping(value = {"/flowers", "/"})
     public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page){
+        MemberSessionDto member = (MemberSessionDto)session.getAttribute("member");
+        if(member != null){
+            model.addAttribute("member", member.getUsername());
+        }
 
         Page<MainFlowerDto> flowers = flowerService.findAllFlowers(page);
         List<Type> types = typeService.allType();

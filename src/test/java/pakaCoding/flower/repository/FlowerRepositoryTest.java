@@ -1,6 +1,7 @@
 package pakaCoding.flower.repository;
 
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ class FlowerRepositoryTest {
 
     }
 
-//    @AfterEach
+    @AfterEach
     void afterEach(){
         flowerRepository.deleteAll();
     }

@@ -5,10 +5,10 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum Gender {
-    MAN("m","남"),
-    WOMAN("w","여");
+public enum Role {
 
-    private final String key;
+    USER("ROLE_USER"),
+    ADMIN("ROLE_ADMIN");
+
     private final String value;
 }

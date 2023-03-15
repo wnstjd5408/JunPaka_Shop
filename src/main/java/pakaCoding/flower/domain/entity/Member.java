@@ -4,18 +4,22 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import pakaCoding.flower.domain.constant.Gender;
+import pakaCoding.flower.domain.constant.Role;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
+@Data
+@NoArgsConstructor
 public class Member extends TimeEntity {
 
 
@@ -34,24 +38,34 @@ public class Member extends TimeEntity {
     @NotNull
     private String username;
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     @NotNull
     private Gender gender; //성별 [남, 녀]
 
     @Column(name="birth_date")
+    @DateTimeFormat(pattern = "yyyy-mm-dd")
     @NotNull
     private LocalDate birthDate;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 
     @Embedded // Embedded 또는 Embeddable(클래스에) 둘 중 하나의 어노테이션만 있어도 되긴 한다.
     private Address address;
 
-    @Column(name="is_active")
-    private int active;
-
-    @Column(name="is_admin")
-    private int admin;
-
 
     @OneToMany(mappedBy = "member") //order 객체에 있는 member 필드에 의해서 매핑
     private List<Order> orders = new ArrayList<>();
+
+    @Builder
+    public Member(String email, String password, String username, Gender gender, LocalDate birthDate, Role role, Address address) {
+        this.email = email;
+        this.password = password;
+        this.username = username;
+        this.gender = gender;
+        this.birthDate = birthDate;
+        this.role = role;
+        this.address = address;
+    }
 }
