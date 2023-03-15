@@ -11,28 +11,28 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfiguration{
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws  Exception{
-        http.csrf().disable()
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws  Exception{
+        httpSecurity.csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/", "/auth/**", "/posts/read/**", "/posts/search/**")
+                .requestMatchers("/", "/posts/read/**", "/posts/search/**")
                 .authenticated()
                 .anyRequest()
                 .permitAll()
                 .and()
                 .formLogin()
-                .loginPage("/auth/login")
-                .loginProcessingUrl("loginProc")
+                .loginPage("/members/login")
+                .loginProcessingUrl("/loginProc")
                 .defaultSuccessUrl("/")
                 .and()
                 .logout()
-                .logoutSuccessUrl("/")
+                .logoutSuccessUrl("/flowers")
                 .invalidateHttpSession(true);
 
-        return http.build();
+        return httpSecurity.build();
     }
 
     @Bean
-    public PasswordEncoder getPasswrodEncoder(){
+    public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
     }
 }

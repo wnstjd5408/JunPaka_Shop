@@ -19,6 +19,7 @@ public class MemberDto {
     private String password;
     private Gender gender;
     private LocalDate birthDate;
+    private String email;
     private Address address;
     private Role role;
 
@@ -29,8 +30,10 @@ public class MemberDto {
                 .username(username)
                 .password(password)
                 .gender(gender)
+                .birthDate(birthDate)
                 .address(address)
-                .role(role)
+                .email(email)
+                .role(role.USER)
                 .build();
 
         return member;

@@ -3,6 +3,7 @@ package pakaCoding.flower.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pakaCoding.flower.dto.MemberDto;
@@ -15,7 +16,7 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-    private final BCryptPasswordEncoder encoder;
+    private final PasswordEncoder encoder;
 
 
     @Transactional
