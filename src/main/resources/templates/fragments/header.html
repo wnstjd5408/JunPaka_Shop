@@ -24,7 +24,7 @@
             </ul>
             <div th:if="${member}">
                 <div class="d-flex px-1">
-                    <button class="btn btn-outline-dark" type="submit" th:onclick="|location.href='@{/members/logout}'|">
+                    <button class="btn btn-outline-dark" type="submit" th:onclick="|location.href='@{logout}'|">
                         <span class="mx-3" th:text="|${member}님 안녕하세요!!|">안녕하세요!!</span>
                         <span class ="badge bg-dark text-whit rounded-pill">Logout</span>
                     </button>
