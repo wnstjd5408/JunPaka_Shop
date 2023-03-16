@@ -23,6 +23,8 @@ public class MainController {
 
     private final FileImageRepository fileImageRepository;
 
+
+    //이미지 보여주기
     @ResponseBody
     @GetMapping("/display/fileImage={saveFileName}")
     public Resource downloadImage(@PathVariable String saveFileName) throws MalformedURLException {
