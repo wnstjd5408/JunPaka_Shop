@@ -9,8 +9,8 @@ import lombok.Getter;
 @AllArgsConstructor
 public class Address {
 
-    private String city;
-    private String street;
+    private String streetAdr;
+    private String detailAdr;
     private String zipcode;
 
 
