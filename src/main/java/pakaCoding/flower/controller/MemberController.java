@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import pakaCoding.flower.domain.entity.Address;
 import pakaCoding.flower.domain.entity.Member;
 import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.dto.MemberDto;
@@ -60,6 +61,7 @@ public class MemberController {
         }
 
         log.info("MemberController 실행");
+
         memberService.join(memberDto);
 
         return "redirect:/members/login";

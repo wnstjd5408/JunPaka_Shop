@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
-
-    <th:block layout:fragment="style">
+    <head>
         <style>
             .test{
                 accent-color:gray;
@@ -24,12 +23,10 @@
                 opacity: 0.5;
             }
         </style>
-    </th:block>
 
-    <th:block layout:fragment="title">
         <title>로그인</title>
-    </th:block>
 
+    </head>
     <!--Section-->
     <th:block layout:fragment="section" class="py-5">
         <div class="container-sm w-50 px-4 px-lg-4 mt-4">

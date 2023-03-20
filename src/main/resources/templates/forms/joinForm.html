@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
-    <th:block layout:fragment="title">
+    <head>
         <title>회원가입</title>
-    </th:block>
+    </head>
 
     <th:block layout:fragment="section" class="py-5">
 
@@ -13,33 +13,78 @@
             </div>
 
             <form th:object="${memberDto}" method="post">
-                <div clas="mb-3">
+                <div clas="my-3">
                     <label for="userId" class="form-label">아이디</label>
                     <input type="text" class="form-control" th:field="*{username}" id="userId">
                 </div>
-                <div clas="mb-3">
+                <div clas="my-3">
                     <label for="userPassword" class="form-label">비밀번호</label>
                     <input type="password" class="form-control" th:field="*{password}" id="userPassword">
                 </div>
                 <div class="mb-3">
                     <label for="gender" class="form-label">성별</label>
-                    <select name="gender" class="form-control, form-select" id="gender">
+                    <select name="gender" class="form-control form-select" id="gender">
                         <option th:each="ged : ${T(pakaCoding.flower.domain.constant.Gender).values()}" th:value="${ged}" th:text="${ged.Value}"></option>
                     </select>
                 </div>
-                <div clas="mb-3">
+                <div class="my-3">
                     <label for="birthDate" class="form-label">생일</label>
                     <input type="date" class="form-control" th:field="*{birthDate}" th:max="${now}" id="birthDate">
                 </div>
-                <div clas="mb-3">
+                <div clas="my-3">
                     <label for="email" class="form-label">이메일</label>
                     <input type="email" class="form-control" th:field="*{email}" id="email">
                 </div>
-
-                <div class="mb-3">
+                <div class="my-3">
+                    <label th:for="zipcode" class="form-label">우편번호</label>
+                    <div class ="d-flex">
+                        <div class="pe-2 flex-grow-1">
+                            <input type="text" th:field="*{zipcode}" class="form-control" readonly>
+                        </div>
+                        <div class="ps-2">
+                            <input type="button" class="btn btn-secondary form-control" onclick="findAddr()" value="우편번호 찾기">
+                        </div>
+                    </div>
+                </div>
+                <div class="my-3">
+                    <label th:for="streetAdr" class="form-label">도로명 주소</label>
+                    <input type="text" th:field="*{streetAdr}" class="form-control" readonly >
+                </div>
+                <div class="my-3">
+                    <label th:for="detailAdr" class="form-label">상세주소</label>
+                    <input type="text" th:field="*{detailAdr}" class="form-control" >
+                </div>
+                <div class="my-3">
                     <button type="submit" class="btn btn-sm btn-secondary form-control">등록하기</button>
                 </div>
             </form>
         </div>
+    </th:block>
+    <th:block layout:fragment="script">
+        <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+        <script>
+            function findAddr(){
+                new daum.Postcode({
+                    oncomplete: function (data){
+                        var addr = ''; //주소 변수
+                        var extraAddr = ''; //참고항목 변수
+
+                        //사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+                        if(data.userSelectedType === 'R'){// 사용자가 도로명 주소를 선택했을 경우
+                            addr = data.roadAddress;
+                        } else{// 사용자가 지번 주소를 선택했을 경우(J)
+                            addr = data.jibunAddress;
+                        }
+
+                        document.getElementById('detailAdr').value='';
+                        // 우편번호와 주소 정보를 해당 필드에 넣는다.
+                        document.getElementById('zipcode').value = data.zonecode;
+                        document.getElementById("streetAdr").value = addr;
+                        // 커서를 상세주소 필드로 이동한다.
+                        document.getElementById("detailAdr").focus();
+                    }
+                }).open();
+            }
+        </script>
     </th:block>
 </html>

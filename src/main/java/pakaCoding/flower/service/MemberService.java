@@ -6,6 +6,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pakaCoding.flower.domain.entity.Address;
 import pakaCoding.flower.dto.MemberDto;
 import pakaCoding.flower.repository.MemberRepository;
 
@@ -21,6 +22,7 @@ public class MemberService {
 
     @Transactional
     public Long join(MemberDto dto){
+
         dto.setPassword(encoder.encode(dto.getPassword()));
 
         return memberRepository.save(dto.toEntity()).getId();
