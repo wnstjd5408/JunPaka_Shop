@@ -8,13 +8,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.bind.annotation.RequestParam;
 import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Type;
@@ -38,7 +35,10 @@ public class FlowerController {
     private final HttpSession session;
 
     @GetMapping("/flowers/create")
-    public String newFlower(Model model){
+    public String newFlower(@SessionAttribute(name="member", required = false)MemberSessionDto member, Model model){
+        if (member != null) {
+            model.addAttribute("member", member.getUsername());
+        }
         List<Type> types = typeService.allType();
 
         model.addAttribute("flowerFormDto", new FlowerFormDto());
@@ -68,9 +68,11 @@ public class FlowerController {
     }
 
     @GetMapping(value = {"/flowers", "/"})
-    public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page){
-        MemberSessionDto member = (MemberSessionDto)session.getAttribute("member");
-        if(member != null){
+    public String list(@SessionAttribute(name="member", required = false)MemberSessionDto member,
+                       Model model,
+                       @RequestParam(value = "page", defaultValue = "0") int page){
+
+        if (member != null) {
             model.addAttribute("member", member.getUsername());
         }
 
@@ -94,9 +96,10 @@ public class FlowerController {
     }
 
     @GetMapping("/types/{typeId}")
-    public String typeIdContain(@PathVariable int typeId, Model model,
+    public String typeIdContain(@SessionAttribute(name="member", required = false)MemberSessionDto member
+                                ,@PathVariable int typeId,
+                                Model model,
                                 @RequestParam(value="page", defaultValue = "0") int page){
-        MemberSessionDto member = (MemberSessionDto)session.getAttribute("member");
         if(member != null){
             model.addAttribute("member", member.getUsername());
         }
@@ -111,8 +114,8 @@ public class FlowerController {
     }
 
     @GetMapping("/flowers/{flowerId}")
-    public String oneFlower(@PathVariable long flowerId, Model model){
-        MemberSessionDto member = (MemberSessionDto)session.getAttribute("member");
+    public String oneFlower(@SessionAttribute(name="member", required = false)MemberSessionDto member,
+                            @PathVariable long flowerId, Model model){
         if(member != null){
             model.addAttribute("member", member.getUsername());
         }

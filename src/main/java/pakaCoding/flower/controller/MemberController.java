@@ -8,11 +8,13 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import pakaCoding.flower.domain.entity.Address;
 import pakaCoding.flower.domain.entity.Member;
 import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.dto.MemberDto;
 import pakaCoding.flower.dto.MemberFormDto;
+import pakaCoding.flower.dto.MemberSessionDto;
 import pakaCoding.flower.service.MemberService;
 import pakaCoding.flower.service.TypeService;
 
@@ -29,17 +31,30 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/members/login")
-    public String login(Model model){
+    public String login(@SessionAttribute(name = "member", required = false) MemberSessionDto loginMember,
+                        Model model){
+
         List<Type> types = typeService.allType();
+        model.addAttribute("types", types);
+
+        if (loginMember !=null){
+            return "flowers/flowerList";
+        }
+
+
 
         model.addAttribute("memberFormDto", new MemberFormDto());
-        model.addAttribute("types", types);
 
         return "forms/loginForm";
     }
 
     @GetMapping("/members/join")
-    public String join(Model model){
+    public String join(@SessionAttribute(name = "member", required = false)Member loginMember,Model model){
+
+        if (loginMember != null){
+            return "flowers/flowerList";
+        }
+
         List<Type> types = typeService.allType();
         LocalDate now = LocalDate.now();
 
