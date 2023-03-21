@@ -96,6 +96,10 @@ public class FlowerController {
     @GetMapping("/types/{typeId}")
     public String typeIdContain(@PathVariable int typeId, Model model,
                                 @RequestParam(value="page", defaultValue = "0") int page){
+        MemberSessionDto member = (MemberSessionDto)session.getAttribute("member");
+        if(member != null){
+            model.addAttribute("member", member.getUsername());
+        }
         log.info("FlowerController 실행");
         Page<MainFlowerDto> flowersType = flowerService.findFlowersType(typeId, page);
         List<Type> types = typeService.allType();
@@ -108,6 +112,11 @@ public class FlowerController {
 
     @GetMapping("/flowers/{flowerId}")
     public String oneFlower(@PathVariable long flowerId, Model model){
+        MemberSessionDto member = (MemberSessionDto)session.getAttribute("member");
+        if(member != null){
+            model.addAttribute("member", member.getUsername());
+        }
+
         Flower flower = flowerService.findOne(flowerId).get();
         List<FileImage> fileImageList = fileImageService.oneFlowerImageFile(flowerId);
         List<Type> types = typeService.allType();

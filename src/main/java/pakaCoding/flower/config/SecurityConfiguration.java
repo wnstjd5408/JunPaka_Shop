@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import pakaCoding.flower.domain.constant.Role;
 
 @Configuration
 @EnableWebSecurity
@@ -17,10 +18,9 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws  Exception{
         httpSecurity.csrf().disable()
                 .authorizeHttpRequests()
-                    .requestMatchers( "/flowers/create/**", "logout")
-                    .authenticated()
-                    .anyRequest()
-                    .permitAll()
+                    .requestMatchers( "logout").authenticated()
+                    .requestMatchers("/flowers/create/**").hasRole("ADMIN")
+                    .anyRequest().permitAll()
                     .and()
                 .formLogin()
                     .loginPage("/members/login")
