@@ -86,7 +86,6 @@ public class FlowerService {
                         .id(m.getId())
                         .flowerName(m.getName())
                         .price(m.getPrice())
-                        .uploadDir(m.getFileImages().get(0).getUploadDir())
                         .imgURL(m.getFileImages().get(0).getSavedFileImgName())
                         .build())
                 .collect(Collectors.toList());

@@ -14,17 +14,19 @@ import pakaCoding.flower.dto.MainFlowerDto;
 import java.util.List;
 
 @Repository
-@Transactional
 public interface FlowerRepository extends JpaRepository<Flower, Long> {
 
      Page<Flower> findAllByOrderByCreateDateDesc(Pageable pageable);
 
-     @Query(value = "SELECT f FROM Flower f where f.type.id = :typeId order by f.createDate")
+     @Query(value = "SELECT f FROM Flower f where f.type.id = :typeId  order by f.createDate DESC ")
      @EntityGraph(attributePaths = {"fileImages"})
      Page<Flower> findAllByTypeIdQuery(@Param("typeId") int typeId, Pageable pageable);
 
      @EntityGraph(attributePaths = {"fileImages"})
+     @Query(value = "SELECT f FROM Flower f order by f.createDate DESC ")
      Page<Flower> findAll(Pageable pageable);
+
+
 //    private final EntityManager em;
 //
 //    public Flower save(Flower flower){

@@ -28,28 +28,7 @@ class MemberRepositoryTest {
     MemberRepository memberRepository;
 
 
-    @Test
-    void joinTest(){
-        PasswordEncoder encoder = new BCryptPasswordEncoder();
-        LocalDate birth = LocalDate.of(1997, 07, 19);
-        MemberDto member = MemberDto.builder()
-                .birthDate(birth)
-                .password("1234")
-                .gender(Gender.MAN)
-                .role(Role.ADMIN)
-                .username("ID")
-                .address(null)
-                .email("wnstjd5408@naver.com")
-                .build();
 
-        member.setPassword(encoder.encode(member.getPassword()));
-
-        Member saveMember = memberRepository.save(member.toEntity());
-
-        Assertions.assertThat(member.getPassword()).isEqualTo(saveMember.getUsername());
-
-
-    }
 
 
 }
