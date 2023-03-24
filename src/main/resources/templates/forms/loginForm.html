@@ -36,13 +36,13 @@
         <form th:object="${memberFormDto}" action="/loginProc" method="post">
             <!--     ID       -->
             <div class="mb-4">
-                <label class="form-label" for="memberId">MemberId</label>
-                <input type="text" id="memberId" th:field="*{username}" class="form-control">
+                <label class="form-label" for="username">MemberId</label>
+                <input type="text" id="username" placeholder="아이디" th:field="*{username}" class="form-control">
             </div>
             <!--    PWD       -->
             <div class="mb-4">
-                <label class="form-label" for="passwordID">Password</label>
-                <input type="password" id="passwordID" th:field="*{password}" class="form-control"/>
+                <label class="form-label" for="password">Password</label>
+                <input type="password" id="password" autocomplete="on" th:field="*{password}" class="form-control" placeholder="비밀번호"/>
             </div>
 
             <div class="row mb-4">
@@ -64,7 +64,12 @@
             <div class="text-center">
                 <p>아이디가 없으신가요?</p><a href="/members/join" class="link-secondary">회원가입</a>
             </div>
+
         </form>
+            <span th:if="${error}" class="text-center">
+                <p id="valid" class="alert alert-danger" th:text="${exception}"></p>
+            </span>
+
         </div>
     </th:block>
 

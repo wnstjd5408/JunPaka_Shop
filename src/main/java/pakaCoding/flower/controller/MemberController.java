@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import pakaCoding.flower.domain.entity.Address;
 import pakaCoding.flower.domain.entity.Member;
@@ -31,29 +32,24 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/members/login")
-    public String login(@SessionAttribute(name = "member", required = false) MemberSessionDto loginMember,
+    public String login(@RequestParam(value="error", required = false)String error,
+                        @RequestParam(value="exception", required = false)String exception,
                         Model model){
 
         List<Type> types = typeService.allType();
+        /* 에러와 예외를 모델에 담아 view resolve */
+        model.addAttribute("error", error);
+        model.addAttribute("exception", exception);
         model.addAttribute("types", types);
-
-        if (loginMember !=null){
-            return "flowers/flowerList";
-        }
-
-
-
         model.addAttribute("memberFormDto", new MemberFormDto());
 
         return "forms/loginForm";
     }
 
     @GetMapping("/members/join")
-    public String join(@SessionAttribute(name = "member", required = false)Member loginMember,Model model){
+    public String join(Model model){
 
-        if (loginMember != null){
-            return "flowers/flowerList";
-        }
+
 
         List<Type> types = typeService.allType();
         LocalDate now = LocalDate.now();
