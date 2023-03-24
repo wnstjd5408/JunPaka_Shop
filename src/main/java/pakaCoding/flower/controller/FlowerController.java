@@ -127,7 +127,7 @@ public class FlowerController {
 
         model.addAttribute("types", types);
         model.addAttribute("flower", flower);
-        model.addAttribute("fileImage", fileImageList.get(0));
+        model.addAttribute("fileImage", fileImageList.get(1));
         model.addAttribute("typeName", typeName);
 
         return "flowers/flower";

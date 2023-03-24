@@ -2,8 +2,12 @@ package pakaCoding.flower.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -11,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "fileImage")
-public class FileImage extends TimeEntity {
+public class FileImage{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,6 +45,14 @@ public class FileImage extends TimeEntity {
 
     private String repimgYn; //대표이미지 여부
 
+
+    @CreatedDate
+    private LocalDateTime regDate; //등록날짜
+
+    @LastModifiedDate
+    private LocalDateTime updateDate; //수정 날짜
+
+
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "flower_id")
     private Flower flower;
@@ -59,7 +71,6 @@ public class FileImage extends TimeEntity {
         this.repimgYn = repimgYn;
         this.flower = flower;
     }
-
 
     public void updateFlowerImg(String originFileImgName, String savedFileImgName, String uploadDir, String extension, Long size, String contentType, String repimgYn){
         this.originFileImgName = originFileImgName;
