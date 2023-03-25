@@ -37,11 +37,11 @@ class FlowerRepositoryTest {
     void beforeEach() {
 
     }
-
-    @AfterEach
-    void afterEach(){
-        flowerRepository.deleteAll();
-    }
+//
+//    @AfterEach
+//    void afterEach(){
+//        flowerRepository.deleteAll();
+//    }
 
     @Test
     public void typeMatch(){
