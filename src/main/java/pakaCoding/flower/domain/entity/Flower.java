@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import pakaCoding.flower.domain.constant.FlowerSellStatus;
 import pakaCoding.flower.dto.FlowerFormDto;
+import pakaCoding.flower.exception.OutOfStockException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,6 @@ import java.util.List;
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
 @Builder
 public class Flower extends TimeEntity {
 
@@ -74,6 +74,20 @@ public class Flower extends TimeEntity {
         this.flowerSellStatus =flowerDto.getFlowerSellStatus();
         this.hitCount = 0L;
         this.delYn = "N";
+    }
+
+    public void removeStockQuantity(int stock){
+
+        int restStock = this.stockQuantity - stock;
+        if(restStock <0){
+            throw new OutOfStockException("상품의 재고가 부족합니다. (현재 재고 수량 : " + this.stockQuantity + ")");
+
+        }
+        this.stockQuantity = restStock;
+    }
+
+    public void addStockQuantity(int stock){
+        this.stockQuantity += stock;
     }
 }
 

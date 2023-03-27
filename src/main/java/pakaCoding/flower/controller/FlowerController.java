@@ -130,7 +130,7 @@ public class FlowerController {
         model.addAttribute("fileImage", fileImageList.get(1));
         model.addAttribute("typeName", typeName);
 
-        return "flowers/flower";
+        return "flowers/flowerDetail";
     }
 
 
