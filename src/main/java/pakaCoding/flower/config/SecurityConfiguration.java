@@ -30,6 +30,7 @@ public class SecurityConfiguration {
         httpSecurity.csrf().disable()
                 .authorizeHttpRequests()
                     .requestMatchers( "logout").authenticated()
+                    .requestMatchers("/order").hasAnyRole("ADMIN", "USER")
                     .requestMatchers("/flowers/create/**").hasRole("ADMIN")
                     .requestMatchers("/members/**").anonymous() //인증되지 않은 사용자만 접근허용
                     .anyRequest().permitAll()
