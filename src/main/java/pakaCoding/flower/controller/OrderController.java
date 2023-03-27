@@ -54,12 +54,13 @@ public class OrderController {
         }
 
         Long orderId;
-
+        String message;
         try{
             orderId = orderService.order(orderDto, principal.getName());
 
         }catch (Exception e){
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            message = "로그인 오류";
+            return new ResponseEntity<String>(message, HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<Long>(orderId, HttpStatus.OK);
     }

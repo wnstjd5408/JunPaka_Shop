@@ -36,7 +36,7 @@ public class Order {
     @Column(updatable = false)
     private LocalDateTime orderDate; //주문시간
 
-    @Enumerated
+    @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
     public void setMember(Member member) {
