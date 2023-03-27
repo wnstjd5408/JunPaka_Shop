@@ -6,13 +6,13 @@ spring:
       driver-class-name: org.mariadb.jdbc.Driver
 
 
-  jpa:
-    generate-ddl: true
-    hibernate:
-      ddl-auto: create
-    properties:
+    jpa:
+      generate-ddl: true
       hibernate:
-        format_sql: true
+        ddl-auto: none
+      properties:
+        hibernate:
+          format_sql: true
 
 jasypt:
   encryptor:

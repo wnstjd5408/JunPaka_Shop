@@ -11,7 +11,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import pakaCoding.flower.config.auth.CustomAuthFailureHandler;
+import pakaCoding.flower.config.auth.CustomAuthenticationEntryPoint;
 import pakaCoding.flower.domain.constant.Role;
 import pakaCoding.flower.service.MemberDetailServiceImpl;
 
@@ -27,10 +31,9 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws  Exception{
-        httpSecurity.csrf().disable()
+        httpSecurity
                 .authorizeHttpRequests()
                     .requestMatchers( "logout").authenticated()
-                    .requestMatchers("/order").hasAnyRole("ADMIN", "USER")
                     .requestMatchers("/flowers/create/**").hasRole("ADMIN")
                     .requestMatchers("/members/**").anonymous() //인증되지 않은 사용자만 접근허용
                     .anyRequest().permitAll()
@@ -44,7 +47,11 @@ public class SecurityConfiguration {
                 .logout()
                     .logoutSuccessUrl("/")
                     .invalidateHttpSession(true)
-                    .deleteCookies("JSESSIONID");
+                    .deleteCookies("JSESSIONID")
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                    .and()
+                .exceptionHandling()
+                    .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
 
         return httpSecurity.build();
     }

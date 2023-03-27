@@ -12,6 +12,8 @@
                 <h3>상품등록</h3>
             </div>
             <form th:object="${flowerFormDto}" method="post" enctype="multipart/form-data">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
                 <div class="mb-3">
                     <label for="flowerSell" class="form-label">타입</label>
                     <select name="flowerSellStatus" class="form-control, form-select" id="flowerSell">
