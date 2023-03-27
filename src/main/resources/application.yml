@@ -1,9 +1,10 @@
 spring:
-  datasource:
-    url: ENC(QNo4FwIZvaMVSDORmxeTfVD5vL/njChkA94oc7B+3fG6GcvEetBTRQTc5J1CgKqP3z+WGnK+cxQ=)
-    username : ENC(g5gYia4h9g3THpuMbwqoVHEGif+LQpTw)
-    password: ENC(IbmNAQwCG0lXRSZSpTObuA==)
-    driver-class-name: org.mariadb.jdbc.Driver
+    datasource:
+      url: ENC(QNo4FwIZvaMVSDORmxeTfVD5vL/njChkA94oc7B+3fG6GcvEetBTRQTc5J1CgKqP3z+WGnK+cxQ=)
+      username : ENC(g5gYia4h9g3THpuMbwqoVHEGif+LQpTw)
+      password: ENC(IbmNAQwCG0lXRSZSpTObuA==)
+      driver-class-name: org.mariadb.jdbc.Driver
+
 
   jpa:
     generate-ddl: true
