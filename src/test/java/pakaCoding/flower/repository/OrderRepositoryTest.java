@@ -64,12 +64,7 @@ class OrderRepositoryTest {
     @Test
     @DisplayName("CascadeTest 영속성 테스트")
     public void cascadeTest() {
-        Type type1 = Type.builder()
-                .count(0)
-                .id(1)
-                .typename("꽃바구니")
-                .build();
-        typeRepository.save(type1);
+        Type type1 = getType();
 
         Order order = new Order();
 
@@ -77,8 +72,7 @@ class OrderRepositoryTest {
             Flower flower = this.registerFLower("테스트" + i, 1000, 1, type1);
             flowerRepository.save(flower);
 
-            Member member = new Member("wnstjd5408@naver.com", "12345", "테스트", Gender.MAN, LocalDate.now(), Role.ADMIN, new Address("가", "나", "다"));
-            memberRepository.save(member);
+            Member member = getMember();
 
             Delivery delivery = new Delivery();
             delivery.setAddress(member.getAddress());
@@ -88,6 +82,7 @@ class OrderRepositoryTest {
             OrderItem orderItem = new OrderItem();
             orderItem.setFlower(flower);
             orderItem.setCount(10);
+
             orderItem.setOrderPrice(1000);
             orderItem.setOrder(order);
 
@@ -107,6 +102,73 @@ class OrderRepositoryTest {
         Assertions.assertEquals(3, savedOrder.getOrderItems().size());
 
     }
+
+    private Member getMember() {
+        Member member = new Member("wnstjd5408@naver.com", "12345", "테스트", Gender.MAN, LocalDate.now(), Role.ADMIN, new Address("가", "나", "다"));
+        memberRepository.save(member);
+        return member;
+    }
+
+    private Type getType() {
+        Type type1 = Type.builder()
+                .count(0)
+                .id(1)
+                .typename("꽃바구니")
+                .build();
+        typeRepository.save(type1);
+        return type1;
+    }
+
+    public Order createOrder(){
+        Order order = new Order();
+        for(int i = 0; i<3; i++){
+            Flower flower = registerFLower("테스트" + i, 1000, 1, getType());
+
+
+            flowerRepository.save(flower);
+            OrderItem orderItem = new OrderItem();
+            orderItem.setFlower(flower);
+            orderItem.setCount(10);
+            orderItem.setOrderPrice(1000);
+            orderItem.setOrder(order);
+            order.getOrderItems().add(orderItem);
+        }
+
+        order.setMember(getMember());
+        orderRepository.save(order);
+        return order;
+    }
+
+    @Test
+    @DisplayName("즉시 로딩 테스트")
+    public void eagerLoadingTest(){
+        Order order = this.createOrder();
+        Long orderItem_id = order.getOrderItems().get(0).getId();
+        em.flush();
+        em.clear();
+        OrderItem orderItem = orderItemRepository.findById(orderItem_id)
+                .orElseThrow(EntityNotFoundException::new);
+        log.info("orderItem ={}", orderItem.getClass());
+    }
+
+    @Test
+    @DisplayName("지연 로딩 테스트")
+    public void lazyLoadingTest(){
+        Order order = this.createOrder();
+        Long orderItem_id = order.getOrderItems().get(0).getId();
+        em.flush();
+        em.clear();
+
+        OrderItem orderItem = orderItemRepository.findById(orderItem_id).orElseThrow(EntityNotFoundException::new);
+        System.out.println("Order class : " + orderItem.getOrder().getClass());
+        System.out.println("-------------------------------------------------");
+        orderItem.getOrder().getOrderDate();
+        System.out.println("orderItem.getOrder().getOrderDate() = " + orderItem.getOrder().getOrderDate());
+        System.out.println("-------------------------------------------------");
+
+    }
+
+
 
 
 }
