@@ -30,9 +30,10 @@ public class CustomUserDetails implements UserDetails {
         return member.getPassword();
     }
 
+    //아이디 저장
     @Override
     public String getUsername() {
-        return member.getUsername();
+        return member.getUserid();
     }
 
     /**
