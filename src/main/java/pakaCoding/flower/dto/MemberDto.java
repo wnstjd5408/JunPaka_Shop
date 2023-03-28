@@ -14,9 +14,9 @@ import java.time.LocalDate;
 @Builder
 public class MemberDto {
 
-
-    private String username;
+    private String userid;
     private String password;
+    private String username;
     private Gender gender;
     private LocalDate birthDate;
     private String email;
@@ -29,8 +29,9 @@ public class MemberDto {
     /* DTO -> Entity*/
     public Member toEntity(){
         Member member = Member.builder()
-                .username(username)
+                .userid(userid)
                 .password(password)
+                .username(username)
                 .gender(gender)
                 .birthDate(birthDate)
                 .address(new Address(streetAdr, detailAdr, zipcode))

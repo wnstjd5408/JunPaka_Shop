@@ -25,7 +25,7 @@ public class MemberDetailServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // MemberRepository를 통해 username에 해당하는 member의 존재여부만 판단
-        Member member = memberRepository.findByUsername(username).orElseThrow(() ->
+        Member member = memberRepository.findByUserid(username).orElseThrow(() ->
                 new UsernameNotFoundException("해당 사용자가 존재하지 않습니다 : " + username));
         session.setAttribute("member", new MemberSessionDto(member));
 

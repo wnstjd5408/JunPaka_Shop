@@ -12,8 +12,9 @@ import java.time.LocalDate;
 @Getter
 public class MemberSessionDto implements Serializable {
 
-    private String username;
+    private String userid;
     private String password;
+    private String username;
     private Gender gender;
     private LocalDate birthDate;
     private Address address;
@@ -23,8 +24,9 @@ public class MemberSessionDto implements Serializable {
 
     /* Entity -> Dto */
     public MemberSessionDto(Member member){
-        this.username = member.getUsername();
+        this.userid = member.getUserid();
         this.password = member.getPassword();
+        this.username = member.getUsername();
         this.gender = member.getGender();
         this.birthDate = member.getBirthDate();
         this.address = member.getAddress();

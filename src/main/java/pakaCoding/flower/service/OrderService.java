@@ -27,7 +27,7 @@ public class OrderService {
 
 
     @Transactional
-    public Long order(OrderDto orderDto, String username) {
+    public Long order(OrderDto orderDto, String userid) {
 
         //엔티티 조회
         List<OrderItem> orderItemList = new ArrayList<>();
@@ -37,7 +37,7 @@ public class OrderService {
         orderItemList.add(orderItem);
 
         //배송정보 생성
-        Member member = memberRepository.findByUsername(username).get();
+        Member member = memberRepository.findByUserid(userid).get();
 
         Delivery delivery = new Delivery();
         delivery.setAddress(member.getAddress());
