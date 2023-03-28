@@ -2,6 +2,8 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
     <head>
         <title th:text="${flower.name}">${flower.name}</title>
+        <meta name="_csrf" th:content="${_csrf.token}">
+        <meta name="_csrf_header" th:content="${_csrf.headerName}">
     </head>
     <!-- content   -->
     <th:block layout:fragment="content" class="py-5">
@@ -94,7 +96,7 @@
                     type : "POST",
                     contentType : "application/json",
                     data : param,
-                    before : function (xhr){
+                    beforeSend : function (xhr){
                         /* 데이터를 전송하기 전에 헤더에 csrf 값을 설정 */
                         xhr.setRequestHeader(header, token);
                     },

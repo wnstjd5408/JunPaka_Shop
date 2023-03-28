@@ -1,17 +1,22 @@
 spring:
-  datasource:
-    url: ENC(QNo4FwIZvaMVSDORmxeTfVD5vL/njChkA94oc7B+3fG6GcvEetBTRQTc5J1CgKqP3z+WGnK+cxQ=)
-    username : ENC(g5gYia4h9g3THpuMbwqoVHEGif+LQpTw)
-    password: ENC(IbmNAQwCG0lXRSZSpTObuA==)
-    driver-class-name: org.mariadb.jdbc.Driver
+    datasource:
+      url: ENC(QNo4FwIZvaMVSDORmxeTfVD5vL/njChkA94oc7B+3fG6GcvEetBTRQTc5J1CgKqP3z+WGnK+cxQ=)
+      username : ENC(g5gYia4h9g3THpuMbwqoVHEGif+LQpTw)
+      password: ENC(IbmNAQwCG0lXRSZSpTObuA==)
+      driver-class-name: org.mariadb.jdbc.Driver
 
-  jpa:
-    generate-ddl: true
-    hibernate:
-      ddl-auto: create
-    properties:
+
+    jpa:
+      generate-ddl: true
       hibernate:
-        format_sql: true
+        ddl-auto: none
+      properties:
+        hibernate:
+          format_sql: true
+    servlet:
+      multipart:
+        max-file-size: 500MB
+        max-request-size: 500MB
 
 jasypt:
   encryptor:
@@ -24,10 +29,7 @@ logging:
     org.hibernate.type: trace
 
 
-servlet:
-  multipart:
-    max-file-size: 10MB
-    max-request-size: 10MB
+
 
 server:
   servlet:

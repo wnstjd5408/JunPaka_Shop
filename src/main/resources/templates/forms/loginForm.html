@@ -28,13 +28,14 @@
 
     </head>
     <!--Section-->
-    <th:block layout:fragment="section" class="py-5">
+    <th:block layout:fragment="content" class="py-5">
         <div class="container-sm w-50 px-4 px-lg-4 mt-4">
             <div class="py-5 text-center">
                 <h3>Login</h3>
             </div>
         <form th:object="${memberFormDto}" action="/loginProc" method="post">
-            <!--     ID       -->
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+
             <div class="mb-4">
                 <label class="form-label" for="username">MemberId</label>
                 <input type="text" id="username" placeholder="아이디" th:field="*{username}" class="form-control">
