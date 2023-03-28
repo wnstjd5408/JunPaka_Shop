@@ -68,7 +68,7 @@ public class MemberController {
 
         if(bindingResult.hasErrors()){
             model.addAttribute("types", types);
-            return "forms/flowerForm";
+            return "forms/joinForm";
         }
 
         log.info("MemberController 실행");

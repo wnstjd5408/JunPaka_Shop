@@ -24,7 +24,7 @@ public class Member extends TimeEntity {
 
 
     @Id @GeneratedValue
-    @Column(name = "user_id")
+    @Column(name = "member_id")
     private Long id;
 
     @Email(message = "이메일 형식으로 입력해주세요")
@@ -37,6 +37,9 @@ public class Member extends TimeEntity {
 
     @NotNull
     private String username;
+
+    @NotNull
+    private String userid;
 
     @Enumerated(EnumType.STRING)
     @NotNull
@@ -59,10 +62,11 @@ public class Member extends TimeEntity {
     private List<Order> orders = new ArrayList<>();
 
     @Builder
-    public Member(String email, String password, String username, Gender gender, LocalDate birthDate, Role role, Address address) {
+    public Member(String email, String password, String userid, String username, Gender gender, LocalDate birthDate, Role role, Address address) {
         this.email = email;
         this.password = password;
         this.username = username;
+        this.userid = userid;
         this.gender = gender;
         this.birthDate = birthDate;
         this.role = role;

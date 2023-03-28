@@ -15,14 +15,23 @@
             <form th:object="${memberDto}" method="post">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
-                <div clas="my-3">
+                <div class="my-3">
                     <label for="userId" class="form-label">아이디</label>
-                    <input type="text" class="form-control" th:field="*{username}" id="userId">
+                    <input type="text" class="form-control" th:field="*{userid}" id="userid">
                 </div>
-                <div clas="my-3">
+                <p th:if="${#fields.hasErrors('userid')}" th:errors="*{userid}" class="alert-danger alert">Incorrect data</p>
+
+                <div class="my-3">
                     <label for="userPassword" class="form-label">비밀번호</label>
                     <input type="password" class="form-control" th:field="*{password}" id="userPassword">
                 </div>
+                <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="alert-danger alert">Incorrect data</p>
+                <div class="my-3">
+                    <label for="username" class="form-label">성함</label>
+                    <input type="text" class="form-control" th:field="*{username}" id="username">
+                </div>
+                <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="alert-danger alert">Incorrect data</p>
+
                 <div class="mb-3">
                     <label for="gender" class="form-label">성별</label>
                     <select name="gender" class="form-control form-select" id="gender">
@@ -37,6 +46,8 @@
                     <label for="email" class="form-label">이메일</label>
                     <input type="email" class="form-control" th:field="*{email}" id="email">
                 </div>
+                <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="alert-danger alert">Incorrect data</p>
+
                 <div class="my-3">
                     <label th:for="zipcode" class="form-label">우편번호</label>
                     <div class ="d-flex">
@@ -57,7 +68,7 @@
                     <input type="text" th:field="*{detailAdr}" class="form-control" >
                 </div>
                 <div class="my-3">
-                    <button type="submit" class="btn btn-sm btn-secondary form-control">등록하기</button>
+                    <button type="submit" class="btn btn-secondary form-control">등록하기</button>
                 </div>
             </form>
         </div>

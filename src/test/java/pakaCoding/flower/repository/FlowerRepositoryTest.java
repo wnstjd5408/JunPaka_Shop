@@ -78,6 +78,7 @@ class FlowerRepositoryTest {
         Pageable pageable = PageRequest.of(0, 10);
         Page<Flower> flowers = flowerRepository.findAllByTypeIdQuery(type1.getId(), pageable);
         log.info("flowers.getTotalElements = {}", flowers.getTotalElements());
+        log.info("flower 사이즈 ={}", flowers.getSize());
         List<FileImage> byFlowerIdOrderByIdDesc = fileImageRepository.findByFlowerId(flowers.getContent().get(0).getId());
         log.info("FileImage 0번의 개수 = {}", byFlowerIdOrderByIdDesc.size());
     }

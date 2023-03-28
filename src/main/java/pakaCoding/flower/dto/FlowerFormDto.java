@@ -1,6 +1,7 @@
 package pakaCoding.flower.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
@@ -25,6 +26,8 @@ public class FlowerFormDto extends TimeEntity {
 
     @NotNull(message = "재고는 필수 입력 값입니다.")
     private Integer stockQuantity;
+
+    @NotNull(message = "타입 선택은 필수 입력 값입니다.")
     private Type type;
     private Long hitCount;
     private MultipartFile thumbnails;

@@ -2,6 +2,7 @@ package pakaCoding.flower.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pakaCoding.flower.domain.constant.DeliveryStatus;
@@ -18,6 +19,7 @@ import java.util.List;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@Slf4j
 public class OrderService {
 
     private final MemberRepository memberRepository;
@@ -27,8 +29,8 @@ public class OrderService {
 
 
     @Transactional
-    public Long order(OrderDto orderDto, String username) {
-
+    public Long order(OrderDto orderDto, String userid) {
+        log.info("OrderService에서 order 실행");
         //엔티티 조회
         List<OrderItem> orderItemList = new ArrayList<>();
         Flower flower = flowerRepository.findById(orderDto.getFlowerId())
@@ -37,7 +39,7 @@ public class OrderService {
         orderItemList.add(orderItem);
 
         //배송정보 생성
-        Member member = memberRepository.findByUsername(username).get();
+        Member member = memberRepository.findByUserid(userid).get();
 
         Delivery delivery = new Delivery();
         delivery.setAddress(member.getAddress());

@@ -26,14 +26,19 @@
                     <label for="flowerName" class="form-label">꽃 이름</label>
                     <input type="text" class="form-control" th:field="*{name}" id="flowerName">
                 </div>
+                <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="alert-danger alert">Incorrect data</p>
                 <div class="mb-3">
                     <label for="flowerPrice" class="form-label">가격</label>
                     <input type="text" class="form-control" th:field="*{price}" id="flowerPrice">
                 </div>
+                <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="alert-danger alert">Incorrect data</p>
+
                 <div class="mb-3">
                     <label for="flowerStockQuantity" class="form-label">수량</label>
                     <input type="text" class="form-control" th:field="*{stockQuantity}" id="flowerStockQuantity">
                 </div>
+                <p th:if="${#fields.hasErrors('stockQuantity')}" th:errors="*{stockQuantity}" class="alert-danger alert">Incorrect data</p>
+
                 <div class="mb-3">
                     <label for="type" class="form-label">타입</label>
                     <select th:field="*{type}" class="form-control, form-select" id="type">
@@ -41,6 +46,8 @@
                         <option th:each="type : ${types}" th:value="${type.id}" th:text="${type.typename}" ></option>
                     </select>
                 </div>
+                <p th:if="${#fields.hasErrors('type')}" th:errors="*{type}" class="alert-danger alert">Incorrect data</p>
+
                 <div class="mb-3">
                     <label for="thumbnails" class="form-label">썸네일 - 메인 사진</label>
                     <input type="file" class="form-control" name="thumbnails" id="thumbnails">
