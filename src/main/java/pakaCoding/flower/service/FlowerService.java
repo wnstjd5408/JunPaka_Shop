@@ -60,10 +60,10 @@ public class FlowerService {
 
     //list에 기본 페이지 Select
     public Page<MainFlowerDto> findAllFlowers(int page){
-        Pageable pageable = PageRequest.of(page, 16);
+        Pageable pageable = PageRequest.of(page, 8);
         log.info("findAllFlowers 시작");
         log.info("findAllFlowers 사용한 service repository 개수 ={}",
-                flowerRepository.findAll(pageable).stream().count());
+                flowerRepository.findAll(pageable).getTotalElements());
         Page<Flower> flowerList = flowerRepository.findAll(pageable);
         return getMainFlowerDtos(flowerList, pageable);
     }
