@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Type;
+import pakaCoding.flower.dto.FlowerDetailDto;
 import pakaCoding.flower.dto.FlowerFormDto;
 import pakaCoding.flower.dto.MainFlowerDto;
 import pakaCoding.flower.dto.MemberSessionDto;
@@ -121,15 +122,13 @@ public class FlowerController {
             model.addAttribute("member", member.getUsername());
         }
 
-        Flower flower = flowerService.findOne(flowerId).get();
-        List<FileImage> fileImageList = fileImageService.oneFlowerImageFile(flowerId);
+        FlowerDetailDto flower = flowerService.findOne(flowerId);
         List<Type> types = typeService.allType();
-        String typeName = typeService.findTypeName(flower.getType().getId());
+//        String typeName = typeService.findTypeName(flower.getType().getId());
 
         model.addAttribute("types", types);
         model.addAttribute("flower", flower);
-        model.addAttribute("fileImage", fileImageList.get(1));
-        model.addAttribute("typeName", typeName);
+//        model.addAttribute("typeName", typeName);
 
         return "flowers/flowerDetail";
     }

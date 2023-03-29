@@ -3,8 +3,10 @@ package pakaCoding.flower.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 import pakaCoding.flower.domain.constant.Gender;
 import pakaCoding.flower.domain.constant.Role;
@@ -42,7 +44,8 @@ public class MemberDto {
 
     /* DTO -> Entity*/
     public Member toEntity(){
-        Member member = Member.builder()
+
+        return Member.builder()
                 .userid(userid)
                 .password(password)
                 .username(username)
@@ -52,7 +55,5 @@ public class MemberDto {
                 .email(email)
                 .role(role.USER)
                 .build();
-
-        return member;
     }
 }

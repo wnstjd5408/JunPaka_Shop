@@ -13,7 +13,7 @@ public class FileImageDto {
 
     private String originFileName;
 
-    private String savedFileName;
+    private String imgUrl;
 
     private String uploadDir;   //경로명
 
@@ -35,7 +35,7 @@ public class FileImageDto {
     public FileImageDto(Long id, String originFileName, String savedFileName, String uploadDir, String extension, Long size, String contentType, Flower flower, String repimgYn) {
         this.id = id;
         this.originFileName = originFileName;
-        this.savedFileName = savedFileName;
+        this.imgUrl = savedFileName;
         this.uploadDir = uploadDir;
         this.extension = extension;
         this.size = size;
@@ -44,10 +44,11 @@ public class FileImageDto {
         this.repimgYn = repimgYn;
     }
 
+    /* DTO -> Entity*/
     public FileImage toEntity(){
         return FileImage.builder()
                 .originFileImgName(originFileName)
-                .savedFileImgName(savedFileName)
+                .savedFileImgName(imgUrl)
                 .uploadDir(uploadDir)
                 .extension(extension)
                 .size(size)
@@ -56,4 +57,9 @@ public class FileImageDto {
                 .flower(flower)
                 .build();
     }
+    /* Entity -> Dto */
+    public FileImageDto(FileImage fileImage){
+        this.imgUrl = fileImage.getSavedFileImgName();
+    }
+
 }
