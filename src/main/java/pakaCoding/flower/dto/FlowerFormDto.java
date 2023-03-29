@@ -29,34 +29,13 @@ public class FlowerFormDto extends TimeEntity {
 
     @NotNull(message = "타입 선택은 필수 입력 값입니다.")
     private Type type;
-    private Long hitCount;
     private MultipartFile thumbnails;
     private List<MultipartFile> multipartFile;
     private FlowerSellStatus flowerSellStatus;
 
-
-    public FlowerFormDto() {
-
-    }
-
-
-    @Builder
-    public FlowerFormDto(Long id, String name, Integer price, Integer stockQuantity, Type type, Long hitCount,
-                         MultipartFile thumbnails , List<MultipartFile> multipartFile, FlowerSellStatus flowerSellStatus) {
-        this.id = id;
-        this.name = name;
-        this.price = price;
-        this.stockQuantity = stockQuantity;
-        this.type = type;
-        this.hitCount = hitCount;
-        this.thumbnails =thumbnails;
-        this.multipartFile = multipartFile;
-        this.flowerSellStatus =flowerSellStatus;
-    }
-
-
-
-
+    /**
+     * 파일저장때 사용
+     */
     //DTO -> Flower
     public Flower toEntity(){
         return Flower.builder()
@@ -69,4 +48,6 @@ public class FlowerFormDto extends TimeEntity {
                 .hitCount(0L)
                 .build();
     }
+
+
 }

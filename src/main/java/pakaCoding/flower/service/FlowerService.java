@@ -1,5 +1,7 @@
 package pakaCoding.flower.service;
 
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -12,11 +14,13 @@ import org.springframework.web.multipart.MultipartFile;
 import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.dto.FileImageDto;
+import pakaCoding.flower.dto.FlowerDetailDto;
 import pakaCoding.flower.dto.FlowerFormDto;
 import pakaCoding.flower.dto.MainFlowerDto;
 import pakaCoding.flower.repository.FileImageRepository;
 import pakaCoding.flower.repository.FlowerRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,6 +31,7 @@ import java.util.stream.Collectors;
 public class FlowerService {
     private final FlowerRepository flowerRepository;
     private final FileImageService fileImageService;
+    private final FileImageRepository fileImageRepository;
 
     @Transactional
     public Long saveFlower(FlowerFormDto flowerFormDto) throws Exception {
@@ -53,11 +58,24 @@ public class FlowerService {
         log.info("flower.getId() = {}", flower.getId());
         return flower.getId();
     }
+    @Transactional(readOnly = true)
+    public FlowerDetailDto findOne(Long flowerId){
 
-    public Optional<Flower> findOne(Long flowerId){
-        return flowerRepository.findById(flowerId);
+        // 상품 이미지 엔티티들을 fileImageDto 객체로 변환하여 fileImageDtoList에 담습니다.
+        List<FileImage> fileImageList = fileImageRepository.findByFlowerId(flowerId);
+        List<FileImageDto> fileImageDtoList = new ArrayList<>();
+
+        for (FileImage fileImage : fileImageList) {
+            FileImageDto fileImageDto = new FileImageDto(fileImage);
+            fileImageDtoList.add(fileImageDto);
+        }
+        Flower flower = flowerRepository.findById(flowerId).orElseThrow(EntityNotFoundException::new);
+        FlowerDetailDto flowerDetailDto = new FlowerDetailDto(flower);
+        flowerDetailDto.setFileImageDtoList(fileImageDtoList);
+        return flowerDetailDto;
     }
 
+    @Transactional(readOnly = true)
     //list에 기본 페이지 Select
     public Page<MainFlowerDto> findAllFlowers(int page){
         Pageable pageable = PageRequest.of(page, 8);
@@ -68,6 +86,7 @@ public class FlowerService {
         return getMainFlowerDtos(flowerList, pageable);
     }
 
+    @Transactional(readOnly = true)
     //type별로 출력
     public Page<MainFlowerDto> findFlowersType(int typeId, int page){
         Pageable pageable = PageRequest.of(page, 16);
