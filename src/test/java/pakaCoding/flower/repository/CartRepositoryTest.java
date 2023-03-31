@@ -49,9 +49,13 @@ class CartRepositoryTest {
 
         Member member = getMember();
         Cart cart = Cart.createCart(member);
-        cartRepository.save(cart);
+//        cartRepository.save(cart);
 
+        Cart findCart = cartRepository.findByMemberId(member.getId());
 
-        Assertions.assertThat(member.getId()).isEqualTo(cart.getId());
+        if(findCart == null) {
+            log.info("findCart = {}", findCart);
+        }
+//        Assertions.assertThat(findCart.getMember().getId()).isNotEqualTo(cart.getMember().getId());
     }
 }

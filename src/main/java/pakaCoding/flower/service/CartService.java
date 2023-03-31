@@ -31,13 +31,12 @@ public class CartService {
     public Long addCart(CartItemDto cartItemDto, String userId){
         Member member = memberRepository.findByUserid(userId).get();
         Cart cart = cartRepository.findByMemberId(member.getId());
-
         //장바구니가 존재하지 않는다면 생성
         if(cart == null){
-            Cart.createCart(member);
+            cart = Cart.createCart(member);
             cartRepository.save(cart);
         }
-
+        log.info("cart.getMember().getName() ={}", cart.getMember().getUsername());
         Flower flower = flowerRepository.findById(cartItemDto.getFlowerId())
                 .orElseThrow(EntityNotFoundException::new);
         CartItem cartItem = cartItemRepository.findByCartIdAndFlowerId(cart.getId(), flower.getId());

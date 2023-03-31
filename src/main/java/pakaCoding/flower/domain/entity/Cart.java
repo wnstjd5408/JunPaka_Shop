@@ -16,6 +16,7 @@ public class Cart extends TimeEntity{
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id")
     private Member member;
 
     public static Cart createCart(Member member){

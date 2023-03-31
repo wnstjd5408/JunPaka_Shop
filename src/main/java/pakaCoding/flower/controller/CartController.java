@@ -28,7 +28,7 @@ public class CartController {
 
 
     //장바구니 담기
-    @PostMapping
+    @PostMapping("/cart")
     @ResponseBody
     public ResponseEntity cart(@RequestBody @Valid CartItemDto cartItemDto, BindingResult bindingResult,
                                Principal principal){
@@ -46,6 +46,8 @@ public class CartController {
 
 
         try {
+            log.info("principal.getName()의 이름 : {}", principal.getName());
+            log.info("cartItemDto 개수 = {}", cartItemDto.getCount());
             cartItemId = cartService.addCart(cartItemDto, principal.getName());
         } catch (Exception e) {
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
