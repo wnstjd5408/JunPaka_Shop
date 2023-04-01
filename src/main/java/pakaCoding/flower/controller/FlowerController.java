@@ -23,6 +23,7 @@ import pakaCoding.flower.service.FileImageService;
 import pakaCoding.flower.service.FlowerService;
 import pakaCoding.flower.service.TypeService;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -36,9 +37,9 @@ public class FlowerController {
     private final HttpSession session;
 
     @GetMapping("/flowers/create")
-    public String newFlower(@SessionAttribute(name="member", required = false)MemberSessionDto member, Model model){
-        if (member != null) {
-            model.addAttribute("member", member.getUsername());
+    public String newFlower(Principal principal, Model model){
+        if (principal != null) {
+            model.addAttribute("member", principal.getName());
         }
         List<Type> types = typeService.allType();
 
@@ -69,12 +70,12 @@ public class FlowerController {
     }
 
     @GetMapping(value = {"/flowers", "/"})
-    public String list(@SessionAttribute(name="member", required = false)MemberSessionDto member,
+    public String list(Principal principal,
                        Model model,
                        @RequestParam(value = "page", defaultValue = "0") int page){
 
-        if (member != null) {
-            model.addAttribute("member", member.getUsername());
+        if (principal != null) {
+            model.addAttribute("member", principal.getName());
         }
 
         Page<MainFlowerDto> flowers = flowerService.findAllFlowers(page);
