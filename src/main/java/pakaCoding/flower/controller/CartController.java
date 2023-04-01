@@ -6,12 +6,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import pakaCoding.flower.dto.CartItemDto;
+import pakaCoding.flower.dto.CartListDto;
 import pakaCoding.flower.service.CartService;
 
 import java.security.Principal;
@@ -25,6 +28,16 @@ public class CartController {
 
     private final CartService cartService;
 
+    //장바구니 조회
+    @GetMapping("/cart")
+    public String cartList(Principal principal, Model model){
+        if (principal != null){
+            List<CartListDto> cartListDtos = cartService.getCartList(principal.getName());
+            model.addAttribute("member", principal.getName());
+            model.addAttribute("cartItems", cartListDtos);
+        }
+        return "cart/cartList";
+    }
 
 
     //장바구니 담기

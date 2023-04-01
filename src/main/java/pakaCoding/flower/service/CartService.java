@@ -11,7 +11,11 @@ import pakaCoding.flower.domain.entity.CartItem;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Member;
 import pakaCoding.flower.dto.CartItemDto;
+import pakaCoding.flower.dto.CartListDto;
 import pakaCoding.flower.repository.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -52,5 +56,22 @@ public class CartService {
             cartItem.addCount(cartItemDto.getCount());
         }
         return cartItem.getId();
+    }
+
+
+    //장바구니 조회
+    @Transactional(readOnly = true)
+    public List<CartListDto> getCartList(String userId){
+
+        List<CartListDto> cartListDtos = new ArrayList<>();
+
+        Member member = memberRepository.findByUserid(userId).get();
+        Cart cart = cartRepository.findByMemberId(member.getId());
+
+        if (cart == null){
+            return cartListDtos;
+        }
+        cartListDtos = cartItemRepository.findCartListDto(cart.getId());
+        return cartListDtos;
     }
 }
