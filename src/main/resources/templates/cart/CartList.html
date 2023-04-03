@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title th:text="|${member}님의 장바구니|"></title>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+
+    <th:block layout:fragment="content" class="py-5">
+
+
+
+
+        <div class="container px-4 px-lg-5 mt-5">
+
+            <h2 class="mb-3"> 장바구니 입니다.</h2>
+            <table class="table">
+                <thead>
+                    <tr class="text-center">
+                        <td>
+                            <input type="checkbox" id="checkAll" th:onclick="">전체선택
+                        </td>
+                        <td>
+                            상품정보
+                        </td>
+                        <td>상품금액</td>
+                    </tr>
+                </thead>
+                <tbody>
+                <tr th:each="cartItem : ${cartItems}">
+                    <td class="text-center align-middle">
+                        <input type="checkbox" name="cartChxBox" th:value="${cartItem.cartItemId}">
+                    </td>
+                    <td class="d-flex">
+                        <div class="me-2">
+                            <img th:src="'/display/fileImage='+${cartItem.imgUrl}"
+                                 src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" th:alt="${cartItem.flowerName}"
+                            height="330" width="230">
+                        </div>
+                        <div class="align-self-center">
+                            <span th:text="${cartItem.flowerName}" class="fw-bold"></span>
+                            <div class="fw-light">
+                                <span class="input-group mt-2">
+                                    <span th:id="price_ + ${cartItem.cartItemId}"
+                                          th:data-price="${cartItem.price}"
+                                          th:text="${cartItem.price} + '원'" class="align-self-center me-2">
+                                    </span>
+                                    <input type="number" name="count" th:id="count_ + ${cartItem.cartItemId}"
+                                           th:value="${cartItem.count}" min="1"
+                                           class="form-control me-2">
+                                    <button type="button" class="btn-close" aria-label="Close">
+                                        <span aria-hidden="true" th:data-id="${cartItem.cartItemId}"
+                                              onclick="deleteCartItem(this)">&times;
+                                        </span>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="text-center align-middle">
+                        <span th:id="totalPrice_ + ${cartItem.cartItemId}"
+                              th:name="totalPrice" th:text="${cartItem.price * cartItem.count} + '원'" >
+
+                        </span>
+
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+            <h2 class="text-center">
+                총 주문 금액 :
+                <span id="orderTotalPrice" class="text-danger">0원</span>
+            </h2>
+
+            <div class="text-center my-md-3">
+                <button type="button" class="btn btn-outline-dark" th:onclick="">주문하기</button>
+            </div>
+
+        </div>
+    </th:block>
+    <th:block layout:fragment="script">
+        <script th:inline="javascript">
+
+            //장바구니 삭제요청
+            function deleteCartItem(obj){
+                var cartItemId = obj.dataset.id;
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
+
+
+                var url= "cartItem/" + cartItemId;
+
+                $.ajax({
+                    url : url,
+                    type : "DELETE",
+                    beforeSend : function (xhr){
+                        /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                        xhr.setRequestHeader(header, token);
+                    },
+                    dataType : "json",
+                    cache   : false,
+                    success : function (result, status){
+                        location.href='/cart'
+                    },
+
+                    error : function (jqXHR, status, error){
+                        if(jqXHR.status == '401'){
+                            alert('로그인 후 이용해주세요')
+                            location.href='/members/login';
+
+                        }else{
+                            alert(jqXHR.responseJSON.message)
+                        }
+                    }
+                });
+            }
+        </script>
+    </th:block>
+</html>

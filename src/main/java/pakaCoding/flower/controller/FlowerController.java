@@ -1,6 +1,5 @@
 package pakaCoding.flower.controller;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,20 +8,17 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pakaCoding.flower.domain.entity.FileImage;
-import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.dto.FlowerDetailDto;
 import pakaCoding.flower.dto.FlowerFormDto;
 import pakaCoding.flower.dto.MainFlowerDto;
 import pakaCoding.flower.dto.MemberSessionDto;
-import pakaCoding.flower.service.FileImageService;
+import pakaCoding.flower.service.CartService;
 import pakaCoding.flower.service.FlowerService;
 import pakaCoding.flower.service.TypeService;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -31,14 +27,17 @@ import java.util.List;
 public class FlowerController {
 
     private final FlowerService flowerService;
-    private final FileImageService fileImageService;
     private final TypeService typeService;
-    private final HttpSession session;
+    private final CartService cartService;
 
     @GetMapping("/flowers/create")
-    public String newFlower(@SessionAttribute(name="member", required = false)MemberSessionDto member, Model model){
-        if (member != null) {
-            model.addAttribute("member", member.getUsername());
+    public String newFlower(Principal principal, Model model){
+        if (principal != null) {
+            model.addAttribute("member", principal.getName());
+            addCartCount(cartService.getCartListCount(principal.getName()), model);
+        }
+        else{
+            model.addAttribute("cartCount", 0);
         }
         List<Type> types = typeService.allType();
 
@@ -69,12 +68,16 @@ public class FlowerController {
     }
 
     @GetMapping(value = {"/flowers", "/"})
-    public String list(@SessionAttribute(name="member", required = false)MemberSessionDto member,
+    public String list(Principal principal,
                        Model model,
                        @RequestParam(value = "page", defaultValue = "0") int page){
 
-        if (member != null) {
-            model.addAttribute("member", member.getUsername());
+        if (principal != null) {
+            model.addAttribute("member", principal.getName());
+            addCartCount(cartService.getCartListCount(principal.getName()), model);
+        }
+        else{
+            model.addAttribute("cartCount", 0);
         }
 
         Page<MainFlowerDto> flowers = flowerService.findAllFlowers(page);
@@ -82,6 +85,8 @@ public class FlowerController {
         List<Type> types = typeService.allType();
 
         log.info("flower.getNumbers = {}", flowers.getTotalPages());
+
+
 
         model.addAttribute("maxPage", 5);
         model.addAttribute("flowers", flowers);
@@ -104,7 +109,12 @@ public class FlowerController {
                                 @RequestParam(value="page", defaultValue = "0") int page){
         if(member != null){
             model.addAttribute("member", member.getUsername());
+            addCartCount(cartService.getCartListCount(member.getUserid()), model);
         }
+        else{
+            model.addAttribute("cartCount", 0);
+        }
+
         log.info("FlowerController 실행");
         Page<MainFlowerDto> flowersType = flowerService.findFlowersType(typeId, page);
         List<Type> types = typeService.allType();
@@ -115,11 +125,22 @@ public class FlowerController {
         return "flowers/flowerList";
     }
 
+    //CartCount 추가
+    private void addCartCount(Integer cartService, Model model) {
+        Integer count = cartService;
+        log.info("카트의 수 = {} ", count);
+        model.addAttribute("cartCount", count);
+    }
+
     @GetMapping("/flowers/{flowerId}")
     public String oneFlower(@SessionAttribute(name="member", required = false)MemberSessionDto member,
                             @PathVariable long flowerId, Model model){
         if(member != null){
             model.addAttribute("member", member.getUsername());
+            addCartCount(cartService.getCartListCount(member.getUserid()), model);
+        }
+        else{
+            model.addAttribute("cartCount", 0);
         }
 
         FlowerDetailDto flower = flowerService.findOne(flowerId);

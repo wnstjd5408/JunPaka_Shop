@@ -27,12 +27,12 @@ public class OrderController {
 
 
     @GetMapping(value = "/order")
-    public String orderPage(@SessionAttribute(name = "member", required = false) MemberSessionDto member,
+    public String orderPage(Principal principal,
                             Model model) {
 
         List<Type> types = typeService.allType();
         model.addAttribute("types", types);
-        model.addAttribute("member", member);
+        model.addAttribute("member", principal.getName());
 
 
         return "forms/orderForm";

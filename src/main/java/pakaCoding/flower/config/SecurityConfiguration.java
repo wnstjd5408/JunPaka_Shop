@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import pakaCoding.flower.config.auth.CustomAccessDeniedHandler;
 import pakaCoding.flower.config.auth.CustomAuthFailureHandler;
 import pakaCoding.flower.config.auth.CustomAuthenticationEntryPoint;
 import pakaCoding.flower.domain.constant.Role;
@@ -52,7 +53,8 @@ public class SecurityConfiguration {
                     .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                     .and()
                 .exceptionHandling()
-                    .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
+                    .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                    .accessDeniedHandler(new CustomAccessDeniedHandler());
 
         return httpSecurity.build();
     }
