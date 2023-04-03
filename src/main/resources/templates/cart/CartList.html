@@ -20,7 +20,7 @@
                 <thead>
                     <tr class="text-center">
                         <td>
-                            <input type="checkbox" id="checkAll" th:onclick="">전체선택
+                            <input type="checkbox" id="checkAll" onclick="checkAll()">전체선택
                         </td>
                         <td>
                             상품정보
@@ -83,6 +83,41 @@
     </th:block>
     <th:block layout:fragment="script">
         <script th:inline="javascript">
+
+
+            $(document).ready(function () {
+                $("input[name=cartChxBox]").change(function () {
+                    getOrderTotalPrice();
+                });
+            });
+
+            // 총 주문 금액 출력
+            function getOrderTotalPrice(){
+                var orderTotalPrice = 0;
+                $("input[name=cartChxBox]:checked").each(function () {
+                    var cartItemId = $(this).val();
+                    console.log('cartItemId = ', cartItemId);
+                    var price = $('#price_' + cartItemId).attr("data-price");
+                    console.log('price = ', price);
+                    var count = $('#count_' + cartItemId).val();
+                    orderTotalPrice += price * count;
+                });
+
+                $("#orderTotalPrice").html(orderTotalPrice + '원');
+
+            }
+
+            // 전체선택 또는 전체해제
+            function checkAll(){
+                if($("#checkAll").prop("checked")){
+                    $("input[name=cartChxBox]").prop("checked",true);
+                }else {
+                    $("input[name=cartChxBox]").prop("checked",false);
+                }
+                getOrderTotalPrice();
+
+            }
+
 
             //장바구니 삭제요청
             function deleteCartItem(obj){
