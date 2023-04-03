@@ -75,7 +75,7 @@ public class CartService {
         return cartListDtos;
     }
 
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = false)
     public Integer getCartListCount(String userId){
 
         Member member = memberRepository.findByUserid(userId).get();
@@ -89,4 +89,11 @@ public class CartService {
         return count;
 
     }
+
+    @Transactional
+    public void deleteCartItem(Long cartItemId){
+        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
+        cartItemRepository.delete(cartItem);
+    }
+
 }

@@ -9,10 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import pakaCoding.flower.dto.CartItemDto;
 import pakaCoding.flower.dto.CartListDto;
 import pakaCoding.flower.service.CartService;
@@ -63,8 +60,16 @@ public class CartController {
             log.info("cartItemDto 개수 = {}", cartItemDto.getCount());
             cartItemId = cartService.addCart(cartItemDto, principal.getName());
         } catch (Exception e) {
-            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.UNAUTHORIZED);
         }
+        return new ResponseEntity<Long>(cartItemId, HttpStatus.OK);
+    }
+
+    //장바구니 삭제
+    @DeleteMapping(value = "/cartItem/{cartItemId}")
+    @ResponseBody
+    public ResponseEntity deleteCartItem(@PathVariable(value = "cartItemId") Long cartItemId){
+        cartService.deleteCartItem(cartItemId);
         return new ResponseEntity<Long>(cartItemId, HttpStatus.OK);
     }
 }
