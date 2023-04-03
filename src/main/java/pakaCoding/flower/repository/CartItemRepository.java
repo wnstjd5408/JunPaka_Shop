@@ -20,4 +20,7 @@ public interface CartItemRepository extends JpaRepository<CartItem, Long> {
             "and fi.repimgYn = 'Y' " +
             "order by fi.regDate desc ")
     List<CartListDto> findCartListDto(Long cartId);
+
+
+    Integer countByCartId(Long cartId);
 }

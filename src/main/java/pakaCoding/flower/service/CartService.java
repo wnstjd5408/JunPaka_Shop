@@ -74,4 +74,19 @@ public class CartService {
         cartListDtos = cartItemRepository.findCartListDto(cart.getId());
         return cartListDtos;
     }
+
+    @Transactional(readOnly = true)
+    public Integer getCartListCount(String userId){
+
+        Member member = memberRepository.findByUserid(userId).get();
+        Cart cart = cartRepository.findByMemberId(member.getId());
+
+        if(cart == null){
+            return 0;
+        }
+
+        Integer count = cartItemRepository.countByCartId(cart.getId());
+        return count;
+
+    }
 }
