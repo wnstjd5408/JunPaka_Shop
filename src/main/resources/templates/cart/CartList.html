@@ -49,6 +49,7 @@
                                     </span>
                                     <input type="number" name="count" th:id="count_ + ${cartItem.cartItemId}"
                                            th:value="${cartItem.count}" min="1"
+                                           onchange="changeCount(this)"
                                            class="form-control me-2">
                                     <button type="button" class="btn-close" aria-label="Close">
                                         <span aria-hidden="true" th:data-id="${cartItem.cartItemId}"
@@ -116,6 +117,17 @@
                 }
                 getOrderTotalPrice();
 
+            }
+
+            //상품 수량 변경
+            function changeCount(obj){
+                var count = obj.value;
+                var cartItemId = obj.id.split('_')[1];
+                var price = $("#price_" + cartItemId).data("price");
+                var totalPrice = count * price;
+                $("#orderTotalPrice").html(orderTotalPrice + '원');
+
+                getOrderTotalPrice();
             }
 
 
