@@ -1,27 +1,20 @@
 package pakaCoding.flower.controller;
 
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pakaCoding.flower.domain.entity.FileImage;
-import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.dto.FlowerDetailDto;
 import pakaCoding.flower.dto.FlowerFormDto;
 import pakaCoding.flower.dto.MainFlowerDto;
 import pakaCoding.flower.dto.MemberSessionDto;
 import pakaCoding.flower.service.CartService;
-import pakaCoding.flower.service.FileImageService;
 import pakaCoding.flower.service.FlowerService;
 import pakaCoding.flower.service.TypeService;
 
