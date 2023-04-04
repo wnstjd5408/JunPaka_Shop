@@ -54,4 +54,24 @@ public class OrderService {
         orderRepository.save(order);
         return order.getId();
     }
+
+    public Long orders(List<OrderDto> orderDtoList, String userId) {
+
+        //로그인한 유저 조회
+        Member member = memberRepository.findByUserid(userId).get();
+
+        List<OrderItem> orderItemList = new ArrayList<>();
+        for (OrderDto orderDto : orderDtoList) {
+            Flower flower = flowerRepository.findById(orderDto.getFlowerId()).orElseThrow(EntityNotFoundException::new);
+            OrderItem orderItem = OrderItem.createOrderItem(flower, flower.getPrice(), orderDto.getCount());
+            orderItemList.add(orderItem);
+        }
+        Delivery delivery = new Delivery();
+        delivery.setAddress(member.getAddress());
+        delivery.setDeliveryStatus(DeliveryStatus.READY);
+        //Order Entity 클래스에 존재하는 createOrder 메소드로 Order 생성 및 저장
+        Order order = Order.createOrder(member, delivery, orderItemList);
+        orderRepository.save(order);
+        return order.getId();
+    }
 }

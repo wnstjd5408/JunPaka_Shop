@@ -77,7 +77,7 @@
             </h2>
 
             <div class="text-center my-md-3">
-                <button type="button" class="btn btn-outline-dark" th:onclick="">주문하기</button>
+                <button type="button" class="btn btn-outline-dark" onclick="orders()">주문하기</button>
             </div>
 
         </div>
@@ -163,6 +163,59 @@
                         }
                     }
                 });
+            }
+            //장바구니 상품(한개 또는 여러개) 주문
+            function orders() {
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
+
+                var url = "/cart/orders";
+
+                var dataList = new Array();
+                var paramData = new Object();
+
+                $("input[name=cartChxBox]:checked").each(function () {
+                    var cartItemId = $(this).val();
+                    var data = new Object();
+                    data['cartItemId'] = cartItemId;
+                    dataList.push(data);
+                });
+
+                paramData['cartOrderDtoList'] = dataList;
+
+                var param = JSON.stringify(paramData);
+
+                $.ajax({
+                    url : url,
+                    type : "POST",
+                    contentType : "application/json",
+                    data : param,
+                    beforeSend : function (xhr){
+                        /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                        xhr.setRequestHeader(header, token);
+                    },
+                    dataType  : "json",
+                    cache : false,
+                    success : function (result, status){
+
+                        alert("주문이 완료 되었습니다 !!");
+                        location.href = '/';
+
+                    },
+
+                    error: function (jqXHR, status, error) {
+                        if (jqXHR.status == '401') {
+                            alert("로그인 후 이용해주세요");
+                            location.href = "/members/login";
+
+                        }else{
+                            alert(jqXHR.responseText.message);
+                        }
+                    },
+
+
+                });
+
             }
         </script>
     </th:block>

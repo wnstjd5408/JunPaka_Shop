@@ -12,6 +12,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import pakaCoding.flower.dto.CartItemDto;
 import pakaCoding.flower.dto.CartListDto;
+import pakaCoding.flower.dto.CartOrderDto;
 import pakaCoding.flower.service.CartService;
 
 import java.security.Principal;
@@ -64,6 +65,22 @@ public class CartController {
         }
         return new ResponseEntity<Long>(cartItemId, HttpStatus.OK);
     }
+
+    //장바구니 상품(한개 또는 여러개) 주문
+    @PostMapping(value = "/cart/orders")
+    @ResponseBody
+    public ResponseEntity orders(@RequestBody CartOrderDto cartOrderDto, Principal principal) {
+
+        List<CartOrderDto> cartOrderDtoList = cartOrderDto.getCartOrderDtoList();
+
+        if(cartOrderDtoList == null || cartOrderDtoList.size() == 0){
+            return new ResponseEntity<String>("주문할 상품을 선택해주세요.", HttpStatus.BAD_REQUEST);
+        }
+
+        Long orderId = cartService.orderCartItem(cartOrderDtoList, principal.getName());
+        return new ResponseEntity<Long>(orderId, HttpStatus.OK);
+    }
+
 
     //장바구니 삭제
     @DeleteMapping(value = "/cartItem/{cartItemId}")
