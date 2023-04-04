@@ -32,6 +32,10 @@ public class Flower extends TimeEntity {
     @Column(nullable = false)
     private int stockQuantity;  //수량
 
+
+    @Column(length = 1000)
+    private String detailComment;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="type_id")
     private Type type;
@@ -70,6 +74,7 @@ public class Flower extends TimeEntity {
         this.name = flowerDto.getName();
         this.price = flowerDto.getPrice();
         this.stockQuantity = flowerDto.getStockQuantity();
+        this.detailComment = flowerDto.getDetailComment();
         this.type = flowerDto.getType();
         this.flowerSellStatus =flowerDto.getFlowerSellStatus();
         this.hitCount = 0L;
