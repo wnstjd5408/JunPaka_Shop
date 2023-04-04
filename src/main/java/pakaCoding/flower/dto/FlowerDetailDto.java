@@ -14,6 +14,7 @@ public class FlowerDetailDto {
     private String name;
     private Integer price;
     private Integer stockQuantity;
+    private String detailComment;
 
     private FlowerSellStatus flowerSellStatus;
     private List<FileImageDto> fileImageDtoList;
@@ -25,6 +26,7 @@ public class FlowerDetailDto {
         this.name = flower.getName();
         this.price = flower.getPrice();
         this.stockQuantity = flower.getStockQuantity();
+        this.detailComment =flower.getDetailComment();
         this.flowerSellStatus = flower.getFlowerSellStatus();
     }
 }

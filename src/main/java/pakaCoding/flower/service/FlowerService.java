@@ -41,6 +41,7 @@ public class FlowerService {
         //insert
         if(flowerFormDto.getId() == null){
             flower = flowerFormDto.toEntity();
+            log.info("detailComment  ={}", flower.getDetailComment());
             flowerRepository.save(flower);
         }
         //상품 update
