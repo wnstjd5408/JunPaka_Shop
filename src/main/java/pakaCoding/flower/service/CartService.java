@@ -4,6 +4,7 @@ import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pakaCoding.flower.domain.entity.Cart;
@@ -12,6 +13,8 @@ import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Member;
 import pakaCoding.flower.dto.CartItemDto;
 import pakaCoding.flower.dto.CartListDto;
+import pakaCoding.flower.dto.CartOrderDto;
+import pakaCoding.flower.dto.OrderDto;
 import pakaCoding.flower.repository.*;
 
 import java.util.ArrayList;
@@ -94,6 +97,32 @@ public class CartService {
     public void deleteCartItem(Long cartItemId){
         CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
         cartItemRepository.delete(cartItem);
+    }
+
+
+    //장바구니 상품 주문
+    @Transactional
+    public Long orderCartItem(List<CartOrderDto> cartOrderDtoList, String userId){
+
+        List<OrderDto> orderDtoList = new ArrayList<>();
+
+        for (CartOrderDto cartOrderDto : cartOrderDtoList) {
+            CartItem cartItem = cartItemRepository.findById(cartOrderDto.getCartItemId()).orElseThrow(EntityNotFoundException::new);
+            OrderDto orderDto = new OrderDto();
+            orderDto.setFlowerId(cartItem.getFlower().getId());
+            orderDto.setCount(cartItem.getCount());
+            orderDtoList.add(orderDto);
+        }
+
+        Long orderId = orderService.orders(orderDtoList, userId);
+
+        for (CartOrderDto cartOrderDto : cartOrderDtoList) {
+            CartItem cartItem = cartItemRepository.findById(cartOrderDto.getCartItemId()).orElseThrow(EntityNotFoundException::new);
+            cartItemRepository.delete(cartItem);
+
+        }
+
+        return orderId;
     }
 
 }

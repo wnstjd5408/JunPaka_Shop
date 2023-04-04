@@ -20,7 +20,7 @@
                 <thead>
                     <tr class="text-center">
                         <td>
-                            <input type="checkbox" id="checkAll" th:onclick="">전체선택
+                            <input type="checkbox" id="checkAll" onclick="checkAll()">전체선택
                         </td>
                         <td>
                             상품정보
@@ -49,6 +49,7 @@
                                     </span>
                                     <input type="number" name="count" th:id="count_ + ${cartItem.cartItemId}"
                                            th:value="${cartItem.count}" min="1"
+                                           onchange="changeCount(this)"
                                            class="form-control me-2">
                                     <button type="button" class="btn-close" aria-label="Close">
                                         <span aria-hidden="true" th:data-id="${cartItem.cartItemId}"
@@ -76,13 +77,59 @@
             </h2>
 
             <div class="text-center my-md-3">
-                <button type="button" class="btn btn-outline-dark" th:onclick="">주문하기</button>
+                <button type="button" class="btn btn-outline-dark" onclick="orders()">주문하기</button>
             </div>
 
         </div>
     </th:block>
     <th:block layout:fragment="script">
         <script th:inline="javascript">
+
+
+            $(document).ready(function () {
+                $("input[name=cartChxBox]").change(function () {
+                    getOrderTotalPrice();
+                });
+            });
+
+            // 총 주문 금액 출력
+            function getOrderTotalPrice(){
+                var orderTotalPrice = 0;
+                $("input[name=cartChxBox]:checked").each(function () {
+                    var cartItemId = $(this).val();
+                    console.log('cartItemId = ', cartItemId);
+                    var price = $('#price_' + cartItemId).attr("data-price");
+                    console.log('price = ', price);
+                    var count = $('#count_' + cartItemId).val();
+                    orderTotalPrice += price * count;
+                });
+
+                $("#orderTotalPrice").html(orderTotalPrice + '원');
+
+            }
+
+            // 전체선택 또는 전체해제
+            function checkAll(){
+                if($("#checkAll").prop("checked")){
+                    $("input[name=cartChxBox]").prop("checked",true);
+                }else {
+                    $("input[name=cartChxBox]").prop("checked",false);
+                }
+                getOrderTotalPrice();
+
+            }
+
+            //상품 수량 변경
+            function changeCount(obj){
+                var count = obj.value;
+                var cartItemId = obj.id.split('_')[1];
+                var price = $("#price_" + cartItemId).data("price");
+                var totalPrice = count * price;
+                $("#orderTotalPrice").html(orderTotalPrice + '원');
+
+                getOrderTotalPrice();
+            }
+
 
             //장바구니 삭제요청
             function deleteCartItem(obj){
@@ -116,6 +163,59 @@
                         }
                     }
                 });
+            }
+            //장바구니 상품(한개 또는 여러개) 주문
+            function orders() {
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
+
+                var url = "/cart/orders";
+
+                var dataList = new Array();
+                var paramData = new Object();
+
+                $("input[name=cartChxBox]:checked").each(function () {
+                    var cartItemId = $(this).val();
+                    var data = new Object();
+                    data['cartItemId'] = cartItemId;
+                    dataList.push(data);
+                });
+
+                paramData['cartOrderDtoList'] = dataList;
+
+                var param = JSON.stringify(paramData);
+
+                $.ajax({
+                    url : url,
+                    type : "POST",
+                    contentType : "application/json",
+                    data : param,
+                    beforeSend : function (xhr){
+                        /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                        xhr.setRequestHeader(header, token);
+                    },
+                    dataType  : "json",
+                    cache : false,
+                    success : function (result, status){
+
+                        alert("주문이 완료 되었습니다 !!");
+                        location.href = '/';
+
+                    },
+
+                    error: function (jqXHR, status, error) {
+                        if (jqXHR.status == '401') {
+                            alert("로그인 후 이용해주세요");
+                            location.href = "/members/login";
+
+                        }else{
+                            alert(jqXHR.responseText.message);
+                        }
+                    },
+
+
+                });
+
             }
         </script>
     </th:block>
