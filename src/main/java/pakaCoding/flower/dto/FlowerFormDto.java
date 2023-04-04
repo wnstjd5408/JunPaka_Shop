@@ -27,6 +27,9 @@ public class FlowerFormDto extends TimeEntity {
     @NotNull(message = "재고는 필수 입력 값입니다.")
     private Integer stockQuantity;
 
+
+    private String detailComment;
+
     @NotNull(message = "타입 선택은 필수 입력 값입니다.")
     private Type type;
     private MultipartFile thumbnails;
@@ -43,6 +46,7 @@ public class FlowerFormDto extends TimeEntity {
                 .name(name)
                 .price(price)
                 .stockQuantity(stockQuantity)
+                .detailComment(detailComment)
                 .flowerSellStatus(flowerSellStatus)
                 .delYn("N")
                 .hitCount(0L)
