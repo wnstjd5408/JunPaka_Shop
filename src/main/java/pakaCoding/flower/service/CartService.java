@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import pakaCoding.flower.domain.entity.Cart;
 import pakaCoding.flower.domain.entity.CartItem;
 import pakaCoding.flower.domain.entity.Flower;
@@ -125,6 +126,22 @@ public class CartService {
         }
 
         return orderId;
+    }
+
+    //로그인한 사용자가 장바구니 사용자가 동일한지 비교 확인
+    @Transactional(readOnly = true)
+    public boolean validateCartItem(Long cartItemId, String userId){
+
+        Member member = memberRepository.findByUserid(userId).get();
+
+
+        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
+        Member savedMember = cartItem.getCart().getMember();
+
+        if(member.getUserid().equals(savedMember.getUserid())){
+            return true;
+        }
+        return false;
     }
 
 }
