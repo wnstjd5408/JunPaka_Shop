@@ -23,6 +23,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class CartService {
 
     private final CartRepository cartRepository;
@@ -34,7 +35,6 @@ public class CartService {
     private final OrderService orderService;
 
     //장바구니 담기
-    @Transactional
     public Long addCart(CartItemDto cartItemDto, String userId){
         Member member = memberRepository.findByUserid(userId).get();
         Cart cart = cartRepository.findByMemberId(member.getId());
@@ -78,7 +78,6 @@ public class CartService {
         return cartListDtos;
     }
 
-    @Transactional(readOnly = false)
     public Integer getCartListCount(String userId){
 
         Member member = memberRepository.findByUserid(userId).get();
@@ -93,15 +92,18 @@ public class CartService {
 
     }
 
-    @Transactional
     public void deleteCartItem(Long cartItemId){
         CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
         cartItemRepository.delete(cartItem);
     }
 
+    // 장바구니 상품 수량 변경
+    public void updateCartItemCount(Long cartItemId, int count){
+        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
+        cartItem.update(count);
+    }
 
     //장바구니 상품 주문
-    @Transactional
     public Long orderCartItem(List<CartOrderDto> cartOrderDtoList, String userId){
 
         List<OrderDto> orderDtoList = new ArrayList<>();
