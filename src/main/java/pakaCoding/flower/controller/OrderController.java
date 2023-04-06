@@ -56,7 +56,6 @@ public class OrderController {
         Long orderId;
         try{
             orderId = orderService.order(orderDto, principal.getName());
-
         }catch (Exception e){
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }

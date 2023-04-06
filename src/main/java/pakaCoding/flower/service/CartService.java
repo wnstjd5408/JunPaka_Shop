@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import pakaCoding.flower.domain.entity.Cart;
 import pakaCoding.flower.domain.entity.CartItem;
 import pakaCoding.flower.domain.entity.Flower;
@@ -23,6 +24,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class CartService {
 
     private final CartRepository cartRepository;
@@ -34,7 +36,6 @@ public class CartService {
     private final OrderService orderService;
 
     //장바구니 담기
-    @Transactional
     public Long addCart(CartItemDto cartItemDto, String userId){
         Member member = memberRepository.findByUserid(userId).get();
         Cart cart = cartRepository.findByMemberId(member.getId());
@@ -78,7 +79,6 @@ public class CartService {
         return cartListDtos;
     }
 
-    @Transactional(readOnly = false)
     public Integer getCartListCount(String userId){
 
         Member member = memberRepository.findByUserid(userId).get();
@@ -93,15 +93,18 @@ public class CartService {
 
     }
 
-    @Transactional
     public void deleteCartItem(Long cartItemId){
         CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
         cartItemRepository.delete(cartItem);
     }
 
+    // 장바구니 상품 수량 변경
+    public void updateCartItemCount(Long cartItemId, int count){
+        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
+        cartItem.update(count);
+    }
 
     //장바구니 상품 주문
-    @Transactional
     public Long orderCartItem(List<CartOrderDto> cartOrderDtoList, String userId){
 
         List<OrderDto> orderDtoList = new ArrayList<>();
@@ -123,6 +126,22 @@ public class CartService {
         }
 
         return orderId;
+    }
+
+    //로그인한 사용자가 장바구니 사용자가 동일한지 비교 확인
+    @Transactional(readOnly = true)
+    public boolean validateCartItem(Long cartItemId, String userId){
+
+        Member member = memberRepository.findByUserid(userId).get();
+
+
+        CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(EntityNotFoundException::new);
+        Member savedMember = cartItem.getCart().getMember();
+
+        if(member.getUserid().equals(savedMember.getUserid())){
+            return true;
+        }
+        return false;
     }
 
 }
