@@ -32,7 +32,7 @@
                 </div>
                 <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="alert-danger alert">Incorrect data</p>
 
-                <div class="mb-3">
+                <div class="my-3">
                     <label for="gender" class="form-label">성별</label>
                     <select name="gender" class="form-control form-select" id="gender">
                         <option th:each="ged : ${T(pakaCoding.flower.domain.constant.Gender).values()}" th:value="${ged}" th:text="${ged.Value}"></option>
@@ -42,7 +42,9 @@
                     <label for="birthDate" class="form-label">생일</label>
                     <input type="date" class="form-control" th:field="*{birthDate}" th:max="${now}" id="birthDate">
                 </div>
-                <div clas="my-3">
+                <p th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}" class="alert-danger alert">Incorrect data</p>
+
+                <div class="my-3">
                     <label for="email" class="form-label">이메일</label>
                     <input type="email" class="form-control" th:field="*{email}" id="email">
                 </div>
@@ -88,11 +90,30 @@
                         } else{// 사용자가 지번 주소를 선택했을 경우(J)
                             addr = data.jibunAddress;
                         }
+                        // 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+                        if(data.userSelectedType === 'R'){
+                            // 법정동명이 있을 경우 추가한다. (법정리는 제외)
+                            // 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+                            if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                                extraAddr += data.bname;
+                            }
+                            // 건물명이 있고, 공동주택일 경우 추가한다.
+                            if(data.buildingName !== '' && data.apartment === 'Y'){
+                                extraAddr += (extraAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                            }
+                            // 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+                            if(extraAddr !== ''){
+                                extraAddr = ' (' + extraAddr + ')';
+                            }
+                            // 조합된 참고항목을 해당 필드에 넣는다.
+                            document.getElementById("streetAdr").value = addr + extraAddr;
 
-                        document.getElementById('detailAdr').value='';
+                        } else {
+                            document.getElementById("streetAdr").value = addr;
+                        }
+
                         // 우편번호와 주소 정보를 해당 필드에 넣는다.
                         document.getElementById('zipcode').value = data.zonecode;
-                        document.getElementById("streetAdr").value = addr;
                         // 커서를 상세주소 필드로 이동한다.
                         document.getElementById("detailAdr").focus();
                     }

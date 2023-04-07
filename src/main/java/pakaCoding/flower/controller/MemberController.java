@@ -65,9 +65,11 @@ public class MemberController {
     public String join(@Valid MemberDto memberDto,
                        BindingResult bindingResult, Model model){
         List<Type> types = typeService.allType();
+        LocalDate now = LocalDate.now();
 
         if(bindingResult.hasErrors()){
             model.addAttribute("types", types);
+            model.addAttribute("now", now);
             return "forms/joinForm";
         }
 
