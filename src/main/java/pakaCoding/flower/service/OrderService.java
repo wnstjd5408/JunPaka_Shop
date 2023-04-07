@@ -3,11 +3,17 @@ package pakaCoding.flower.service;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pakaCoding.flower.domain.constant.DeliveryStatus;
 import pakaCoding.flower.domain.entity.*;
 import pakaCoding.flower.dto.OrderDto;
+import pakaCoding.flower.dto.OrderItemDto;
+import pakaCoding.flower.dto.OrderMyPageDto;
 import pakaCoding.flower.repository.FileImageRepository;
 import pakaCoding.flower.repository.FlowerRepository;
 import pakaCoding.flower.repository.MemberRepository;
@@ -15,6 +21,7 @@ import pakaCoding.flower.repository.OrderRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -73,5 +80,28 @@ public class OrderService {
         Order order = Order.createOrder(member, delivery, orderItemList);
         orderRepository.save(order);
         return order.getId();
+    }
+
+    //주문 내역 조회
+    @Transactional(readOnly = true)
+    public Page<OrderMyPageDto> getOrderList(String userId, int page){
+        Pageable pageable = PageRequest.of(page, 5);
+        log.info("getOrderList 메서드에 사용한 총 개수 ={}",
+                orderRepository.findOrders(userId, pageable));
+        Page<Order> orders = orderRepository.findOrders(userId, pageable);
+
+        List<OrderMyPageDto> orderMyPageDtos = orders.stream()
+                .map(o -> {
+                    OrderMyPageDto orderMyPageDto = new OrderMyPageDto(o);
+                    List<OrderItem> orderItems = o.getOrderItems();
+                    for (OrderItem orderItem : orderItems) {
+                        FileImage fileImage =
+                                fileImageRepository.findByFlowerIdAndRepimgYn(orderItem.getFlower().getId(), "Y");
+                        OrderItemDto orderItemDto = new OrderItemDto(orderItem, fileImage.getSavedFileImgName());
+                        orderMyPageDto.addOrderItemDto(orderItemDto);
+                    }
+                    return orderMyPageDto;
+                }).collect(Collectors.toList());
+        return new PageImpl<>(orderMyPageDtos, pageable, orders.getTotalElements());
     }
 }
