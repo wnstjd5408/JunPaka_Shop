@@ -20,7 +20,17 @@
 
              <div th:each="order : ${orders.getContent()}">
                     <div class="d-flex my-2 align-self-center">
-                        <h5 th:text="${order.orderDate} + ' 주문'"></h5>
+                        <h4 th:text="${order.orderDate} + ' 주문'"></h4>
+                        <div class="ms-3">
+                            <th:block th:if="${order.orderStatus == T(pakaCoding.flower.domain.constant.OrderStatus).ORDER}">
+                                <button type="button" class="btn btn-outline-success"
+                                        th:value="${order.orderId}" onclick="#">주문취소</button>
+
+                            </th:block>
+                            <th:block th:unless="${order.orderStatus == T(pakaCoding.flower.domain.constant.OrderStatus).ORDER}">
+                                <h6 class="mt-1">(취소 완료)</h6>
+                            </th:block>
+                        </div>
                     </div>
                     <div class="card d-flex">
                         <div th:each="orderItem : ${order.orderItemDtoList}" class="d-flex mb-3">
