@@ -24,7 +24,7 @@
             </ul>
             <div th:if="${member}" class="d-flex">
                 <div class="px-1">
-                    <button class="btn btn-outline-dark" type="submit" th:onclick="">
+                    <button class="btn btn-outline-dark" type="submit" th:onclick="|location.href='@{/orders}'|">
                         <span class="badge bg-dark text-white rounded-pill">MY PAGE</span>
                     </button>
                 </div>

@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+    <head>
+        <title th:text="|${member}의 주문정보|"></title>
+        <meta name="_csrf" th:content="${_csrf.token}">
+        <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    </head>
+
+
+
+     <th:block layout:fragment="content" class="py-5">
+
+         <div class="container px-4 px-lg-5 mt-5">
+
+            <h2 class="mb-4 fw-bolder">
+                주문 내역
+            </h2>
+
+             <div th:each="order : ${orders.getContent()}">
+                    <div class="d-flex my-2 align-self-center">
+                        <h5 th:text="${order.orderDate} + ' 주문'"></h5>
+                    </div>
+                    <div class="card d-flex">
+                        <div th:each="orderItem : ${order.orderItemDtoList}" class="d-flex mb-3">
+                            <div class="ms-1 h-auto">
+                                <img th:src="'/display/fileImage='+${orderItem.imgUrl}" class="rounded"
+                                     th:alt="${orderItem.flowerName}" height="330" width="230">
+                            </div>
+                            <div class="align-self-center w-75">
+                                <span th:text="${orderItem.flowerName}" class="fw-bold me-2"></span>
+                                <div class="me-2 fw-light">
+                                    <span th:text="${orderItem.orderPrice} + '원'"></span>
+                                    <span th:text="${orderItem.count} + '개'"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+             </div>
+         </div>
+     </th:block>
+
+
+</html>
