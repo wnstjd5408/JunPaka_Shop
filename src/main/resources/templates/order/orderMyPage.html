@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+    <head>
+        <title th:text="|${member}의 주문정보|"></title>
+        <meta name="_csrf" th:content="${_csrf.token}">
+        <meta name="_csrf_header" th:content="${_csrf.headerName}">
+    </head>
+
+
+
+     <th:block layout:fragment="content" class="py-5">
+
+         <div class="container px-4 px-lg-5 mt-5">
+
+            <h2 class="mb-4 fw-bolder">
+                주문 내역
+            </h2>
+
+             <div th:each="order : ${orders.getContent()}">
+                    <div class="d-flex my-2 align-self-center">
+                        <h4 th:text="${order.orderDate} + ' 주문'"></h4>
+                        <div class="ms-3">
+                            <th:block th:if="${order.orderStatus == T(pakaCoding.flower.domain.constant.OrderStatus).ORDER}">
+                                <button type="button" class="btn btn-outline-success"
+                                        th:value="${order.orderId}" onclick="#">주문취소</button>
+
+                            </th:block>
+                            <th:block th:unless="${order.orderStatus == T(pakaCoding.flower.domain.constant.OrderStatus).ORDER}">
+                                <h6 class="mt-1">(취소 완료)</h6>
+                            </th:block>
+                        </div>
+                    </div>
+                    <div class="card d-flex mb-3">
+                        <div th:each="orderItem : ${order.orderItemDtoList}" class="d-flex">
+                            <div class="ms-1 h-auto">
+                                <img th:src="'/display/fileImage='+${orderItem.imgUrl}" class="rounded h-100"
+                                     th:alt="${orderItem.flowerName}" width="230">
+                            </div>
+                            <div class="align-self-center w-75">
+                                <span th:text="${orderItem.flowerName}" class="fw-bold me-2"></span>
+                                <div class="me-2 fw-light">
+                                    <span th:text="${orderItem.orderPrice} + '원'"></span>
+                                    <span th:text="${orderItem.count} + '개'"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+             </div>
+             <th:block layout:fragment="paging" class="py-5">
+            <!--page-->
+                 <nav class="container d-flex align-items-center justify-content-center navbar-light" aria-label="Page navigation example"
+                      th:with="start=${(orders.number/maxPage)*maxPage + 1},
+                  end=(${(orders.totalPages == 0) ? 1 : (start + (maxPage - 1) < orders.totalPages ? start + (maxPage - 1) : orders.totalPages)})">
+                     <ul class="pagination justify-content-center">
+
+                         <li class="page-item" th:classappend="${orders.number eq 0}? 'disabled' : ''">
+                             <a class="page-link"
+                                th:href="@{'/orders/' + ${orders.number-1}}" aria-label="Previous">
+                                 <span aria-hidden="true">&laquo;&laquo;</span>
+                             </a>
+                         </li>
+                         <li class="page-item" th:each="page : ${#numbers.sequence(start, end)}"
+                             th:classappend="${orders.number eq page-1}?'active': ''" >
+                             <a class="page-link"
+                                th:href="@{'/orders/' + ${page-1}}" th:inline="text" th:text="${page}">[[${page]]</a>
+                         </li>
+
+                         <li class="page-item" th:classappend="${orders.number+1 ge orders.totalPages}? 'disabled' : ''">
+                             <a class="page-link"
+                                th:href="@{'/orders/' + ${orders.number+1}}" aria-label="Next">
+                                 <span aria-hidden="true">&raquo;</span>
+                             </a>
+                         </li>
+
+                     </ul>
+                 </nav>
+             </th:block>
+         </div>
+     </th:block>
+
+
+</html>
