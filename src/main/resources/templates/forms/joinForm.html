@@ -32,7 +32,7 @@
                 </div>
                 <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="alert-danger alert">Incorrect data</p>
 
-                <div class="mb-3">
+                <div class="my-3">
                     <label for="gender" class="form-label">성별</label>
                     <select name="gender" class="form-control form-select" id="gender">
                         <option th:each="ged : ${T(pakaCoding.flower.domain.constant.Gender).values()}" th:value="${ged}" th:text="${ged.Value}"></option>
@@ -42,7 +42,9 @@
                     <label for="birthDate" class="form-label">생일</label>
                     <input type="date" class="form-control" th:field="*{birthDate}" th:max="${now}" id="birthDate">
                 </div>
-                <div clas="my-3">
+                <p th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}" class="alert-danger alert">Incorrect data</p>
+
+                <div class="my-3">
                     <label for="email" class="form-label">이메일</label>
                     <input type="email" class="form-control" th:field="*{email}" id="email">
                 </div>
