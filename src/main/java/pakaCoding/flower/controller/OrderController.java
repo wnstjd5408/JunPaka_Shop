@@ -47,7 +47,7 @@ public class OrderController {
         Page<OrderMyPageDto> orderList = orderService.getOrderList(principal.getName(), page);
         List<Type> types = typeService.allType();
 
-
+        model.addAttribute("maxPage", 5);
         model.addAttribute("types", types);
         model.addAttribute("orders", orderList);
 

@@ -32,11 +32,11 @@
                             </th:block>
                         </div>
                     </div>
-                    <div class="card d-flex">
-                        <div th:each="orderItem : ${order.orderItemDtoList}" class="d-flex mb-3">
+                    <div class="card d-flex mb-3">
+                        <div th:each="orderItem : ${order.orderItemDtoList}" class="d-flex">
                             <div class="ms-1 h-auto">
-                                <img th:src="'/display/fileImage='+${orderItem.imgUrl}" class="rounded"
-                                     th:alt="${orderItem.flowerName}" height="330" width="230">
+                                <img th:src="'/display/fileImage='+${orderItem.imgUrl}" class="rounded h-100"
+                                     th:alt="${orderItem.flowerName}" width="230">
                             </div>
                             <div class="align-self-center w-75">
                                 <span th:text="${orderItem.flowerName}" class="fw-bold me-2"></span>
@@ -48,6 +48,35 @@
                         </div>
                     </div>
              </div>
+             <th:block layout:fragment="paging" class="py-5">
+            <!--page-->
+                 <nav class="container d-flex align-items-center justify-content-center navbar-light" aria-label="Page navigation example"
+                      th:with="start=${(orders.number/maxPage)*maxPage + 1},
+                  end=(${(orders.totalPages == 0) ? 1 : (start + (maxPage - 1) < orders.totalPages ? start + (maxPage - 1) : orders.totalPages)})">
+                     <ul class="pagination justify-content-center">
+
+                         <li class="page-item" th:classappend="${orders.number eq 0}? 'disabled' : ''">
+                             <a class="page-link"
+                                th:href="@{'/orders/' + ${orders.number-1}}" aria-label="Previous">
+                                 <span aria-hidden="true">&laquo;&laquo;</span>
+                             </a>
+                         </li>
+                         <li class="page-item" th:each="page : ${#numbers.sequence(start, end)}"
+                             th:classappend="${orders.number eq page-1}?'active': ''" >
+                             <a class="page-link"
+                                th:href="@{'/orders/' + ${page-1}}" th:inline="text" th:text="${page}">[[${page]]</a>
+                         </li>
+
+                         <li class="page-item" th:classappend="${orders.number+1 ge orders.totalPages}? 'disabled' : ''">
+                             <a class="page-link"
+                                th:href="@{'/orders/' + ${orders.number+1}}" aria-label="Next">
+                                 <span aria-hidden="true">&raquo;</span>
+                             </a>
+                         </li>
+
+                     </ul>
+                 </nav>
+             </th:block>
          </div>
      </th:block>
 
