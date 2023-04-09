@@ -114,6 +114,10 @@ public class FileImageService {
 
 
 
+    public FileImage findBySavedFileImgName(String savedFileImgName){
+        return fileImageRepository.findBySavedFileImgName(savedFileImgName).get();
+    }
+
     private FileImageDto buildFileDto(MultipartFile file1, String originFileName, String extension, String savedFileName, Flower flower, String repimgYn) {
         return FileImageDto.builder()
                 .originFileName(originFileName)
