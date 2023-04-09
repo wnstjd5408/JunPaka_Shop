@@ -23,12 +23,18 @@ import java.nio.file.Paths;
 public class MainController {
 
     private final FileImageService fileService;
-
+    private String fullPath;
 
     //이미지 보여주기
     @ResponseBody
     @GetMapping("/display/fileImage={saveFileName}")
     public Resource downloadImage(@PathVariable String saveFileName) throws MalformedURLException {
+
+        if(saveFileName.equals("noItem")){
+            log.info("장바구니가 비어있습니다.");
+            fullPath = "D:/file/"+ saveFileName + ".jpg";
+            return new UrlResource("file:" + fullPath);
+        }
 
         FileImage fileImage = fileService.findBySavedFileImgName(saveFileName);
 
@@ -38,7 +44,7 @@ public class MainController {
         if(!saveFilePath.toFile().exists()){
             throw new RuntimeException("File not Found");
         }
-        String fullPath = fileImage.getUploadDir() + fileImage.getSavedFileImgName();
+        fullPath = fileImage.getUploadDir() + fileImage.getSavedFileImgName();
         return new UrlResource("file:" + fullPath);
     }
 
