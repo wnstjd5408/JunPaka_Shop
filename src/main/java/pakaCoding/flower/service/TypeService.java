@@ -18,7 +18,6 @@ public class TypeService {
 
     //전체 Type 조회
     public List<Type> allType(){
-        log.info("typeRepository 의 개수 = {}", typeRepository.findAll().stream().count());
         return typeRepository.findAll();
     }
 

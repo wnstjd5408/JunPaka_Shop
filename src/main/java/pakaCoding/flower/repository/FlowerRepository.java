@@ -16,15 +16,31 @@ import java.util.List;
 @Repository
 public interface FlowerRepository extends JpaRepository<Flower, Long> {
 
-     Page<Flower> findAllByOrderByCreateDateDesc(Pageable pageable);
 
-     @Query(value = "SELECT f FROM Flower f left join  f.fileImages fi where f.type.id = :typeId and  fi.repimgYn = 'Y' order by f.createDate DESC ")
+//     @Query(value = "SELECT f FROM Flower f left join  f.fileImages fi where f.type.id = :typeId and  fi.repimgYn = 'Y' order by f.createDate DESC ")
 //     @EntityGraph(attributePaths = {"fileImages"})
-     Page<Flower> findAllByTypeIdQuery(@Param("typeId") int typeId, Pageable pageable);
+//     Page<Flower> findAllByTypeIdQuery(@Param("typeId") int typeId, Pageable pageable);
 
-     @Query(value = "SELECT f FROM Flower f left join  f.fileImages fi where fi.repimgYn = 'Y' order by f.createDate DESC ")
+     @Query(value = "Select new pakaCoding.flower.dto.MainFlowerDto(f.id, f.name, fi.savedFileImgName, f.price) " +
+             "from Flower  f join f.fileImages fi " +
+             "where f.type.id = :typeId " +
+             "and fi.repimgYn = 'Y' " +
+             "and f.id = fi.flower.id " +
+             "order by f.createDate desc")
+     Page<MainFlowerDto> findAllByTypeIdListDtos(@Param("typeId") int typeId, Pageable pageable);
+
+
+//     @Query(value = "SELECT f FROM Flower f join FileImage fi on f.id = fi.flower.id where fi.repimgYn = 'Y' order by f.createDate DESC ")
 //     @EntityGraph(attributePaths = {"fileImages"})
-     Page<Flower> findAll(Pageable pageable);
+//     Page<Flower> findFlower(Pageable pageable);
+
+
+     @Query ("select new pakaCoding.flower.dto.MainFlowerDto(f.id, f.name, fi.savedFileImgName, f.price) " +
+             "from Flower f join f.fileImages fi " +
+             "where fi.repimgYn= 'Y' " +
+             "and f.id = fi.flower.id " +
+             "order by  f.createDate DESC")
+     Page<MainFlowerDto> findFlowerListDto(Pageable pageable);
 
 
 //    private final EntityManager em;
