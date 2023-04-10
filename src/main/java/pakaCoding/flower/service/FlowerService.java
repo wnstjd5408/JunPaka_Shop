@@ -82,9 +82,11 @@ public class FlowerService {
         Pageable pageable = PageRequest.of(page, 8);
         log.info("findAllFlowers 시작");
         log.info("findAllFlowers 사용한 service repository 개수 ={}",
-                flowerRepository.findAll(pageable).getTotalElements());
-        Page<Flower> flowerList = flowerRepository.findAll(pageable);
-        return getMainFlowerDtos(flowerList, pageable);
+                flowerRepository.findFlowerListDto(pageable).getTotalElements());
+        Page<MainFlowerDto> flowerList = flowerRepository.findFlowerListDto(pageable);
+        List<MainFlowerDto> flowerDtoList = flowerList.getContent();
+
+        return new PageImpl<>(flowerDtoList, pageable, flowerList.getTotalElements());
     }
 
     @Transactional(readOnly = true)
@@ -93,9 +95,10 @@ public class FlowerService {
         Pageable pageable = PageRequest.of(page, 16);
         log.info("Flower Service findFlowersType 시작");
         log.info("findFlowersType 함수를 사용한 service repository 개수 ={}",
-                flowerRepository.findAllByTypeIdQuery(typeId, pageable).stream().count());
-        Page<Flower> flowerList = flowerRepository.findAllByTypeIdQuery(typeId, pageable);
-        return getMainFlowerDtos(flowerList, pageable);
+                flowerRepository.findAllByTypeIdListDtos(typeId, pageable).stream().count());
+        Page<MainFlowerDto> flowerList = flowerRepository.findAllByTypeIdListDtos(typeId, pageable);
+        List<MainFlowerDto> flowerDtoList = flowerList.getContent();
+        return new PageImpl<>(flowerDtoList, pageable, flowerList.getTotalElements());
     }
 
 

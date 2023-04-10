@@ -79,6 +79,7 @@ public class CartService {
         return cartListDtos;
     }
 
+    @Transactional(readOnly = true)
     public Integer getCartListCount(String userId){
 
         Member member = memberRepository.findByUserid(userId).get();
