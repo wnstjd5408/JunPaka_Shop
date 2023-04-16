@@ -104,4 +104,11 @@ public class OrderService {
                 }).collect(Collectors.toList());
         return new PageImpl<>(orderMyPageDtos, pageable, orders.getTotalElements());
     }
+
+
+    //주문 취소
+    public void orderCancel(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(EntityNotFoundException::new);
+        order.orderCancel();
+    }
 }

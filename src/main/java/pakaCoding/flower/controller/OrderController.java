@@ -84,4 +84,12 @@ public class OrderController {
         log.info("카트의 수 = {} ", count);
         model.addAttribute("cartCount", count);
     }
+
+    //주문 취소
+    @PostMapping(value = "/order/{orderId}/cancel")
+    @ResponseBody
+    public ResponseEntity orderCancel(@PathVariable(name = "orderId") Long orderId, Principal principal){
+        orderService.orderCancel(orderId);
+        return new ResponseEntity<Long>(orderId, HttpStatus.OK);
+    }
 }
