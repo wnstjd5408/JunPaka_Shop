@@ -24,7 +24,7 @@
                         <div class="ms-3">
                             <th:block th:if="${order.orderStatus == T(pakaCoding.flower.domain.constant.OrderStatus).ORDER}">
                                 <button type="button" class="btn btn-outline-success"
-                                        th:value="${order.orderId}" onclick="cancelOrder(this.value)">주문취소</button>
+                                        th:value="${order.orderId}" onclick="cancelOrder(this.va">주문취소</button>
 
                             </th:block>
                             <th:block th:unless="${order.orderStatus == T(pakaCoding.flower.domain.constant.OrderStatus).ORDER}">
