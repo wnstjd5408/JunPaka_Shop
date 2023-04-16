@@ -23,7 +23,8 @@ import java.util.List;
 public class Member extends TimeEntity {
 
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
 
