@@ -14,14 +14,14 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
-import pakaCoding.flower.domain.constant.DeliveryStatus;
-import pakaCoding.flower.domain.constant.FlowerSellStatus;
-import pakaCoding.flower.domain.constant.Gender;
-import pakaCoding.flower.domain.constant.Role;
+import pakaCoding.flower.domain.constant.*;
 import pakaCoding.flower.domain.entity.*;
+import pakaCoding.flower.dto.OrderDto;
 
 import java.time.LocalDate;
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -65,24 +65,22 @@ class OrderRepositoryTest {
     @DisplayName("CascadeTest 영속성 테스트")
     public void cascadeTest() {
         Type type1 = getType();
-
+        Member member = getMember();
         Order order = new Order();
+
+        Delivery delivery = new Delivery();
+        delivery.setAddress(member.getAddress());
+        delivery.setDeliveryStatus(DeliveryStatus.READY);
+        order.setDelivery(delivery);
 
         for (int i = 0; i < 3; i++) {
             Flower flower = this.registerFLower("테스트" + i, 1000, 1, type1);
             flowerRepository.save(flower);
 
-            Member member = getMember();
-
-            Delivery delivery = new Delivery();
-            delivery.setAddress(member.getAddress());
-            delivery.setDeliveryStatus(DeliveryStatus.READY);
-
             // 3. OrderItem 생성 및 초기화
             OrderItem orderItem = new OrderItem();
             orderItem.setFlower(flower);
             orderItem.setCount(10);
-
             orderItem.setOrderPrice(1000);
             orderItem.setOrder(order);
 
@@ -102,6 +100,42 @@ class OrderRepositoryTest {
         Assertions.assertEquals(3, savedOrder.getOrderItems().size());
 
     }
+    @Test
+    public void cancelOrderTest(){
+        Type type1 = getType();
+        Member member = getMember();
+        Order order = new Order();
+
+        Delivery delivery = new Delivery();
+        delivery.setAddress(member.getAddress());
+        delivery.setDeliveryStatus(DeliveryStatus.READY);
+        order.setDelivery(delivery);
+
+        Flower flower = this.registerFLower("테스트", 1000, 11, type1);
+        flowerRepository.save(flower);
+
+        // 3. OrderItem 생성 및 초기화
+        OrderItem orderItem = OrderItem.createOrderItem(flower,10000, 10);
+
+
+
+        //4. Order에 OrderItem add(총 3개)
+        order.getOrderItems().add(orderItem);
+
+        Order order1 = orderRepository.saveAndFlush(order);
+
+        Order findOrder = orderRepository.findById(order1.getId()).orElseThrow(EntityNotFoundException::new);
+        findOrder.orderCancel();
+
+
+        //then
+        assertThat(OrderStatus.CANCEL).isEqualTo(findOrder.getOrderStatus());
+        assertThat(11).isEqualTo(flower.getStockQuantity());
+
+
+
+    }
+
 
     private Member getMember() {
         Member member = new Member("wnstjd5408@naver.com", "12345", "admin", "테스트", Gender.MAN, LocalDate.now(), Role.ADMIN, new Address("가", "나", "다"));
@@ -167,6 +201,7 @@ class OrderRepositoryTest {
         System.out.println("-------------------------------------------------");
 
     }
+
 
 
 

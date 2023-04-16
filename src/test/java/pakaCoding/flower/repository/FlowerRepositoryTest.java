@@ -15,6 +15,7 @@ import pakaCoding.flower.domain.constant.FlowerSellStatus;
 import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Type;
+import pakaCoding.flower.dto.MainFlowerDto;
 
 import java.util.List;
 
@@ -76,7 +77,7 @@ class FlowerRepositoryTest {
 
         log.info("id  = {}", type1.getId());
         Pageable pageable = PageRequest.of(0, 10);
-        Page<Flower> flowers = flowerRepository.findAllByTypeIdQuery(type1.getId(), pageable);
+        Page<MainFlowerDto> flowers = flowerRepository.findAllByTypeIdListDtos(type1.getId(), pageable);
         log.info("flowers.getTotalElements = {}", flowers.getTotalElements());
         log.info("flower 사이즈 ={}", flowers.getSize());
         List<FileImage> byFlowerIdOrderByIdDesc = fileImageRepository.findByFlowerId(flowers.getContent().get(0).getId());
