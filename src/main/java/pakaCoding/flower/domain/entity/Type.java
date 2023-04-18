@@ -34,4 +34,12 @@ public class Type {
         this.typename = typename;
         this.count = count;
     }
+
+    public void addTypeCount() {
+        this.count += 1;
+    }
+
+    public void subTypeCount(){
+        this.count -= 1;
+    }
 }

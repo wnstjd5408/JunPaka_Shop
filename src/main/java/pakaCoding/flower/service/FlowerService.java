@@ -13,12 +13,14 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
+import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.dto.FileImageDto;
 import pakaCoding.flower.dto.FlowerDetailDto;
 import pakaCoding.flower.dto.FlowerFormDto;
 import pakaCoding.flower.dto.MainFlowerDto;
 import pakaCoding.flower.repository.FileImageRepository;
 import pakaCoding.flower.repository.FlowerRepository;
+import pakaCoding.flower.repository.TypeRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,6 +59,10 @@ public class FlowerService {
         flower.addFiles(fileImages);
 
         log.info("flower.getId() = {}", flower.getId());
+
+        Type type = flower.getType();
+        type.addTypeCount();
+
         return flower.getId();
     }
     @Transactional(readOnly = true)
