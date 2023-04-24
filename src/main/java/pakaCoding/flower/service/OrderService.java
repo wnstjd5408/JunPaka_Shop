@@ -48,9 +48,7 @@ public class OrderService {
         //배송정보 생성
         Member member = memberRepository.findByUserid(userid).get();
 
-        Delivery delivery = new Delivery();
-        delivery.setAddress(member.getAddress());
-        delivery.setDeliveryStatus(DeliveryStatus.READY);
+        Delivery delivery = Delivery.createDelivery(member);
 
 
         //Order 객체 생성

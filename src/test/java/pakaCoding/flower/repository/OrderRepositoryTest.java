@@ -19,6 +19,7 @@ import pakaCoding.flower.domain.entity.*;
 import pakaCoding.flower.dto.OrderDto;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -104,23 +105,19 @@ class OrderRepositoryTest {
     public void cancelOrderTest(){
         Type type1 = getType();
         Member member = getMember();
-        Order order = new Order();
 
-        Delivery delivery = new Delivery();
-        delivery.setAddress(member.getAddress());
-        delivery.setDeliveryStatus(DeliveryStatus.READY);
-        order.setDelivery(delivery);
+        Delivery delivery = Delivery.createDelivery(member);
 
         Flower flower = this.registerFLower("테스트", 1000, 11, type1);
         flowerRepository.save(flower);
-
+        List<OrderItem> orderItemList = new ArrayList<>();
         // 3. OrderItem 생성 및 초기화
         OrderItem orderItem = OrderItem.createOrderItem(flower,10000, 10);
+        orderItemList.add(orderItem);
 
 
-
+        Order order = Order.createOrder(member, delivery, orderItemList);
         //4. Order에 OrderItem add(총 3개)
-        order.getOrderItems().add(orderItem);
 
         Order order1 = orderRepository.saveAndFlush(order);
 
