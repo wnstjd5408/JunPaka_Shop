@@ -84,7 +84,7 @@ public class Order {
     //==취소 로직==//
     /* 주문 취소 */
     public void orderCancel(){
-
+        this.delivery.deliveryStatusCacelUpdate();
         this.orderStatus = OrderStatus.CANCEL;
         for (OrderItem orderItem : orderItems) {
             orderItem.cancel();

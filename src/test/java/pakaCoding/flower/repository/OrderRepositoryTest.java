@@ -126,6 +126,8 @@ class OrderRepositoryTest {
 
 
         //then
+        log.info("배송 전송상태  :  {}", findOrder.getDelivery().getDeliveryStatus());
+        assertThat(DeliveryStatus.CANCEL).isEqualTo(findOrder.getDelivery().getDeliveryStatus());
         assertThat(OrderStatus.CANCEL).isEqualTo(findOrder.getOrderStatus());
         assertThat(11).isEqualTo(flower.getStockQuantity());
 
