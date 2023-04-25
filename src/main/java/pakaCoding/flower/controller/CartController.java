@@ -31,8 +31,11 @@ public class CartController {
     public String cartList(Principal principal, Model model){
         if (principal != null){
             List<CartListDto> cartListDtos = cartService.getCartList(principal.getName());
+            log.info("carListDtos의 사이즈 = {}", cartListDtos.size());
             model.addAttribute("member", principal.getName());
-            model.addAttribute("cartItems", cartListDtos);
+            if (cartListDtos.size() != 0){
+                model.addAttribute("cartItems", cartListDtos);
+            }
         }
         return "cart/cartList";
     }
