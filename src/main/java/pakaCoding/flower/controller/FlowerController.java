@@ -103,13 +103,13 @@ public class FlowerController {
     }
 
     @GetMapping("/types/{typeId}")
-    public String typeIdContain(@SessionAttribute(name="member", required = false)MemberSessionDto member
-                                ,@PathVariable int typeId,
+    public String typeIdContain(Principal principal,
+                                @PathVariable int typeId,
                                 Model model,
                                 @RequestParam(value="page", defaultValue = "0") int page){
-        if(member != null){
-            model.addAttribute("member", member.getUsername());
-            addCartCount(cartService.getCartListCount(member.getUserid()), model);
+        if(principal != null){
+            model.addAttribute("member", principal.getName());
+            addCartCount(cartService.getCartListCount(principal.getName()), model);
         }
         else{
             model.addAttribute("cartCount", 0);
@@ -133,11 +133,11 @@ public class FlowerController {
     }
 
     @GetMapping("/flowers/{flowerId}")
-    public String oneFlower(@SessionAttribute(name="member", required = false)MemberSessionDto member,
+    public String oneFlower(Principal principal,
                             @PathVariable long flowerId, Model model){
-        if(member != null){
-            model.addAttribute("member", member.getUsername());
-            addCartCount(cartService.getCartListCount(member.getUserid()), model);
+        if(principal != null){
+            model.addAttribute("member", principal.getName());
+            addCartCount(cartService.getCartListCount(principal.getName()), model);
         }
         else{
             model.addAttribute("cartCount", 0);
