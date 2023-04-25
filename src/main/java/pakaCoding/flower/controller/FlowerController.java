@@ -145,11 +145,9 @@ public class FlowerController {
 
         FlowerDetailDto flower = flowerService.findOne(flowerId);
         List<Type> types = typeService.allType();
-//        String typeName = typeService.findTypeName(flower.getType().getId());
 
         model.addAttribute("types", types);
         model.addAttribute("flower", flower);
-//        model.addAttribute("typeName", typeName);
 
         return "flowers/flowerDetail";
     }
