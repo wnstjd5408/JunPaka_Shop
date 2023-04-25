@@ -17,16 +17,17 @@ public class FlowerDetailDto {
     private String detailComment;
 
     private FlowerSellStatus flowerSellStatus;
-    private List<FileImageDto> fileImageDtoList;
+    private List<String> imgUrlList;
 
 
     /* Entity -> Dto */
-    public FlowerDetailDto(Flower flower){
+    public FlowerDetailDto(Flower flower, List<String> imgUrlList){
         this.id = flower.getId();
         this.name = flower.getName();
         this.price = flower.getPrice();
         this.stockQuantity = flower.getStockQuantity();
         this.detailComment =flower.getDetailComment();
         this.flowerSellStatus = flower.getFlowerSellStatus();
+        this.imgUrlList = imgUrlList;
     }
 }

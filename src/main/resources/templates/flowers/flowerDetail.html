@@ -11,7 +11,7 @@
         <div class="container px-5 px-lg-5 mt-5">
             <div class="row gx-3 gx-lg-5 row-cols-1 row-cols-md-3 row-cols-xl-2 justify-content-center">
                 <div class="col mb-2">
-                    <img class="card-img-top"th:src="'/display/fileImage='+${flower.fileImageDtoList[0].imgUrl}"
+                    <img class="card-img-top"th:src="'/display/fileImage='+${flower.imgUrlList[0]}"
                          src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
                 </div>
                 <div class="text-start">
@@ -58,8 +58,8 @@
                     <div class="my-2">
                         <span class="fw-light fs-6" th:text="${flower.detailComment}" style="white-space: pre-line;"></span>
                     </div>
-                    <div th:each="fileImage : ${flower.fileImageDtoList}" class="text-center my-1 rounded">
-                        <img class="  p-2 " th:src="'/display/fileImage='+${fileImage.imgUrl}"
+                    <div th:each="imgUrl : ${flower.imgUrlList}" class="text-center my-1 rounded">
+                        <img class="  p-2 " th:src="'/display/fileImage='+${imgUrl}"
                              src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..."  width="800"/>
                     </div>
                 </div>

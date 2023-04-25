@@ -70,15 +70,15 @@ public class FlowerService {
 
         // 상품 이미지 엔티티들을 fileImageDto 객체로 변환하여 fileImageDtoList에 담습니다.
         List<FileImage> fileImageList = fileImageRepository.findByFlowerId(flowerId);
-        List<FileImageDto> fileImageDtoList = new ArrayList<>();
+        List<String> imgUrlList = new ArrayList<>();
 
         for (FileImage fileImage : fileImageList) {
             FileImageDto fileImageDto = new FileImageDto(fileImage);
-            fileImageDtoList.add(fileImageDto);
+            log.info("fileImageDto.getImgUrl() = {} ", fileImageDto.getImgUrl());
+            imgUrlList.add(fileImageDto.getImgUrl());
         }
         Flower flower = flowerRepository.findById(flowerId).orElseThrow(EntityNotFoundException::new);
-        FlowerDetailDto flowerDetailDto = new FlowerDetailDto(flower);
-        flowerDetailDto.setFileImageDtoList(fileImageDtoList);
+        FlowerDetailDto flowerDetailDto = new FlowerDetailDto(flower, imgUrlList);
         return flowerDetailDto;
     }
 
