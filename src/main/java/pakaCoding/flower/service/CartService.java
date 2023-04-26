@@ -31,7 +31,6 @@ public class CartService {
     private final MemberRepository memberRepository;
     private final FlowerRepository flowerRepository;
     private final CartItemRepository cartItemRepository;
-    private final TypeRepository typeRepository;
 
     private final OrderService orderService;
 
@@ -69,8 +68,8 @@ public class CartService {
 
         List<CartListDto> cartListDtos = new ArrayList<>();
 
-        Member member = memberRepository.findByUserid(userId).get();
-        Cart cart = cartRepository.findByMemberId(member.getId());
+        Cart cart = cartRepository.findByMemberId(memberRepository.getMemberId(userId));
+
 
         if (cart == null){
             return cartListDtos;
@@ -82,8 +81,7 @@ public class CartService {
     @Transactional(readOnly = true)
     public Integer getCartListCount(String userId){
 
-        Member member = memberRepository.findByUserid(userId).get();
-        Cart cart = cartRepository.findByMemberId(member.getId());
+        Cart cart = cartRepository.findByMemberId(memberRepository.getMemberId(userId));
 
         if(cart == null){
             return 0;
