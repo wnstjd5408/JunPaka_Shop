@@ -2,18 +2,25 @@ package pakaCoding.flower.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.repository.FileImageRepository;
 import pakaCoding.flower.service.FileImageService;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -26,8 +33,8 @@ public class MainController {
     private String fullPath;
 
     //이미지 보여주기
-    @ResponseBody
-    @GetMapping("/display/fileImage={saveFileName}")
+//    @ResponseBody
+//    @GetMapping("/display/fileImage={saveFileName}")
     public Resource downloadImage(@PathVariable String saveFileName) throws MalformedURLException {
 
         if(saveFileName.equals("noItem")){
@@ -46,6 +53,20 @@ public class MainController {
         }
         fullPath = fileImage.getUploadDir() + fileImage.getSavedFileImgName();
         return new UrlResource("file:" + fullPath);
+    }
+
+    @ResponseBody
+    @GetMapping("/display/fileImage={saveFileName}")
+    public ResponseEntity<Resource> displayFileImage(@PathVariable String saveFileName) throws IOException {
+        String path = "D:/file/";
+        HttpHeaders header = new HttpHeaders();
+        Resource resource = new FileSystemResource(path + saveFileName);
+        if(!resource.exists())
+            return new ResponseEntity<Resource>(HttpStatus.NOT_FOUND);
+        Path filePath = Paths.get(path+saveFileName);
+        header.add("Content-type", Files.probeContentType(filePath));
+        return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
+
     }
 
 }
