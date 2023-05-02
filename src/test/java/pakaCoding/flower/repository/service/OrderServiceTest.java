@@ -1,4 +1,4 @@
-package pakaCoding.flower.service;
+package pakaCoding.flower.repository.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import org.assertj.core.api.Assertions;
@@ -21,6 +21,7 @@ import pakaCoding.flower.repository.FlowerRepository;
 import pakaCoding.flower.repository.MemberRepository;
 import pakaCoding.flower.repository.OrderRepository;
 import pakaCoding.flower.repository.TypeRepository;
+import pakaCoding.flower.service.OrderService;
 
 import java.time.LocalDate;
 

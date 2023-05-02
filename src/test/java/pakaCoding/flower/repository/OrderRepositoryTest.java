@@ -195,8 +195,8 @@ class OrderRepositoryTest {
         OrderItem orderItem = orderItemRepository.findById(orderItem_id).orElseThrow(EntityNotFoundException::new);
         System.out.println("Order class : " + orderItem.getOrder().getClass());
         System.out.println("-------------------------------------------------");
-        orderItem.getOrder().getOrderDate();
-        System.out.println("orderItem.getOrder().getOrderDate() = " + orderItem.getOrder().getOrderDate());
+        orderItem.getOrder().getCreateDate();
+        System.out.println("orderItem.getOrder().getCreateDate() = " + orderItem.getOrder().getCreateDate());
         System.out.println("-------------------------------------------------");
 
     }
