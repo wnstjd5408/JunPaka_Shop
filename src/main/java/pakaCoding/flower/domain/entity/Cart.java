@@ -8,7 +8,7 @@ import lombok.ToString;
 @Table(name = "cart")
 @Data
 @ToString
-public class Cart extends TimeEntity{
+public class Cart extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
