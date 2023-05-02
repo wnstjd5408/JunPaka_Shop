@@ -20,7 +20,7 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-public class Member extends TimeEntity {
+public class Member extends BaseEntity {
 
 
     @Id

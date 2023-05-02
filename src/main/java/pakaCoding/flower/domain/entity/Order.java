@@ -15,7 +15,7 @@ import java.util.List;
 @Table(name ="orders")
 @Getter
 @Setter
-public class Order {
+public class Order extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,9 +33,7 @@ public class Order {
     @JoinColumn(name="delivery_id")
     private Delivery delivery; //배송정보
 
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime orderDate; //주문시간
+
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
@@ -66,7 +64,6 @@ public class Order {
             order.addOrderItem(orderItem);
         }
         order.setOrderStatus(OrderStatus.ORDER);
-        order.setOrderDate(LocalDateTime.now());
         return order;
     }
 

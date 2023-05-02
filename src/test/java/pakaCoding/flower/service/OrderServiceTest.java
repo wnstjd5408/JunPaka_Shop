@@ -21,6 +21,7 @@ import pakaCoding.flower.repository.FlowerRepository;
 import pakaCoding.flower.repository.MemberRepository;
 import pakaCoding.flower.repository.OrderRepository;
 import pakaCoding.flower.repository.TypeRepository;
+import pakaCoding.flower.service.OrderService;
 
 import java.time.LocalDate;
 
@@ -85,6 +86,29 @@ class OrderServiceTest {
         assertThat(OrderStatus.CANCEL).isEqualTo(order.getOrderStatus());
         assertThat(11).isEqualTo(flower.getStockQuantity());
     }
+    @DisplayName("주문자 테스트")
+    @Test
+    void create(){
+        //given
+        Flower flower = registerFLower("테스트" , 1000, 11, getType());
+        Member member = getMember();
+
+        //상품 상세 페이지 화면에서 넘어오는 값들 설정
+
+        OrderDto orderDto = new OrderDto();
+        orderDto.setCount(10);
+        orderDto.setFlowerId(flower.getId());
+
+        //주문 객체 DB에 저장
+        Long orderId = orderService.order(orderDto, member.getUserid());
+        Order order = orderRepository.findById(orderId).orElseThrow(RuntimeException::new);
+
+
+        //when
+        assertThat(order).isNotNull();
+        assertThat(order.getCreatedBy()).isEqualTo(member.getUserid());
+    }
+
 
     private Member getMember() {
         Member member = new Member("wnstjd5408@naver.com", "12345", "admin", "테스트", Gender.MAN, LocalDate.now(), Role.ADMIN, new Address("가", "나", "다"));

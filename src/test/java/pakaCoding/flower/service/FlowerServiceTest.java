@@ -11,16 +11,22 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
+import pakaCoding.flower.domain.constant.FlowerSellStatus;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.repository.FlowerRepository;
+import pakaCoding.flower.service.FlowerService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
-@ExtendWith(MockitoExtension.class)
+@SpringBootTest
+@Transactional
+@TestPropertySource(locations = "classpath:application-test.yml")
 class FlowerServiceTest {
 
     @InjectMocks
@@ -39,8 +45,8 @@ class FlowerServiceTest {
 
         //given
         Type flowerBasket = new Type(1, "꽃바구니", 0);
-        Flower fs = registerFLower("장미꽃다발", 15000, 1, flowerBasket, 0L);
-        Flower fBasket = registerFLower("장미꽃바구니", 35000, 1, flowerBasket, 0L);
+        Flower fs = registerFLower("테스트" , 1000, 11, flowerBasket);
+        Flower fBasket = registerFLower("테스트" , 1000, 11, flowerBasket);
 
         repository.save(fs);
         repository.save(fBasket);
@@ -56,13 +62,17 @@ class FlowerServiceTest {
     }
 
 
-    private Flower registerFLower(String name, int price, int stockQuantity, Type type, Long hitCount){
+    private Flower registerFLower(String name, int price, int stockQuantity, Type type){
         return Flower.builder()
                 .name(name)
                 .price(price)
                 .stockQuantity(stockQuantity)
                 .type(type)
-                .hitCount(hitCount)
+                .flowerSellStatus(FlowerSellStatus.SELL)
+                .hitCount(0L)
+                .fileImages(new ArrayList<>())
+                .delYn("Y")
                 .build();
     }
+
 }
