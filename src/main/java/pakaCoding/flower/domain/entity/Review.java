@@ -14,27 +14,19 @@ import org.springframework.data.annotation.LastModifiedDate;
 @NoArgsConstructor
 @Getter
 @Entity
-@Table(name="comments")
-public class Comment {
+@Table(name="reviews")
+public class Review extends TimeEntity{
 
     @Id
     @GeneratedValue
     private Long id;
 
 
-
     @Column(columnDefinition = "TEXT")
     @NotNull
     private String comment;
 
-
-    @Column(name = "created_date", updatable = false)
-    @CreatedDate
-    private String createdDate;
-
-    @Column(name = "modified_date")
-    @LastModifiedDate
-    private String modifiedDate;
+    private int rating;
 
     @ManyToOne
     @JoinColumn(name="flower_id") //외래키

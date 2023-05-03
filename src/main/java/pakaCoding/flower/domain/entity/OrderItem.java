@@ -31,6 +31,9 @@ public class OrderItem {
     private int count; //주문 수량
 
 
+    private String reviewYn; //리뷰여부
+
+
     //==조회 로직==//
     /** 주문상품 전체 가격 조회 */
     public int getTotalPrice() {
@@ -44,6 +47,7 @@ public class OrderItem {
         orderItem.setCount(count);
         orderItem.setOrderPrice(orderPrice);
 
+        orderItem.setReviewYn("N");
         flower.removeStockQuantity(count);
 
         return orderItem;
