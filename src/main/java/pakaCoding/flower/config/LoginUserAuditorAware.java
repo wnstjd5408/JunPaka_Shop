@@ -16,7 +16,7 @@ public class LoginUserAuditorAware implements AuditorAware<String> {
     public Optional<String> getCurrentAuditor() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userId = "";
-        if(authentication != null){
+        if(authentication != null || authentication.isAuthenticated()){
             userId = authentication.getName();
         }
 
