@@ -47,7 +47,7 @@
                                     <span th:text="${orderItem.count} + '개'"></span>
                                 </div>
                                 <a class="btn btn-outline-dark mt-auto"
-                                        th:href="@{'/reviews/form/?orderNo=' + ${orderItem.orderItemId}}">리뷰쓰기</a>
+                                        th:href="@{/reviews/form(orderItemNo=${orderItem.orderItemId})}">리뷰쓰기</a>
                             </div>
                         </div>
                     </div>
