@@ -33,7 +33,6 @@ import java.util.stream.Collectors;
 public class FlowerService {
     private final FlowerRepository flowerRepository;
     private final FileImageService fileImageService;
-    private final FileImageRepository fileImageRepository;
 
     @Transactional
     public Long saveFlower(FlowerFormDto flowerFormDto) throws Exception {
