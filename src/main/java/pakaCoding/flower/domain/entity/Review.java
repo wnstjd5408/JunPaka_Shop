@@ -2,10 +2,7 @@ package pakaCoding.flower.domain.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -13,34 +10,39 @@ import org.springframework.data.annotation.LastModifiedDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity
-@Table(name="comments")
-public class Comment {
+@Table(name="reviews")
+public class Review extends TimeEntity{
 
     @Id
     @GeneratedValue
     private Long id;
 
 
-
     @Column(columnDefinition = "TEXT")
     @NotNull
     private String comment;
 
+    private int rating;
 
-    @Column(name = "created_date", updatable = false)
-    @CreatedDate
-    private String createdDate;
-
-    @Column(name = "modified_date")
-    @LastModifiedDate
-    private String modifiedDate;
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="flower_id") //외래키
     private Flower flower;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="member_id")//외래키
     private Member member;
+
+
+    //==생성 메서드==//
+    public static Review createReview(Member member, Flower flower, String comment, int rating){
+
+        Review review = new Review();
+        review.setComment(comment);
+        review.setRating(rating);
+        review.setFlower(flower);
+        review.setMember(member);
+        return review;
+    }
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.aspectj.weaver.ast.Or;
 
 @Entity
 @Table(name = "order_item")
@@ -31,6 +32,9 @@ public class OrderItem {
     private int count; //주문 수량
 
 
+    private String reviewYn; //리뷰여부
+
+
     //==조회 로직==//
     /** 주문상품 전체 가격 조회 */
     public int getTotalPrice() {
@@ -44,9 +48,16 @@ public class OrderItem {
         orderItem.setCount(count);
         orderItem.setOrderPrice(orderPrice);
 
+        orderItem.setReviewYn("N");
         flower.removeStockQuantity(count);
 
         return orderItem;
+    }
+
+    //==Review 유무 확인==//
+    public static Long orderItemId(OrderItem orderItem){
+        orderItem.setReviewYn("N");
+        return orderItem.getId();
     }
 
     //==주문 취소==//

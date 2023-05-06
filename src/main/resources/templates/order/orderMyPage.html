@@ -34,16 +34,20 @@
                     </div>
                     <div class="card d-flex mb-3">
                         <div th:each="orderItem : ${order.orderItemDtoList}" class="d-flex">
+
                             <div class="ms-1 h-auto">
                                 <img th:src="'/display/fileImage='+${orderItem.imgUrl}" class="rounded h-100"
                                      th:alt="${orderItem.flowerName}" width="230">
                             </div>
                             <div class="align-self-center w-75">
+
                                 <span th:text="${orderItem.flowerName}" class="fw-bold me-2"></span>
                                 <div class="me-2 fw-light">
                                     <span th:text="${orderItem.orderPrice} + '원'"></span>
                                     <span th:text="${orderItem.count} + '개'"></span>
                                 </div>
+                                <a class="btn btn-outline-dark mt-auto"
+                                        th:href="@{/reviews/form(orderItemNo=${orderItem.orderItemId})}">리뷰쓰기</a>
                             </div>
                         </div>
                     </div>
