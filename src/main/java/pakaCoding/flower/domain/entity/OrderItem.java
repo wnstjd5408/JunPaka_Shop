@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
+import org.aspectj.weaver.ast.Or;
 
 @Entity
 @Table(name = "order_item")
@@ -51,6 +52,12 @@ public class OrderItem {
         flower.removeStockQuantity(count);
 
         return orderItem;
+    }
+
+    //==Review 유무 확인==//
+    public static Long orderItemId(OrderItem orderItem){
+        orderItem.setReviewYn("N");
+        return orderItem.getId();
     }
 
     //==주문 취소==//
