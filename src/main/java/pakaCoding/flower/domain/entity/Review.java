@@ -36,13 +36,15 @@ public class Review extends TimeEntity{
 
 
     //==생성 메서드==//
-    public static Review createReview(Member member, Flower flower, String comment, int rating){
+    public static Review createReview(Member member, Flower flower, OrderItem orderItem, String comment, int rating){
 
         Review review = new Review();
         review.setComment(comment);
         review.setRating(rating);
         review.setFlower(flower);
         review.setMember(member);
+
+        orderItem.changeReviewId();
         return review;
     }
 }

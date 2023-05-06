@@ -55,7 +55,7 @@
                 <textarea class="form-control border-0 h-50" rows="15" aria-label="With textarea" style="white-space: pre-line;" th:field="*{comment}" id="comment"></textarea>
             </div>
             <p th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}" class="alert-danger alert">Incorrect data</p>
-
+            <input type="hidden" th:value="${orderItemNo}" name="orderItemId" >
             <div class="mb-3">
                 <button type="submit" class="btn btn-sm btn-secondary form-control">등록하기</button>
             </div>

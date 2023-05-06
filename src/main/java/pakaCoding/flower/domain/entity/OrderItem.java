@@ -54,10 +54,9 @@ public class OrderItem {
         return orderItem;
     }
 
-    //==Review 유무 확인==//
-    public static Long orderItemId(OrderItem orderItem){
-        orderItem.setReviewYn("N");
-        return orderItem.getId();
+    //==Review 유무 바꾸기==//
+    public void changeReviewId(){
+        this.setReviewYn("Y");
     }
 
     //==주문 취소==//
