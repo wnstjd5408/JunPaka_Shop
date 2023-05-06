@@ -13,8 +13,8 @@
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
             <div class="mb-3">
-                <label for="comment" class="form-label">리뷰 남기기</label>
-                <textarea class="form-control" aria-label="With textarea" style="white-space: pre-line;" th:field="*{comment}" id="comment"></textarea>
+                <label for="comment" class="form-label fs-3">리뷰 남기기</label>
+                <textarea class="form-control border-0 h-50" rows="10" aria-label="With textarea" style="white-space: pre-line;" th:field="*{comment}" id="comment"></textarea>
             </div>
             <p th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}" class="alert-danger alert">Incorrect data</p>
 

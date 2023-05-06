@@ -38,7 +38,7 @@ public class ReviewController {
         model.addAttribute("types", types);
         model.addAttribute("reviewFormDto", new ReviewFormDto());
 
-        return "reviews/reviewForm";
+        return "forms/reviewForm";
     }
 
     //CartCount 추가
