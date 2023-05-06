@@ -3,6 +3,7 @@ package pakaCoding.flower.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,8 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pakaCoding.flower.domain.entity.Type;
+import pakaCoding.flower.dto.OrderMyPageDto;
 import pakaCoding.flower.dto.ReviewFormDto;
 import pakaCoding.flower.service.CartService;
+import pakaCoding.flower.service.OrderService;
 import pakaCoding.flower.service.ReviewService;
 import pakaCoding.flower.service.TypeService;
 
@@ -28,6 +31,7 @@ public class ReviewController {
     private final TypeService typeService;
     private final CartService cartService;
     private final ReviewService reviewService;
+    private final OrderService orderService;
 
     @GetMapping("/reviews/form")
     public String review(Principal principal, @RequestParam long orderItemNo, Model model){
@@ -48,7 +52,7 @@ public class ReviewController {
     }
 
     @PostMapping("/reviews/form")
-    public String review(@Valid ReviewFormDto reviewFormDto,
+    public String saveReview(@Valid ReviewFormDto reviewFormDto,
                          BindingResult bindingResult,
                          Principal principal,
                          Model model){
@@ -58,13 +62,11 @@ public class ReviewController {
             model.addAttribute("types", types);
             return "forms/reviewForm";
         }
-
         log.info("Post : review 호출");
 
         reviewService.saveReview(reviewFormDto, principal.getName());
 
-
-        return "redirect:/";
+        return "redirect:/orders";
     }
 
     //CartCount 추가
