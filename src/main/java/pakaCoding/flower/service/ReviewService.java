@@ -33,7 +33,7 @@ public class ReviewService {
         Flower flower = orderItem.getFlower();
 
         Member member = memberRepository.findByUserid(userId).orElseThrow(EntityNotFoundException::new);
-        Review review = Review.createReview(member, flower, reviewFormDto.getComment(), reviewFormDto.getRating());
+        Review review = Review.createReview(member, flower, orderItem, reviewFormDto.getComment(), reviewFormDto.getRating());
         Review findReview = reviewRepository.save(review);
 
 
