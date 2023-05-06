@@ -1,20 +1,58 @@
 <!DOCTYPE html>
-<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}" xmlns="http://www.w3.org/1999/html">
 
 <head>
     <title>Review 등록</title>
+    <style>
+            #myform fieldset{
+                display: inline-block; /* 하위 별점 이미지들이 있는 영역만 자리를 차지함.*/
+                direction: rtl; /* 이모지 순서 반전 */
+                border: 0; /* 필드셋 테두리 제거 */
+            }
+            #myform fieldset legend{
+                text-align: center;
+            }
+            #myform input[type=radio]{
+                display: none; /* 라디오박스 감춤 */
+            }
+            #myform label{
+                font-size: 2em; /* 이모지 크기 */
+                color: transparent; /* 기존 이모지 컬러 제거 */
+                text-shadow: 0 0 0 #f0f0f0; /* 새 이모지 색상 부여 */
+            }
+            #myform label:hover{
+                text-shadow: 0 0 0 rgb(70, 53, 113); /* 마우스 호버 */
+            }
+            #myform label:hover ~ label{
+                text-shadow: 0 0 0 rgb(70, 53, 113); /* 마우스 호버 뒤에오는 이모지들 */
+            }
+            #myform input[type=radio]:checked ~ label{
+                text-shadow: 0 0 0 rgb(70, 53, 113); /* 마우스 클릭 체크 */
+            }
+    </style>
+
 </head>
 <th:block layout:fragment="section" class="py-5">
     <div class="container-sm w-50 px-4 px-lg-4 mt-4">
         <div class="py-5 text-center">
             <h3>리뷰등록</h3>
         </div>
-        <form th:object="${reviewFormDto}" method="post">
+        <form th:object="${reviewFormDto}" th:action="@{/reviews/form}" method="post" id="myform">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-
             <div class="mb-3">
-                <label for="comment" class="form-label fs-3">리뷰 남기기</label>
-                <textarea class="form-control border-0 h-50" rows="10" aria-label="With textarea" style="white-space: pre-line;" th:field="*{comment}" id="comment"></textarea>
+                <legend class="form-label">별점</legend>
+                <fieldset class="form-control" >
+                    <input type="radio" th:field="*{rating}" data-th-value="5" id="rate1"><label for="rate1">⭐</label>
+                    <input type="radio" th:field="*{rating}" data-th-value="4" id="rate2"><label for="rate2">⭐</label>
+                    <input type="radio" th:field="*{rating}" data-th-value="3" id="rate3"><label for="rate3">⭐</label>
+                    <input type="radio" th:field="*{rating}" data-th-value="2" id="rate4"><label for="rate4">⭐</label>
+                    <input type="radio" th:field="*{rating}" data-th-value="1" id="rate5"><label for="rate5">⭐</label>
+                </fieldset>
+            </div>
+            <div class="mb-3">
+                <legend for="comment" class="form-label fs-4">리뷰 남기기</legend>
+                <textarea class="form-control border-0 h-50" rows="15" aria-label="With textarea" style="white-space: pre-line;" th:field="*{comment}" id="comment"></textarea>
             </div>
             <p th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}" class="alert-danger alert">Incorrect data</p>
 
