@@ -42,12 +42,10 @@ public class OrderService {
         List<OrderItem> orderItemList = new ArrayList<>();
         Flower flower = flowerRepository.findById(orderDto.getFlowerId())
                 .orElseThrow(EntityNotFoundException::new);
-        OrderItem orderItem = OrderItem.createOrderItem(flower, flower.getPrice(), orderDto.getCount());
-        orderItemList.add(orderItem);
+        orderItemList.add(OrderItem.createOrderItem(flower, flower.getPrice(), orderDto.getCount()));
 
+        Member member = memberRepository.findByUserid(userid).orElseThrow(EntityNotFoundException::new);
         //배송정보 생성
-        Member member = memberRepository.findByUserid(userid).get();
-
         Delivery delivery = Delivery.createDelivery(member);
 
 
