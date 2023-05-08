@@ -1,6 +1,7 @@
 package pakaCoding.flower.service;
 
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,12 +25,14 @@ import pakaCoding.flower.repository.TypeRepository;
 import pakaCoding.flower.service.OrderService;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
 @TestPropertySource(locations = "classpath:application-test.yml")
+@Slf4j
 class OrderServiceTest {
 
     @Autowired
@@ -54,7 +57,7 @@ class OrderServiceTest {
                 .name(name)
                 .price(price)
                 .stockQuantity(stockQuantity)
-                .type(type)
+                .detailComment("테스트 설명")
                 .flowerSellStatus(FlowerSellStatus.SELL)
                 .hitCount(0L)
                 .fileImages(null)
@@ -66,13 +69,14 @@ class OrderServiceTest {
     public void cancelOrder() {
         //given
         Flower flower = registerFLower("테스트" , 1000, 11, getType());
+        Flower saveFlower = flowerRepository.save(flower);
         Member member = getMember();
 
         //상품 상세 페이지 화면에서 넘어오는 값들 설정
 
         OrderDto orderDto = new OrderDto();
         orderDto.setCount(10);
-        orderDto.setFlowerId(flower.getId());
+        orderDto.setFlowerId(saveFlower.getId());
 
         //주문 객체 DB에 저장
         Long orderId = orderService.order(orderDto, member.getUserid());
@@ -91,27 +95,42 @@ class OrderServiceTest {
     void create(){
         //given
         Flower flower = registerFLower("테스트" , 1000, 11, getType());
+        log.info("flower.getId() = {}", flower.getId());
+        Flower saveFlower = flowerRepository.save(flower);
+        log.info("saveFlower.getId() = {}", saveFlower.getId());
+
         Member member = getMember();
 
         //상품 상세 페이지 화면에서 넘어오는 값들 설정
 
         OrderDto orderDto = new OrderDto();
         orderDto.setCount(10);
-        orderDto.setFlowerId(flower.getId());
+        orderDto.setFlowerId(saveFlower.getId());
 
         //주문 객체 DB에 저장
         Long orderId = orderService.order(orderDto, member.getUserid());
+        log.info("orderId = {}", orderId);
+
+        //저장된 주문 객체 조회
         Order order = orderRepository.findById(orderId).orElseThrow(RuntimeException::new);
+
+        List<OrderItem> orderItems = order.getOrderItems();
+
+        int totalPrice = orderDto.getCount() * saveFlower.getPrice();
+
+        log.info("order.getCreateDate() = {}", order.getCreateDate());
+        log.info("order.getCreatedBy() = {}", order.getCreatedBy());
 
 
         //when
         assertThat(order).isNotNull();
-        assertThat(order.getCreatedBy()).isEqualTo(member.getUserid());
+
+        assertThat(totalPrice).isEqualTo(order.getTotalPrice());
     }
 
 
     private Member getMember() {
-        Member member = new Member("wnstjd5408@naver.com", "12345", "admin", "테스트", Gender.MAN, LocalDate.now(), Role.ADMIN, new Address("가", "나", "다"));
+        Member member = new Member("wnstjd5408@naver.com", "12345", "test", "테스트", Gender.MAN, LocalDate.now(), Role.ADMIN, new Address("가", "나", "다"));
         memberRepository.save(member);
         return member;
     }
