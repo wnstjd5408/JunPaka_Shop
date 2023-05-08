@@ -38,18 +38,22 @@ public class Order extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
+
+    //연관관계 메서드
+
     public void setMember(Member member) {
         this.member = member;
         member.getOrders().add(this);
     }
 
-
+    //연관관계 메서드
     public void setDelivery(Delivery delivery) {
         this.delivery = delivery;
         delivery.setOrder(this);
     }
 
     //OrderItem 한개 씩 추가
+    //연관관계 메서드
     public void addOrderItem(OrderItem orderItem) {
         orderItems.add(orderItem);
         orderItem.setOrder(this);

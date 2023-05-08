@@ -41,13 +41,13 @@
                         <h3 name ="totalPrice" id="totalPrice" class="fw-bolder"></h3>
                     </div>
                     <div th:if="${flower.flowerSellStatus == T(pakaCoding.flower.domain.constant.FlowerSellStatus).SELL}"
-                         class="text-end">
-                        <button type="button" class="btn btn-outline-dark btn-lg"
+                         class="text-end mt-1">
+                        <button type="button" class="btn btn-outline-dark btn-lg mt-1"
                                 onclick="addCart()">장바구니 담기</button>
-                        <button type="button" class="btn btn-outline-dark btn-lg" onclick="order()">주문하기</button>
+                        <button type="button" class="btn btn-outline-dark btn-lg mt-1" onclick="order()">주문하기</button>
                     </div>
                     <div th:unless="${flower.flowerSellStatus == T(pakaCoding.flower.domain.constant.FlowerSellStatus).SELL}"
-                        class="text-end">
+                        class="text-end mt-1">
                         <button type="button" class="btn btn-outline-danger btn-lg" disabled="disabled" >품절</button>
                     </div>
                 </div>

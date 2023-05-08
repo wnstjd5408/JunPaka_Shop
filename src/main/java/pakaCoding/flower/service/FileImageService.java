@@ -22,15 +22,17 @@ import static org.apache.commons.io.FileUtils.deleteQuietly;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class FileImageService {
-
-    private final FileImageRepository fileImageRepository;
 
     @Value("${upload.path}")
     private String uploadDir;
 
+    private final FileImageRepository fileImageRepository;
+
+
+
     //파일 저장
-    @Transactional
     public List<FileImageDto> saveFile(FlowerFormDto flowerDto) throws Exception {
         log.info("saveFile 실행");
         Flower flower = flowerDto.toEntity();
