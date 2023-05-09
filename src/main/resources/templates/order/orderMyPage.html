@@ -64,23 +64,21 @@
                       th:with="start=${(orders.number/maxPage)*maxPage + 1},
                   end=(${(orders.totalPages == 0) ? 1 : (start + (maxPage - 1) < orders.totalPages ? start + (maxPage - 1) : orders.totalPages)})">
                      <ul class="pagination justify-content-center">
-
-                         <li class="page-item" th:classappend="${orders.number eq 0}? 'disabled' : ''">
+                         <li class="page-item" th:classappend="${start > 1}">
                              <a class="page-link"
-                                th:href="@{'/orders/' + ${orders.number-1}}" aria-label="Previous">
+                                th:href="@{?(page=${Start - maxPage-1}}" aria-label="Previous">
                                  <span aria-hidden="true">&laquo;&laquo;</span>
                              </a>
                          </li>
                          <li class="page-item" th:each="page : ${#numbers.sequence(start, end)}"
-                             th:classappend="${orders.number eq page-1}?'active': ''" >
+                             th:classappend="${page == orders.number+1} ? 'active'">
                              <a class="page-link"
-                                th:href="@{'/orders/' + ${page-1}}" th:inline="text" th:text="${page}">[[${page]]</a>
+                                th:href="@{|?page=${page-1}|}" th:inline="text" th:text="${page}">1</a>
                          </li>
 
-                         <li class="page-item" th:classappend="${orders.number+1 ge orders.totalPages}? 'disabled' : ''">
-                             <a class="page-link"
-                                th:href="@{'/orders/' + ${orders.number+1}}" aria-label="Next">
-                                 <span aria-hidden="true">&raquo;</span>
+                         <li th:if="${end < orders.totalPages}" class ="page-item">
+                             <a class="page-link" th:href="@{?(page=${orders.totalPages - 1})}" aria-label="Next">
+                                 <span aria-hidden="true">&raquo;&raquo;</span>
                              </a>
                          </li>
 
