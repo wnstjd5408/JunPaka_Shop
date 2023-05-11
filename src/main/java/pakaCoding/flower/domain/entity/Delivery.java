@@ -39,7 +39,7 @@ public class Delivery {
     }
 
     //== 취소 메서드 == //
-    public void deliveryStatusCacelUpdate(){
+    public void deliveryStatusCancelUpdate(){
         this.deliveryStatus = DeliveryStatus.CANCEL;
     }
 }
