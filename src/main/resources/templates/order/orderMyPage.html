@@ -46,13 +46,16 @@
                                     <span th:text="${orderItem.orderPrice} + '원'"></span>
                                     <span th:text="${orderItem.count} + '개'"></span>
                                 </div>
-                                <th:block th:if="${orderItem.reviewYn == 'N'}">
+                                <th:block th:if="${orderItem.reviewYn == T(pakaCoding.flower.domain.constant.ReviewStatus).NO}">
                                 <a class="btn btn-outline-dark mt-auto ms-2"
                                         th:href="@{/reviews/form(orderItemNo=${orderItem.orderItemId})}">리뷰쓰기</a>
                                 </th:block>
-                                <th:block th:unless="${orderItem.reviewYn == 'N'}">
+                                <th:block th:if="${orderItem.reviewYn == T(pakaCoding.flower.domain.constant.ReviewStatus).YES}">
                                     <a class="btn btn-outline-dark mt-auto ms-2 disabled"
                                        href="#">리뷰완료</a>
+                                </th:block>
+                                <th:block th:if="${orderItem.reviewYn == T(pakaCoding.flower.domain.constant.ReviewStatus).CANCEL}">
+                                   <p class="mt-auto ms-2">주문 취소</p>
                                 </th:block>
                             </div>
                         </div>

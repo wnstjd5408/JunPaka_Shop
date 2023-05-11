@@ -2,6 +2,7 @@ package pakaCoding.flower.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import pakaCoding.flower.domain.constant.ReviewStatus;
 import pakaCoding.flower.domain.entity.OrderItem;
 
 @Getter
@@ -13,7 +14,7 @@ public class OrderItemDto {
     private String flowerName;
     private int count;
     private int orderPrice;
-    private String reviewYn;
+    private ReviewStatus reviewYn;
 
     private String imgUrl;
 
@@ -22,7 +23,7 @@ public class OrderItemDto {
         this.flowerName = orderItem.getFlower().getName();
         this.count = orderItem.getCount();
         this.orderPrice = orderItem.getOrderPrice();
-        this.reviewYn = orderItem.getReviewYn();
+        this.reviewYn = orderItem.getReviewStatus();
         this.imgUrl = imgUrl;
     }
 }

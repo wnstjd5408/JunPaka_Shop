@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.aspectj.weaver.ast.Or;
+import pakaCoding.flower.domain.constant.ReviewStatus;
 
 @Entity
 @Table(name = "order_item")
@@ -32,7 +33,8 @@ public class OrderItem {
     private int count; //주문 수량
 
 
-    private String reviewYn; //리뷰여부
+    @Enumerated(EnumType.STRING)
+    private ReviewStatus reviewStatus; //리뷰여부
 
 
     //==조회 로직==//
@@ -48,20 +50,28 @@ public class OrderItem {
         orderItem.setCount(count);
         orderItem.setOrderPrice(orderPrice);
 
-        orderItem.setReviewYn("N");
+        orderItem.changeReviewId(ReviewStatus.NO);
         flower.removeStockQuantity(count);
 
         return orderItem;
     }
 
     //==Review 유무 바꾸기==//
-    public void changeReviewId(){
-        this.setReviewYn("Y");
+    public void changeReviewId(ReviewStatus reviewStatus){
+        if(reviewStatus == ReviewStatus.CANCEL){
+            this.reviewStatus = ReviewStatus.CANCEL;
+        }
+        else if(reviewStatus == ReviewStatus.YES){
+            this.reviewStatus = ReviewStatus.YES;
+        }
+        else{
+            this.reviewStatus = ReviewStatus.NO;
+        }
     }
 
     //==주문 취소==//
     public void cancel() {
-        changeReviewId();
+        this.reviewStatus = ReviewStatus.CANCEL;
         this.getFlower().addStockQuantity(count);
     }
 }

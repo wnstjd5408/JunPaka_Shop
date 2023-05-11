@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import pakaCoding.flower.domain.constant.ReviewStatus;
 
 @Builder
 @AllArgsConstructor
@@ -44,7 +45,7 @@ public class Review extends TimeEntity{
         review.setFlower(flower);
         review.setMember(member);
 
-        orderItem.changeReviewId();
+        orderItem.changeReviewId(ReviewStatus.YES);
         return review;
     }
 }
