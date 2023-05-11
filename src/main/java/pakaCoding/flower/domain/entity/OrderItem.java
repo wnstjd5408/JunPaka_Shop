@@ -61,6 +61,7 @@ public class OrderItem {
 
     //==주문 취소==//
     public void cancel() {
+        changeReviewId();
         this.getFlower().addStockQuantity(count);
     }
 }
