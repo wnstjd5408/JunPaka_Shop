@@ -57,9 +57,14 @@ public class FlowerController {
             model.addAttribute("types", types);
             return "forms/flowerForm";
         }
-
+        Long flowerId;
         log.info("FlowerController save 호출");
-        Long flowerId = flowerService.saveFlower(flowerFormDto);
+        try {
+            flowerId = flowerService.saveFlower(flowerFormDto);
+        }catch (Exception e){
+            model.addAttribute("errorMessage", "상품 등록 중 에러가 발생했습니다.");
+            return "forms/flowerForm";
+        }
 
         redirectAttributes.addAttribute("flowerId", flowerId);
 
