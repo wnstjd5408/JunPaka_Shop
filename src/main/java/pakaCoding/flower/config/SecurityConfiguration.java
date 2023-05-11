@@ -24,17 +24,14 @@ import java.beans.Encoder;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
 public class SecurityConfiguration {
-
-
 
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws  Exception{
         httpSecurity
                 .authorizeHttpRequests()
-                    .requestMatchers( "/logout", "/orders/**").authenticated()
+                    .requestMatchers( "/logout", "/orders/**", "reviews/**").authenticated()
                     .requestMatchers("/flowers/create/**").hasRole("ADMIN")
                     .requestMatchers("/order", "/reviews/form/**").hasAnyRole("ADMIN", "USER")
                     .requestMatchers("/members/**").anonymous() //인증되지 않은 사용자만 접근허용
