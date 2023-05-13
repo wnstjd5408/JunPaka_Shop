@@ -87,8 +87,7 @@ public class FlowerService {
     public Page<MainFlowerDto> findAllFlowers(int page){
         Pageable pageable = PageRequest.of(page, 8);
         log.info("findAllFlowers 시작");
-        log.info("findAllFlowers 사용한 service repository 개수 ={}",
-                flowerRepository.findFlowerListDto(pageable).getTotalElements());
+
         Page<MainFlowerDto> flowerList = flowerRepository.findFlowerListDto(pageable);
         List<MainFlowerDto> flowerDtoList = flowerList.getContent();
 

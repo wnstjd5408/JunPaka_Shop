@@ -81,8 +81,6 @@ public class OrderService {
     @Transactional(readOnly = true)
     public Page<OrderMyPageDto> getOrderList(String userId, int page){
         Pageable pageable = PageRequest.of(page, 5);
-        log.info("getOrderList 메서드에 사용한 총 개수 ={}",
-                orderRepository.findOrders(userId, pageable).getTotalElements());
         Page<Order> orders = orderRepository.findOrders(userId, pageable);
 
         List<OrderMyPageDto> orderMyPageDtos = orders.stream()
@@ -97,6 +95,8 @@ public class OrderService {
                     }
                     return orderMyPageDto;
                 }).collect(Collectors.toList());
+
+        log.info("주문의 수 : {}", orders.getTotalElements());
         return new PageImpl<>(orderMyPageDtos, pageable, orders.getTotalElements());
     }
 

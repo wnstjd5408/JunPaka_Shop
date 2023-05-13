@@ -79,10 +79,9 @@ public class OrderController {
     }
 
     //CartCount 추가
-    private void addCartCount(Integer cartService, Model model) {
-        Integer count = cartService;
-        log.info("카트의 수 = {} ", count);
-        model.addAttribute("cartCount", count);
+    private void addCartCount(Integer totalCartCount, Model model) {
+        log.info("카트의 수 = {} ", totalCartCount);
+        model.addAttribute("cartCount", totalCartCount);
     }
 
     //주문 취소
