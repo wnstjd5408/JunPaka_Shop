@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import pakaCoding.flower.domain.constant.*;
@@ -24,8 +26,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@SpringBootTest
+@Transactional
 @TestPropertySource(locations = "classpath:application-test.yml")
 @Slf4j
 class OrderRepositoryTest {
@@ -120,6 +122,8 @@ class OrderRepositoryTest {
         //4. Order에 OrderItem add(총 3개)
 
         Order order1 = orderRepository.saveAndFlush(order);
+        log.info("findOrders 쿼리 실행");
+        Page<Order> orders = orderRepository.findOrders(member.getUserid(), PageRequest.of(0, 5));
 
         Order findOrder = orderRepository.findById(order1.getId()).orElseThrow(EntityNotFoundException::new);
         findOrder.orderCancel();
@@ -195,7 +199,6 @@ class OrderRepositoryTest {
         OrderItem orderItem = orderItemRepository.findById(orderItem_id).orElseThrow(EntityNotFoundException::new);
         System.out.println("Order class : " + orderItem.getOrder().getClass());
         System.out.println("-------------------------------------------------");
-        orderItem.getOrder().getCreateDate();
         System.out.println("orderItem.getOrder().getCreateDate() = " + orderItem.getOrder().getCreateDate());
         System.out.println("-------------------------------------------------");
 
