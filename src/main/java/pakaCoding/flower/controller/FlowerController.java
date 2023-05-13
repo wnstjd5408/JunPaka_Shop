@@ -86,10 +86,10 @@ public class FlowerController {
         }
 
         Page<MainFlowerDto> flowers = flowerService.findAllFlowers(page);
-        log.info("flower 한페이지의 수 = {}", flowers.getTotalElements());
+        log.info("flower 전체 수 = {}", flowers.getTotalElements());
         List<Type> types = typeService.allType();
 
-        log.info("flower.getNumbers = {}", flowers.getTotalPages());
+        log.info("flower.getTotalPages = {}", flowers.getTotalPages());
 
 
 
