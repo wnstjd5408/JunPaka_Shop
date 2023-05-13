@@ -41,6 +41,7 @@ public class OrderController {
         }
         else{
             model.addAttribute("cartCount", 0);
+            return "redirect:/flowers";
         }
 
         log.info("GET : orderPage 실행");
