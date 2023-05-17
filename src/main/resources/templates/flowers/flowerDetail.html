@@ -52,7 +52,22 @@
                     </div>
                 </div>
             </div>
-            <div class="row gx-3 gx-lg-3 row-cols-1 row-cols-md-1 justify-content-center">
+            <div class="d-flex mt-auto justify-content-center">
+                <div class="px-1 mt-lg-5 w-100">
+                    <button class="btn btn-outline-dark btn-lg w-100" type="submit">
+                        <span>상세정보</span>
+                    </button>
+                </div>
+                <div class="px-1 mt-lg-5 w-100">
+                    <button class="btn btn-lg btn-outline-dark w-100" type="submit" onclick="showReview()">
+                        <span>리뷰</span>
+                    </button>
+                </div>
+            </div>
+            <div id="reviewList" class="row gx-3 gx-lg-3 row-cols-1 row-cols-md-1 justify-content-center">
+
+            </div>
+            <div id="item" class="row gx-3 gx-lg-3 row-cols-1 row-cols-md-1 justify-content-center">
                 <div>
                     <hr class="mt-2">
                     <div class="my-2">
@@ -85,7 +100,35 @@
                 var totalPrice = price*count;
                 $("#totalPrice").html(totalPrice + '원');
             }
+            function showReview(){
+                var url ="/reviews/" + $("#flowerId").val();
+                $.ajax({
+                    url : url,
+                    type : "GET",
+                    contentType : "application/json",
 
+                    dataType : "text",
+                    cache : false,
+                    success : function (result, status){
+                        console.log("댓글보여주기");
+                    },
+                    error : function (jqXHR, status, error){
+                        if (jqXHR.status == '401') {
+                            alert("로그인 후 이용해주세요");
+                            location.href ='/members/login';
+                        }else{
+                            alert(jqXHR.responseText);
+                        }
+
+                    }
+
+                }).done(function (result){
+                    console.log(result);
+                    $("#reviewList").replaceWith(result);
+
+                })
+
+            }
             function order(){
                 var token = $("meta[name='_csrf']").attr("content");
                 var header = $("meta[name='_csrf_header']").attr("content");
@@ -109,7 +152,7 @@
                     },
                     dataType : "json",
                     cache : false,
-                    success : function (result, status){
+                    success : function (result, status, fragment){
                         alert("주문이 완료 되었습니다.");
                         location.href='/';
                     },

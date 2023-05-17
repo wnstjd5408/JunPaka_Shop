@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
@@ -22,6 +22,7 @@
       <th:block layout:fragment="section"></th:block>
       <th:block layout:fragment="paging"></th:block>
       <th:block layout:fragment="content"></th:block>
+      <th:block layout:fragment="review"></th:block>
       <th:block th:replace="~{fragments/footer :: footer}"></th:block>
 
       <!-- Core theme JS-->

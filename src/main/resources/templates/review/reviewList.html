@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+  <th:block layout:fragment="review" th:if="${not #strings.isEmpty(reviews)}"  class="py-5">
+    <div id="reviewList"  class="text-center my-1 rounded">
+        <h2>페이지 바뀜</h2>
+        <ul>
+            <th:block th:each="review : ${reviews}">
+                <li th:text="|${review.rating} ${review.username}|"></li>
+                <li th:text="${review.comment}"></li>
+            </th:block>
+        </ul>
+
+    </div>
+  </th:block>
+</html>
