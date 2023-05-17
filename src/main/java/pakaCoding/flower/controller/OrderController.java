@@ -55,6 +55,8 @@ public class OrderController {
         return "order/orderMyPage";
     }
 
+
+
     //단일 상품 주문
     @PostMapping(value = "/order")
     @ResponseBody
@@ -76,7 +78,7 @@ public class OrderController {
         }catch (Exception e){
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<Long>(orderId, HttpStatus.OK);
+        return ResponseEntity.ok(orderId);
     }
 
     //CartCount 추가
