@@ -70,7 +70,23 @@ public class ReviewController {
 
         return "redirect:/orders";
     }
+
     @GetMapping(value = {"/reviews/{flowerId}"})
+    public String reviewPage(@PathVariable("flowerId") Long flowerId,
+                             @RequestParam(value="page", defaultValue = "0") int page,
+                             Model model){
+
+        log.info("reviewPage : 실행");
+        Page<ReviewDto> allReview = reviewService.findAllReview(flowerId, page);
+
+        model.addAttribute("maxPage", 5);
+        model.addAttribute("reviews", allReview);
+
+        return "review/reviewList";
+
+    }
+
+//    @GetMapping(value = {"/reviews/{flowerId}"})
     @ResponseBody
     public DeferredResult<ResponseEntity<Page<ReviewDto>>> showReview(@PathVariable("flowerId") Long flowerId,
                                                                       @RequestParam(value="page", defaultValue = "0") int page){
