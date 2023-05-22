@@ -20,9 +20,6 @@ import pakaCoding.flower.repository.OrderItemRepository;
 import pakaCoding.flower.repository.ReviewRepository;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +31,7 @@ public class ReviewService {
     private final MemberRepository memberRepository;
     private final OrderItemRepository orderItemRepository;
 
-    public Long saveReview(ReviewFormDto reviewFormDto, String userId){
+    public void saveReview(ReviewFormDto reviewFormDto, String userId){
         log.info("ReviewService에서 saveReview 실행");
 
         OrderItem orderItem = orderItemRepository.findById(reviewFormDto.getOrderItemId()).orElseThrow(EntityNotFoundException::new);
@@ -42,10 +39,8 @@ public class ReviewService {
 
         Member member = memberRepository.findByUserid(userId).orElseThrow(EntityNotFoundException::new);
         Review review = Review.createReview(member, flower, orderItem, reviewFormDto.getComment(), reviewFormDto.getRating());
-        Review findReview = reviewRepository.save(review);
+        reviewRepository.save(review);
 
-
-        return findReview.getId();
 
     }
 
