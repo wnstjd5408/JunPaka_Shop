@@ -81,7 +81,7 @@ public class ReviewController {
 
         model.addAttribute("maxPage", 5);
         model.addAttribute("reviews", allReview);
-
+        model.addAttribute("total", allReview.getTotalElements());
         return "review/reviewList";
 
     }

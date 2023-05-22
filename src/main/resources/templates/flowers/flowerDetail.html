@@ -4,6 +4,11 @@
         <title th:text="${flower.name}">${flower.name}</title>
         <meta name="_csrf" th:content="${_csrf.token}">
         <meta name="_csrf_header" th:content="${_csrf.headerName}">
+        <style>
+            .checked{
+                color : orange;
+            }
+        </style>
     </head>
     <!-- content   -->
     <th:block layout:fragment="content" class="py-5">
@@ -64,9 +69,7 @@
                     </button>
                 </div>
             </div>
-            <div id="reviewList" class="row gx-3 gx-lg-3 row-cols-1 row-cols-md-1 justify-content-center">
 
-            </div>
             <div id="item" class="row gx-3 gx-lg-3 row-cols-1 row-cols-md-1 justify-content-center">
                 <div>
                     <hr class="mt-2">
@@ -79,10 +82,14 @@
                     </div>
                 </div>
             </div>
+
+            <div id="reviewList" class="row gx-3 gx-lg-3 row-cols-1 row-cols-md-1 justify-content-center">
+
+            </div>
         </div>
     </th:block>
     <th:block layout:fragment="script">
-
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
         <script th:inline="javascript">
             /*<![CDATA[*/
             $(document).ready(function(){
