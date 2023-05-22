@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+  <th:block layout:fragment="review" th:if="${not #strings.isEmpty(reviews)}"  class="py-5">
+    <div id="reviewList"  class="text-sm-start my-1 rounded">
+        <h2 th:text="|리뷰 (${total})|"></h2>
+        <th:block th:each="review : ${reviews}">
+            <hr class="mt-2">
+            <div class="text-start mb-4">
+                <div class="list-group list-group-flush border-bottom">
+                    <div class="list-group-item row">
+                        <div>
+                            <th:block th:if="${review.rating} == 5">
+                                <th:block th:each="num : ${#numbers.sequence(1, review.rating)}">
+                                    <i class="fa fa-star checked" ></i>
+                                </th:block>
+                            </th:block>
+                            <th:block th:if="${review.rating} == 4 or ${review.rating} == 3 or ${review.rating} == 2 or ${review.rating} == 1">
+                                <th:block th:each="num : ${#numbers.sequence(1, review.rating)}">
+                                    <i class="fa fa-star checked" ></i>
+                                </th:block>
+                                <th:block th:each="num : ${#numbers.sequence(1, 5 - review.rating)}">
+                                    <i class="fa fa-star" ></i>
+                                </th:block>
+                            </th:block>
+                            <span class="mb-1" th:text="${review.createReviewDate}"></span>
+                        </div>
+                    </div>
+                    <div class="list-group-item">
+                        <span>
+                            <strong th:text="${review.username}" class="mb-3">
+                               </strong>
+                        </span>
+                    </div>
+                    <div class="list-group-item">
+                        <span th:text="${review.comment}" class="mb-3"></span>
+                    </div>
+                </div>
+
+            </div>
+        </th:block>
+    </div>
+  </th:block>
+</html>
