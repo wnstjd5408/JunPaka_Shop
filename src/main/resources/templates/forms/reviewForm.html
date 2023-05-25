@@ -38,7 +38,8 @@
         <div class="py-5 text-center">
             <h3>리뷰등록</h3>
         </div>
-        <form th:object="${reviewFormDto}" th:action="@{/reviews/form}" method="post" id="myform">
+        <form th:object="${reviewFormDto}" th:action="@{/reviews/form}" method="post" id="myform"
+              enctype="multipart/form-data">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
             <div class="mb-3">
                 <legend class="form-label">별점</legend>
@@ -49,6 +50,10 @@
                     <input type="radio" th:field="*{rating}" data-th-value="2" id="rate4"><label for="rate4">⭐</label>
                     <input type="radio" th:field="*{rating}" data-th-value="1" id="rate5"><label for="rate5">⭐</label>
                 </fieldset>
+            </div>
+            <div class="mb-3">
+                <label for ="reviewImage" class="form-label">이미지</label>
+                <input type="file" class="form-control" name="multipartFile" multiple id="reviewImage"/>
             </div>
             <div class="mb-3">
                 <legend for="comment" class="form-label fs-4">리뷰 남기기</legend>
