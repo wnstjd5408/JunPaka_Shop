@@ -109,16 +109,7 @@ public class FileImageService {
         return files;
     }
 
-    //Flower 별로 이미지 파일 들고오기
-    public List<FileImage> oneFlowerImageFile(Long flowerId){
-        return fileImageRepository.findByFlowerId(flowerId);
-    }
 
-
-
-    public FileImage findBySavedFileImgName(String savedFileImgName){
-        return fileImageRepository.findBySavedFileImgName(savedFileImgName).get();
-    }
 
     private FileImageDto buildFileDto(MultipartFile file1, String originFileName, String extension, String savedFileName, Flower flower, String repimgYn) {
         return FileImageDto.builder()

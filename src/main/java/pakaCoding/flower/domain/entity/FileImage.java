@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "fileImage")
+@Table(name = "file_image")
 public class FileImage{
 
     @Id
