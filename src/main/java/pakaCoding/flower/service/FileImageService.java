@@ -8,10 +8,13 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
+import pakaCoding.flower.domain.entity.Review;
 import pakaCoding.flower.dto.FileImageDto;
 import pakaCoding.flower.dto.FlowerFormDto;
+import pakaCoding.flower.dto.ReviewFormDto;
 import pakaCoding.flower.repository.FileImageRepository;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.*;
 
@@ -32,7 +35,72 @@ public class FileImageService {
 
 
 
-    //파일 저장
+    //리뷰 이미지 저장
+    public List<FileImageDto> saveReviewFile(ReviewFormDto reviewFormDto){
+        log.info("saveReviewFile 실행");
+        Review review = reviewFormDto.toEntity();
+
+
+        List<MultipartFile> multipartFileList =  reviewFormDto.getMultipartFile();
+        List<FileImageDto> files = new ArrayList<>();
+
+
+        Map<String, Object> result = new HashMap<>();
+        FileImageDto file = null;
+        Long fileId = null;
+
+        List<Long> fileIds = new ArrayList<>();
+
+        int count = 0;
+        try{
+            if(!multipartFileList.get(0).getOriginalFilename().equals(""))
+                for (MultipartFile file1 : multipartFileList) {
+                    log.info("file1 = {}", file1.getOriginalFilename());
+
+                    String originalFilename = file1.getOriginalFilename();
+                    String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+                    String saveFileName = UUID.randomUUID() + extension;
+
+                    File targetFile = new File(uploadDir + saveFileName);
+
+                    result.put("result", "FAIL");
+
+                    if (count != 0) {
+                        file = buildFileDto(file1, originalFilename, extension, saveFileName,  "N");
+                    } else {
+                        file = buildFileDto(file1, originalFilename, extension, saveFileName, "Y");
+                    }
+
+                    //List 파일 추가
+                    files.add(file);
+
+                    try {
+                        InputStream fileStream = file1.getInputStream();
+                        copyInputStreamToFile(fileStream, targetFile); //파일저장
+
+                        //배열에 담기
+                        fileIds.add(fileId);
+                        result.put("fileIdxs", fileIds.toString());
+                        result.put("result", "OK");
+                    } catch (Exception e) {
+                        deleteQuietly(targetFile); //저장된 현재 파일 삭제
+                        e.printStackTrace();
+                        result.put("result", "FAIL");
+                        break;
+                    }
+
+                    count += 1;
+                }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return files;
+    }
+
+
+
+    //아이템 파일 저장
     public List<FileImageDto> saveFile(FlowerFormDto flowerDto) throws Exception {
         log.info("saveFile 실행");
         Flower flower = flowerDto.toEntity();
@@ -61,16 +129,16 @@ public class FileImageService {
                     String saveFileName = UUID.randomUUID() + extension;
 
 
-                    java.io.File targetFile = new java.io.File(uploadDir + saveFileName);
+                    java.io.File targetFile = new File(uploadDir + saveFileName);
 
 
                     //초기값으로 fail 설정
                     result.put("result", "FAIL");
 
                     if (count != 0) {
-                        file = buildFileDto(file1, originalFilename, extension, saveFileName, flower, "N");
+                        file = buildFileDto(file1, originalFilename, extension, saveFileName,  "N");
                     } else {
-                        file = buildFileDto(file1, originalFilename, extension, saveFileName, flower, "Y");
+                        file = buildFileDto(file1, originalFilename, extension, saveFileName, "Y");
                     }
 
                     //List 파일 추가
@@ -103,7 +171,7 @@ public class FileImageService {
 
 
 
-    private FileImageDto buildFileDto(MultipartFile file1, String originFileName, String extension, String savedFileName, Flower flower, String repimgYn) {
+    private FileImageDto buildFileDto(MultipartFile file1, String originFileName, String extension, String savedFileName, String repimgYn) {
         return FileImageDto.builder()
                 .originFileName(originFileName)
                 .savedFileName(savedFileName)

@@ -9,10 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pakaCoding.flower.domain.entity.Flower;
-import pakaCoding.flower.domain.entity.Member;
-import pakaCoding.flower.domain.entity.OrderItem;
-import pakaCoding.flower.domain.entity.Review;
+import pakaCoding.flower.domain.entity.*;
+import pakaCoding.flower.dto.FileImageDto;
 import pakaCoding.flower.dto.ReviewDto;
 import pakaCoding.flower.dto.ReviewFormDto;
 import pakaCoding.flower.repository.MemberRepository;
@@ -20,6 +18,7 @@ import pakaCoding.flower.repository.OrderItemRepository;
 import pakaCoding.flower.repository.ReviewRepository;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +28,7 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final MemberRepository memberRepository;
+    private final FileImageService fileImageService;
     private final OrderItemRepository orderItemRepository;
 
     public void saveReview(ReviewFormDto reviewFormDto, String userId){
@@ -41,7 +41,11 @@ public class ReviewService {
         Review review = Review.createReview(member, flower, orderItem, reviewFormDto.getComment(), reviewFormDto.getRating());
         reviewRepository.save(review);
 
-
+        List<FileImageDto> reviewFiles =fileImageService.saveReviewFile(reviewFormDto);
+        List<ReviewImage> reviewImages = reviewFiles.stream()
+                .map(FileImageDto::toEntityReviewImage)
+                .collect(Collectors.toList());
+        review.addReviewFiles(reviewImages);
     }
 
     @Transactional(readOnly = true)

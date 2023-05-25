@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
+import pakaCoding.flower.domain.entity.ReviewImage;
 
 @Data
 public class FileImageDto {
@@ -52,6 +53,20 @@ public class FileImageDto {
                 .repimgYn(repimgYn)
                 .build();
     }
+
+    /* DTO -> Entiyu*/
+    public ReviewImage toEntityReviewImage() {
+        return ReviewImage.builder()
+                .originFileImgName(originFileName)
+                .savedFileImgName(imgUrl)
+                .uploadDir(uploadDir)
+                .extension(extension)
+                .size(size)
+                .contentType(contentType)
+                .repimgYn(repimgYn)
+                .build();
+    }
+
     /* Entity -> Dto */
     public FileImageDto(FileImage fileImage){
         this.imgUrl = fileImage.getSavedFileImgName();
