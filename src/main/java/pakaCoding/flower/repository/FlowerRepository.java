@@ -24,7 +24,7 @@ public interface FlowerRepository extends JpaRepository<Flower, Long> {
      @Query(value = "Select new pakaCoding.flower.dto.MainFlowerDto(f.id, f.name, fi.savedFileImgName, f.price) " +
              "from Flower  f join f.fileImages fi " +
              "where f.type.id = :typeId " +
-             "and fi.repimgYn = 'Y' " +
+             "and fi.repImgYn = 'Y' " +
              "and f.id = fi.flower.id " +
              "order by f.createDate desc")
      Page<MainFlowerDto> findAllByTypeIdListDtos(@Param("typeId") int typeId, Pageable pageable);
@@ -37,7 +37,7 @@ public interface FlowerRepository extends JpaRepository<Flower, Long> {
 
      @Query ("select new pakaCoding.flower.dto.MainFlowerDto(f.id, f.name, fi.savedFileImgName, f.price) " +
              "from Flower f join f.fileImages fi " +
-             "where fi.repimgYn= 'Y' " +
+             "where fi.repImgYn= 'Y' " +
              "and f.id = fi.flower.id " +
              "order by  f.createDate DESC")
      Page<MainFlowerDto> findFlowerListDto(Pageable pageable);

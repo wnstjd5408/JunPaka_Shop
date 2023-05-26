@@ -1,13 +1,18 @@
 package pakaCoding.flower.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import pakaCoding.flower.domain.entity.FileImage;
-import pakaCoding.flower.domain.entity.Flower;
+import lombok.NoArgsConstructor;
+import pakaCoding.flower.domain.entity.Image;
+import pakaCoding.flower.domain.entity.ItemImage;
 import pakaCoding.flower.domain.entity.ReviewImage;
 
 @Data
-public class FileImageDto {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class ImageDto {
 
 
     private Long id;
@@ -24,37 +29,25 @@ public class FileImageDto {
 
     private String contentType; //ContentType
 
-    private String repimgYn;
+    private String repImgYn;
 
-    public FileImageDto() {
-    }
 
-    @Builder
-    public FileImageDto(Long id, String originFileName, String savedFileName, String uploadDir, String extension, Long size, String contentType, String repimgYn) {
-        this.id = id;
-        this.originFileName = originFileName;
-        this.imgUrl = savedFileName;
-        this.uploadDir = uploadDir;
-        this.extension = extension;
-        this.size = size;
-        this.contentType = contentType;
-        this.repimgYn = repimgYn;
-    }
+
 
     /* DTO -> Entity*/
-    public FileImage toEntity(){
-        return FileImage.builder()
+    public ItemImage toEntity(){
+        return ItemImage.builder()
                 .originFileImgName(originFileName)
                 .savedFileImgName(imgUrl)
                 .uploadDir(uploadDir)
                 .extension(extension)
                 .size(size)
                 .contentType(contentType)
-                .repimgYn(repimgYn)
+                .repImgYn(repImgYn)
                 .build();
     }
 
-    /* DTO -> Entiyu*/
+    /* DTO -> Entity*/
     public ReviewImage toEntityReviewImage() {
         return ReviewImage.builder()
                 .originFileImgName(originFileName)
@@ -63,13 +56,13 @@ public class FileImageDto {
                 .extension(extension)
                 .size(size)
                 .contentType(contentType)
-                .repimgYn(repimgYn)
+                .repImgYn(repImgYn)
                 .build();
     }
 
     /* Entity -> Dto */
-    public FileImageDto(FileImage fileImage){
-        this.imgUrl = fileImage.getSavedFileImgName();
+    public ImageDto(Image image){
+        this.imgUrl = image.getSavedFileImgName();
     }
 
 }
