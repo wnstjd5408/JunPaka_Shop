@@ -8,8 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import pakaCoding.flower.domain.constant.FlowerSellStatus;
-import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
+import pakaCoding.flower.domain.entity.Image;
+import pakaCoding.flower.domain.entity.ItemImage;
 import pakaCoding.flower.domain.entity.Type;
 
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ import java.util.List;
 class FileImageRepositoryTest {
 
     @Autowired
-    FileImageRepository fileImageRepository;
+    ItemImageRepository imageRepository;
     @Autowired
     FlowerRepository flowerRepository;
 
@@ -36,7 +37,7 @@ class FileImageRepositoryTest {
 
     @AfterEach
     void afterEach(){
-        fileImageRepository.deleteAll();
+        imageRepository.deleteAll();
     }
 
 
@@ -44,10 +45,9 @@ class FileImageRepositoryTest {
     public void fileImageTest(){
         Flower flower1 = flowerRepository.findById(1L).get();
 
-        List<FileImage> byFlowerIdOrderByIdDesc = fileImageRepository.findByFlowerId(flower1.getId());
+        List<ItemImage> byFlowerId = imageRepository.findByFlowerId(flower1.getId());
 
-        log.info("1번의 개수 = {}", byFlowerIdOrderByIdDesc.size());
-
+        log.info("1번의 개수 = {}", byFlowerId.size());
     }
 
     @Test
@@ -57,25 +57,24 @@ class FileImageRepositoryTest {
         for (int i = 1; i <= 100; i++) {
             Flower fs = registerFLower("장미꽃다발", 15000, 1, type1);
             flowerRepository.save(fs);
-            FileImage fileImage = FileImage.builder()
-                    .repimgYn("Y")
+            ItemImage image = ItemImage.builder()
+                    .repImgYn("Y")
                     .contentType("10000")
                     .extension("1")
                     .originFileImgName("1")
                     .savedFileImgName("!")
                     .size(1000L)
                     .uploadDir("www")
-                    .flower(fs)
                     .build();
-            fileImageRepository.save(fileImage);
+            imageRepository.save(image);
         }
-        List<FileImage> fileImageList = new ArrayList<>();
+        List<Image> fileImageList = new ArrayList<>();
 
         for(Long i = 1L; i<=100L; i+= 1L){
 
             Flower flower = flowerRepository.findById(i).get();
-            FileImage fileImage = fileImageRepository.findByFlowerIdAndRepimgYn(flower.getId(), "Y");
-            fileImageList.add(fileImage);
+            Image image = imageRepository.findByFlowerIdAndRepImgYn(flower.getId(), "Y");
+            fileImageList.add(image);
         }
 
         log.info("file = {}", fileImageList.size());

@@ -2,7 +2,6 @@ package pakaCoding.flower.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import pakaCoding.flower.domain.constant.FlowerSellStatus;
 import pakaCoding.flower.dto.FlowerFormDto;
 import pakaCoding.flower.exception.OutOfStockException;
@@ -46,7 +45,7 @@ public class Flower extends BaseEntity {
     private String delYn;       //삭제여부
 
     @OneToMany(mappedBy = "flower", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    private List<FileImage> fileImages = new ArrayList<>();
+    private List<ItemImage> fileImages = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private FlowerSellStatus flowerSellStatus;
@@ -63,9 +62,9 @@ public class Flower extends BaseEntity {
 //    }
 
 
-    public void addFiles(List<FileImage> fileImages){
+    public void addFiles(List<ItemImage> fileImages){
         this.fileImages = fileImages;
-        fileImages.forEach(fileImage -> fileImage.setFlower(this));
+        fileImages.forEach(ii -> ii.setFlower(this));
     }
 
 

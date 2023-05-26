@@ -2,7 +2,6 @@ package pakaCoding.flower.dto;
 
 import lombok.Data;
 import pakaCoding.flower.domain.constant.FlowerSellStatus;
-import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
 
 import java.util.List;

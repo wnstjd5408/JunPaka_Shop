@@ -9,12 +9,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pakaCoding.flower.domain.constant.DeliveryStatus;
 import pakaCoding.flower.domain.entity.*;
 import pakaCoding.flower.dto.OrderDto;
 import pakaCoding.flower.dto.OrderItemDto;
 import pakaCoding.flower.dto.OrderMyPageDto;
-import pakaCoding.flower.repository.FileImageRepository;
+import pakaCoding.flower.repository.ItemImageRepository;
 import pakaCoding.flower.repository.FlowerRepository;
 import pakaCoding.flower.repository.MemberRepository;
 import pakaCoding.flower.repository.OrderRepository;
@@ -31,7 +30,7 @@ public class OrderService {
 
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
-    private final FileImageRepository fileImageRepository;
+    private final ItemImageRepository fileImageRepository;
     private final FlowerRepository flowerRepository;
 
 
@@ -88,9 +87,9 @@ public class OrderService {
                     OrderMyPageDto orderMyPageDto = new OrderMyPageDto(o);
                     List<OrderItem> orderItems = o.getOrderItems();
                     for (OrderItem orderItem : orderItems) {
-                        FileImage fileImage =
-                                fileImageRepository.findByFlowerIdAndRepimgYn(orderItem.getFlower().getId(), "Y");
-                        OrderItemDto orderItemDto = new OrderItemDto(orderItem, fileImage.getSavedFileImgName());
+
+                        Image image = fileImageRepository.findByFlowerIdAndRepImgYn(orderItem.getFlower().getId(), "Y");
+                        OrderItemDto orderItemDto = new OrderItemDto(orderItem, image.getSavedFileImgName());
                         orderMyPageDto.addOrderItemDto(orderItemDto);
                     }
                     return orderMyPageDto;

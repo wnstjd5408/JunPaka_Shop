@@ -7,6 +7,9 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import pakaCoding.flower.domain.constant.ReviewStatus;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,6 +39,15 @@ public class Review extends TimeEntity{
     private Member member;
 
 
+    @OneToMany(mappedBy = "review", cascade = CascadeType.PERSIST)
+    private List<ReviewImage> reviewImages = new ArrayList<>();
+
+
+
+    public void addReviewFiles(List<ReviewImage> reviewImages){
+        this.reviewImages = reviewImages;
+        reviewImages.forEach(reviewImage -> reviewImage.setReview(this));
+    }
     //==생성 메서드==//
     public static Review createReview(Member member, Flower flower, OrderItem orderItem, String comment, int rating){
 
