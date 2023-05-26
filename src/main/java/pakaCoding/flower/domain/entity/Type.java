@@ -16,7 +16,8 @@ import java.util.List;
 @NoArgsConstructor
 public class Type {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "type_id")
     private int id;
 
