@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pakaCoding.flower.domain.entity.*;
-import pakaCoding.flower.dto.FileImageDto;
+import pakaCoding.flower.dto.ImageDto;
 import pakaCoding.flower.dto.ReviewDto;
 import pakaCoding.flower.dto.ReviewFormDto;
 import pakaCoding.flower.repository.MemberRepository;
@@ -41,10 +41,10 @@ public class ReviewService {
         Review review = Review.createReview(member, flower, orderItem, reviewFormDto.getComment(), reviewFormDto.getRating());
         reviewRepository.save(review);
 
-        List<FileImageDto> reviewFiles =fileImageService.saveReviewFile(reviewFormDto);
-        List<ReviewImage> reviewImages = reviewFiles.stream()
-                .map(FileImageDto::toEntityReviewImage)
-                .collect(Collectors.toList());
+        List<ImageDto> reviewFiles =fileImageService.saveReviewFile(reviewFormDto);
+        List<ReviewImage> reviewImages = reviewFiles.stream().
+                        map(ImageDto::toEntityReviewImage).
+                        collect(Collectors.toList());
         review.addReviewFiles(reviewImages);
     }
 

@@ -1,12 +1,9 @@
 package pakaCoding.flower.repository;
 
 import lombok.extern.slf4j.Slf4j;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,8 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import pakaCoding.flower.domain.constant.FlowerSellStatus;
-import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
+import pakaCoding.flower.domain.entity.ItemImage;
 import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.dto.MainFlowerDto;
 
@@ -36,7 +33,7 @@ class FlowerRepositoryTest {
     TypeRepository typeRepository;
 
     @Autowired
-    FileImageRepository fileImageRepository;
+    ItemImageRepository imageRepository;
 
     @BeforeEach
     void beforeEach() {
@@ -60,17 +57,16 @@ class FlowerRepositoryTest {
         for(int i = 1; i<=100; i++){
             Flower fs = registerFLower("장미꽃다발", 15000, 1, type1);
             flowerRepository.save(fs);
-            FileImage fileImage = FileImage.builder()
-                    .repimgYn("Y")
+            ItemImage image = ItemImage.builder()
+                    .repImgYn("Y")
                     .contentType("10000")
                     .extension("1")
                     .originFileImgName("1")
                     .savedFileImgName("!")
                     .size(1000L)
                     .uploadDir("www")
-                    .flower(fs)
                     .build();
-            fileImageRepository.save(fileImage);
+            imageRepository.save(image);
         }
 
 
@@ -82,8 +78,7 @@ class FlowerRepositoryTest {
         Page<MainFlowerDto> flowers = flowerRepository.findAllByTypeIdListDtos(type1.getId(), pageable);
         log.info("flowers.getTotalElements = {}", flowers.getTotalElements());
         log.info("flower 사이즈 ={}", flowers.getSize());
-        List<FileImage> byFlowerIdOrderByIdDesc = fileImageRepository.findByFlowerId(flowers.getContent().get(0).getId());
-        log.info("FileImage 0번의 개수 = {}", byFlowerIdOrderByIdDesc.size());
+
     }
 
 

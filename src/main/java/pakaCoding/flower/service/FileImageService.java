@@ -6,13 +6,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import pakaCoding.flower.domain.entity.FileImage;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Review;
-import pakaCoding.flower.dto.FileImageDto;
 import pakaCoding.flower.dto.FlowerFormDto;
+import pakaCoding.flower.dto.ImageDto;
 import pakaCoding.flower.dto.ReviewFormDto;
-import pakaCoding.flower.repository.FileImageRepository;
+import pakaCoding.flower.repository.ItemImageRepository;
 
 import java.io.File;
 import java.io.InputStream;
@@ -31,22 +30,22 @@ public class FileImageService {
     @Value("${upload.path}")
     private String uploadDir;
 
-    private final FileImageRepository fileImageRepository;
+    private final ItemImageRepository fileImageRepository;
 
 
 
     //리뷰 이미지 저장
-    public List<FileImageDto> saveReviewFile(ReviewFormDto reviewFormDto){
+    public List<ImageDto> saveReviewFile(ReviewFormDto reviewFormDto){
         log.info("saveReviewFile 실행");
         Review review = reviewFormDto.toEntity();
 
 
         List<MultipartFile> multipartFileList =  reviewFormDto.getMultipartFile();
-        List<FileImageDto> files = new ArrayList<>();
+        List<ImageDto> files = new ArrayList<>();
 
 
         Map<String, Object> result = new HashMap<>();
-        FileImageDto file = null;
+        ImageDto file = null;
         Long fileId = null;
 
         List<Long> fileIds = new ArrayList<>();
@@ -101,13 +100,13 @@ public class FileImageService {
 
 
     //아이템 파일 저장
-    public List<FileImageDto> saveFile(FlowerFormDto flowerDto) throws Exception {
+    public List<ImageDto> saveFile(FlowerFormDto flowerDto) throws Exception {
         log.info("saveFile 실행");
         Flower flower = flowerDto.toEntity();
 
 
         List<MultipartFile> multipartFileList  = flowerDto.getMultipartFile();
-        List<FileImageDto> files = new ArrayList<>();
+        List<ImageDto> files = new ArrayList<>();
         log.info("multipartFileList ={}", multipartFileList);
 
         MultipartFile thumbnails = flowerDto.getThumbnails();
@@ -115,7 +114,7 @@ public class FileImageService {
 
         //결과 map
         Map<String, Object> result = new HashMap<>();
-        FileImageDto file = null;
+        ImageDto file = null;
         Long fileId = null;
         //파일 시퀀스 리스트
         List<Long> fileIds = new ArrayList<>();
@@ -171,15 +170,15 @@ public class FileImageService {
 
 
 
-    private FileImageDto buildFileDto(MultipartFile file1, String originFileName, String extension, String savedFileName, String repimgYn) {
-        return FileImageDto.builder()
+    private ImageDto buildFileDto(MultipartFile file1, String originFileName, String extension, String savedFileName, String repImgYn) {
+        return ImageDto.builder()
                 .originFileName(originFileName)
-                .savedFileName(savedFileName)
+                .imgUrl(savedFileName)
                 .uploadDir(uploadDir)
                 .extension(extension)
                 .size(file1.getSize())
                 .contentType(file1.getContentType())
-                .repimgYn(repimgYn)
+                .repImgYn(repImgYn)
                 .build();
     }
 
