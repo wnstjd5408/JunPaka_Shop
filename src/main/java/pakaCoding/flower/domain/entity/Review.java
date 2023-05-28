@@ -29,9 +29,10 @@ public class Review extends TimeEntity{
     @NotNull
     private String comment;
 
+    @Column(nullable = false)
     private int rating;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="flower_id") //외래키
     private Flower flower;
 

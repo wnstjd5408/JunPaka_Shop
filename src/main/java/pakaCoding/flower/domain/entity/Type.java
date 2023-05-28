@@ -1,6 +1,8 @@
 package pakaCoding.flower.domain.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Null;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,6 +23,7 @@ public class Type {
     @Column(name = "type_id")
     private int id;
 
+    @NotNull
     private String typename;
 
     @ColumnDefault("0")
