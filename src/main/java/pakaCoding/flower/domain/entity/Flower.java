@@ -1,7 +1,9 @@
 package pakaCoding.flower.domain.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import pakaCoding.flower.domain.constant.FlowerSellStatus;
 import pakaCoding.flower.dto.FlowerFormDto;
 import pakaCoding.flower.exception.OutOfStockException;
@@ -22,7 +24,7 @@ public class Flower extends BaseEntity {
     @Column(name ="flower_id")
     private Long id;            //번호
 
-    @Column(name = "flower_name")
+    @Column(name = "flower_name", length = 100)
     private String name;        //이름
 
     @Column(nullable = false)
@@ -39,9 +41,10 @@ public class Flower extends BaseEntity {
     @JoinColumn(name ="type_id")
     private Type type;
 
+    @ColumnDefault("0")
     private Long hitCount;      //조회수
 
-
+    @NotNull
     private String delYn;       //삭제여부
 
     @OneToMany(mappedBy = "flower", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)

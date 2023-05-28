@@ -34,6 +34,7 @@ public class Member extends BaseEntity {
 
     @Length(min=5, message = "최소 5글자 이상 입력해주세요")
     @NotEmpty(message = "*비밀번호를 다시 입력해주세요")
+    @NotNull
     private String password;
 
     @NotNull
@@ -43,16 +44,17 @@ public class Member extends BaseEntity {
     private String userid;
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 20)
     @NotNull
     private Gender gender; //성별 [남, 녀]
 
-    @Column(name="birth_date")
     @DateTimeFormat(pattern = "yyyy-mm-dd")
     @NotNull
     private LocalDate birthDate;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
+    @NotNull
     private Role role;
 
     @Embedded // Embedded 또는 Embeddable(클래스에) 둘 중 하나의 어노테이션만 있어도 되긴 한다.

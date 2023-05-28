@@ -1,6 +1,7 @@
 package pakaCoding.flower.domain.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -36,6 +37,7 @@ public class Order extends BaseEntity{
 
 
     @Enumerated(EnumType.STRING)
+    @NotNull
     private OrderStatus orderStatus;
 
 

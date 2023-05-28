@@ -1,6 +1,7 @@
 package pakaCoding.flower.domain.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import pakaCoding.flower.domain.constant.DeliveryStatus;
@@ -22,10 +23,13 @@ public class Delivery {
 
 
     @Embedded
+    @NotNull
     private Address address;
 
 
     @Enumerated(EnumType.STRING)  //타입은 반드시 String으로!
+    @Column(length = 100)
+    @NotNull
     private DeliveryStatus deliveryStatus; //ENUM[READY(준비), COMP(배송)]
 
     //== 생성 메서드 == //

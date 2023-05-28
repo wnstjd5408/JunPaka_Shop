@@ -1,5 +1,6 @@
 package pakaCoding.flower.domain.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,6 +12,8 @@ public class Address {
 
     private String streetAdr;
     private String detailAdr;
+
+    @Column(length = 100)
     private String zipcode;
 
 

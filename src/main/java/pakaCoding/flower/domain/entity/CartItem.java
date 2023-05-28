@@ -1,6 +1,7 @@
 package pakaCoding.flower.domain.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.Getter;
 
@@ -11,6 +12,7 @@ public class CartItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "cart_item_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -22,6 +24,7 @@ public class CartItem {
     @JoinColumn(name ="flower_id")
     private Flower flower;
 
+    @NotNull
     private int count;
 
     public static CartItem createCartItem(Cart cart, Flower flower, int count){

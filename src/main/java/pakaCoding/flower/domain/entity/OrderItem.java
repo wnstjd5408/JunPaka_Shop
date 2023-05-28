@@ -34,6 +34,7 @@ public class OrderItem {
 
 
     @Enumerated(EnumType.STRING)
+    @NotNull
     private ReviewStatus reviewStatus; //리뷰여부
 
 
