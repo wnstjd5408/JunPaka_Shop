@@ -2,7 +2,6 @@ package pakaCoding.flower.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import pakaCoding.flower.domain.entity.FileImage;
 
 @Data
 public class MainFlowerDto {

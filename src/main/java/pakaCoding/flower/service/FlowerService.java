@@ -12,10 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.ItemImage;
 import pakaCoding.flower.domain.entity.Type;
-import pakaCoding.flower.dto.FlowerDetailDto;
-import pakaCoding.flower.dto.FlowerFormDto;
-import pakaCoding.flower.dto.ImageDto;
-import pakaCoding.flower.dto.MainFlowerDto;
+import pakaCoding.flower.dto.*;
 import pakaCoding.flower.repository.FlowerRepository;
 import pakaCoding.flower.repository.ItemImageRepository;
 
@@ -72,6 +69,19 @@ public class FlowerService {
         }
         Flower flower = flowerRepository.findById(flowerId).orElseThrow(EntityNotFoundException::new);
         return new FlowerDetailDto(flower, imgUrlList);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<AdminItemListDto> adminPageFindAllFlowers(int page){
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Flower> adminFlowers = flowerRepository.findAdminFlowers(pageable);
+
+        return adminFlowers.map(f -> AdminItemListDto.builder()
+                .itemName(f.getName())
+                .stockQuantity(f.getStockQuantity())
+                .price(f.getPrice())
+                .id(f.getId())
+                .build());
     }
 
     @Transactional(readOnly = true)

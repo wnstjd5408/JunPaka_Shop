@@ -10,10 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pakaCoding.flower.domain.entity.Type;
-import pakaCoding.flower.dto.FlowerDetailDto;
-import pakaCoding.flower.dto.FlowerFormDto;
-import pakaCoding.flower.dto.MainFlowerDto;
-import pakaCoding.flower.dto.MemberSessionDto;
+import pakaCoding.flower.dto.*;
 import pakaCoding.flower.service.CartService;
 import pakaCoding.flower.service.FlowerService;
 import pakaCoding.flower.service.TypeService;
@@ -45,6 +42,21 @@ public class FlowerController {
         model.addAttribute("types", types);
         return "forms/flowerForm";
     }
+    @GetMapping("/admin/flowers")
+    public String itemManage(Model model,
+                             @RequestParam(value = "page", defaultValue = "0") int page){
+
+        Page<AdminItemListDto> items = flowerService.adminPageFindAllFlowers(page);
+
+        log.info("flower.getTotalPages = {}", items.getTotalPages());
+
+        model.addAttribute("maxPage", 5);
+        model.addAttribute("flowers", items);
+
+        pageModelPut(items, model);
+
+        return "flowers/itemMng";
+    }
 
     @PostMapping("/flowers/create")
     public String save(@Valid FlowerFormDto flowerFormDto,
@@ -72,6 +84,7 @@ public class FlowerController {
         return "redirect:/flowers/{flowerId}";
     }
 
+
     @GetMapping(value = {"/flowers", "/"})
     public String list(Principal principal,
                        Model model,
@@ -98,10 +111,11 @@ public class FlowerController {
         model.addAttribute("types", types);
 
         pageModelPut(flowers, model);
+
         return "flowers/flowerList";
     }
 
-    private void pageModelPut(Page<MainFlowerDto> results, Model model){
+    private <T> void pageModelPut(Page<T> results, Model model){
         model.addAttribute("totalCount", results.getTotalElements());
         model.addAttribute("size", results.getPageable().getPageSize());
         model.addAttribute("number", results.getPageable().getPageNumber());
@@ -121,6 +135,7 @@ public class FlowerController {
         }
 
         log.info("FlowerController 실행");
+
         Page<MainFlowerDto> flowersType = flowerService.findFlowersType(typeId, page);
         List<Type> types = typeService.allType();
 
