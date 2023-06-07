@@ -14,6 +14,7 @@
             <div class="py-5 text-center">
                 <h3>상품등록</h3>
             </div>
+
             <form th:object="${flowerFormDto}" method="post" enctype="multipart/form-data">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
@@ -64,8 +65,11 @@
                     <label for="flowerImage" class="form-label">이미지</label>
                     <input type="file" class="form-control" name="multipartFile" multiple id="flowerImage">
                 </div>
-                <div class="mb-3">
+                <div class ="mb-3" th:if="${#strings.isEmpty(flowerFormDto.id)}" style="text-align: center">
                     <button type="submit" class="btn btn-sm btn-secondary form-control">등록하기</button>
+                </div>
+                <div class="mb-3" th:unless="${#strings.isEmpty(flowerFormDto.id)}" style="text-align: center">
+                    <button th:formaction="@{'/admin/flowers/' + ${flowerFormDto.id} }" type="submit" class="btn btn-sm btn-secondary form-control">수정하기</button>
                 </div>
             </form>
         </div>

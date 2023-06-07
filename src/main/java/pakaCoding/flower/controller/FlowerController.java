@@ -28,7 +28,7 @@ public class FlowerController {
     private final CartService cartService;
 
     //상품 등록 페이지
-    @GetMapping("admin/flowers/create")
+    @GetMapping("/admin/flowers/create")
     public String newFlower(FlowerFormDto flowerFormDto ,Principal principal, Model model){
         isPrincipal(principal, model);
         List<Type> types = typeService.allType();
@@ -39,15 +39,16 @@ public class FlowerController {
     }
 
 
-//    @GetMapping("/admin/flowers/{flowerId}")
-//    public String updatePageItem(@PathVariable long flowerId ,Model model){
-//        FlowerDetailDto flower = flowerService.findOne(flowerId);
-//
-//
-//        model.addAttribute("flower", flower);
-//
-//        return "forms/flowerForm";
-//    }
+    @GetMapping("/admin/flowers/{flowerId}")
+    public String updatePageItem(@PathVariable(name = "flowerId") Long flowerId ,Model model){
+
+        FlowerFormDto flower = flowerService.getFlowerDetail(flowerId);
+
+        log.info("flower.getName() = {}", flower.getName());
+        model.addAttribute("flowerFormDto", flower);
+
+        return "forms/flowerForm";
+    }
 
 
     @GetMapping("/admin/flowers")

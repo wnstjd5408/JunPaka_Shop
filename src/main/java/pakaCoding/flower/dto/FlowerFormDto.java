@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.springframework.web.multipart.MultipartFile;
 import pakaCoding.flower.domain.constant.FlowerSellStatus;
 import pakaCoding.flower.domain.entity.Flower;
@@ -14,6 +15,7 @@ import pakaCoding.flower.domain.entity.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class FlowerFormDto extends TimeEntity {
 
@@ -49,6 +51,7 @@ public class FlowerFormDto extends TimeEntity {
     }
 
     public FlowerFormDto(Flower flower, List<ImageDto> imageDtolist) {
+        this.id = flower.getId();
         this.name = flower.getName();
         this.price = flower.getPrice();
         this.stockQuantity = flower.getStockQuantity();
