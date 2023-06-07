@@ -48,13 +48,19 @@
                               th:field="*{detailComment}" id="detailComment"></textarea>
                 </div>
                 <p th:if="${#fields.hasErrors('detailComment')}" th:errors="*{detailComment}" class="alert-danger alert">Incorrect data</p>
-                <div class="mb-3">
-                    <label for="type" class="form-label">타입</label>
-                    <select th:field="*{type}" class="form-control, form-select" id="type">
+                <div class="mb-3" th:if="${#strings.isEmpty(flowerFormDto.id)}">
+                    <label for="typeNot" class="form-label">타입</label>
+                    <select th:field="*{type}" class="form-control, form-select" id="typeNot">
                         <option value="">==타입 선택==</option>
                         <option th:each="type : ${types}" th:value="${type.id}" th:text="${type.typename}" ></option>
                     </select>
                 </div>
+                <div class="mb-3" th:unless="${#strings.isEmpty(flowerFormDto.id)}">
+                    <label for="type" class="form-label">타입</label>
+                    <input type="text" id="type" class="form-control" th:name="*{type.id}" th:value="*{type.typename}"  disabled/>
+                </div>
+
+
                 <p th:if="${#fields.hasErrors('type')}" th:errors="*{type}" class="alert-danger alert">Incorrect data</p>
 
                 <div class="mb-3">
@@ -65,10 +71,10 @@
                     <label for="flowerImage" class="form-label">이미지</label>
                     <input type="file" class="form-control" name="multipartFile" multiple id="flowerImage">
                 </div>
-                <div class ="mb-3" th:if="${#strings.isEmpty(flowerFormDto.id)}" style="text-align: center">
+                <div class ="mb-3" th:if="${#strings.isEmpty(flowerFormDto.id)}">
                     <button type="submit" class="btn btn-sm btn-secondary form-control">등록하기</button>
                 </div>
-                <div class="mb-3" th:unless="${#strings.isEmpty(flowerFormDto.id)}" style="text-align: center">
+                <div class="mb-3" th:unless="${#strings.isEmpty(flowerFormDto.id)}">
                     <button th:formaction="@{'/admin/flowers/' + ${flowerFormDto.id} }" type="submit" class="btn btn-sm btn-secondary form-control">수정하기</button>
                 </div>
             </form>
