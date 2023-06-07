@@ -27,7 +27,7 @@
 
                 <div class="mb-3">
                     <label for="flowerName" class="form-label">꽃 이름</label>
-                    <input type="text" class="form-control" th:field="*{name}" id="flowerName">
+                    <input type="text" class="form-control"  th:field="*{name}" id="flowerName">
                 </div>
                 <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="alert-danger alert">Incorrect data</p>
                 <div class="mb-3">
@@ -38,12 +38,13 @@
 
                 <div class="mb-3">
                     <label for="flowerStockQuantity" class="form-label">수량</label>
-                    <input type="text" class="form-control" th:field="*{stockQuantity}" id="flowerStockQuantity">
+                    <input type="text" class="form-control"  th:field="*{stockQuantity}" id="flowerStockQuantity">
                 </div>
                 <p th:if="${#fields.hasErrors('stockQuantity')}" th:errors="*{stockQuantity}" class="alert-danger alert">Incorrect data</p>
                 <div class="mb-3">
                     <label for ="detailComment" class="form-label">상품 상세 내용</label>
-                    <textarea class="form-control" aria-label="With textarea" style="white-space: pre-line;" th:field="*{detailComment}" id="detailComment"></textarea>
+                    <textarea class="form-control" aria-label="With textarea" style="white-space: pre-line;"
+                              th:field="*{detailComment}" id="detailComment"></textarea>
                 </div>
                 <p th:if="${#fields.hasErrors('detailComment')}" th:errors="*{detailComment}" class="alert-danger alert">Incorrect data</p>
                 <div class="mb-3">

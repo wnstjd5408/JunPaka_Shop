@@ -45,9 +45,10 @@ public class FlowerFormDto extends TimeEntity {
     private List<ImageDto> imageDtolist = new ArrayList<>();
     private List<Long> itemImgIds = new ArrayList<>();
 
+    public FlowerFormDto() {
+    }
 
     public FlowerFormDto(Flower flower, List<ImageDto> imageDtolist) {
-        this.id = flower.getId();
         this.name = flower.getName();
         this.price = flower.getPrice();
         this.stockQuantity = flower.getStockQuantity();
