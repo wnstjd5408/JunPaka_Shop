@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.ItemImage;
 import pakaCoding.flower.domain.entity.Type;
@@ -56,20 +57,39 @@ public class FlowerService {
         return flower.getId();
     }
     @Transactional(readOnly = true)
-    public FlowerDetailDto findOne(Long flowerId){
+    public FlowerFormDto getFlowerDetail(Long flowerId){
 
         // 상품 이미지 엔티티들을 fileImageDto 객체로 변환하여 fileImageDtoList에 담습니다.
         List<ItemImage> fileImageList = fileImageRepository.findByFlowerId(flowerId);
-        List<String> imgUrlList = new ArrayList<>();
+        List<ImageDto> imgUrlList = new ArrayList<>();
 
-        for (ItemImage fileImage : fileImageList) {
-            ImageDto fileImageDto = new ImageDto(fileImage);
+        for (ItemImage itemImage : fileImageList) {
+            ImageDto fileImageDto = new ImageDto(itemImage);
             log.info("fileImageDto.getImgUrl() = {} ", fileImageDto.getImgUrl());
-            imgUrlList.add(fileImageDto.getImgUrl());
+            imgUrlList.add(fileImageDto);
         }
+
         Flower flower = flowerRepository.findById(flowerId).orElseThrow(EntityNotFoundException::new);
-        return new FlowerDetailDto(flower, imgUrlList);
+        return new FlowerFormDto(flower, imgUrlList);
     }
+
+
+//    @Transactional(readOnly = true)
+//    public FlowerFormDto findAdminOne(Long flowerId){
+//        // 상품 이미지 엔티티들을 fileImageDto 객체로 변환하여 fileImageDtoList에 담습니다.
+//        List<ItemImage> fileImageList = fileImageRepository.findByFlowerId(flowerId);
+//
+//
+//        List<String> imgUrlList = fileImageList.stream().map(itemImage -> {
+//                    ImageDto imageDto = new ImageDto(itemImage);
+//                    return imageDto.getImgUrl();
+//                }
+//        ).toList();
+//        Flower flower = flowerRepository.findById(flowerId).orElseThrow(EntityNotFoundException::new);
+//
+//
+//    }
+
 
     @Transactional(readOnly = true)
     public Page<AdminItemListDto> adminPageFindAllFlowers(int page){

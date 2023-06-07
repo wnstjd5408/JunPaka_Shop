@@ -27,25 +27,28 @@ public class FlowerController {
     private final TypeService typeService;
     private final CartService cartService;
 
-    @GetMapping("/flowers/create")
-    public String newFlower(Principal principal, Model model){
+    //상품 등록 페이지
+    @GetMapping("admin/flowers/create")
+    public String newFlower(FlowerFormDto flowerFormDto ,Principal principal, Model model){
         isPrincipal(principal, model);
         List<Type> types = typeService.allType();
 
-        model.addAttribute("flowerFormDto", new FlowerFormDto());
+        model.addAttribute("flowerFormDto", flowerFormDto);
         model.addAttribute("types", types);
         return "forms/flowerForm";
     }
 
-    private void isPrincipal(Principal principal, Model model) {
-        if (principal != null) {
-            model.addAttribute("member", principal.getName());
-            addCartCount(cartService.getCartListCount(principal.getName()), model);
-        }
-        else{
-            model.addAttribute("cartCount", 0);
-        }
-    }
+
+//    @GetMapping("/admin/flowers/{flowerId}")
+//    public String updatePageItem(@PathVariable long flowerId ,Model model){
+//        FlowerDetailDto flower = flowerService.findOne(flowerId);
+//
+//
+//        model.addAttribute("flower", flower);
+//
+//        return "forms/flowerForm";
+//    }
+
 
     @GetMapping("/admin/flowers")
     public String itemManage(Model model,
@@ -63,7 +66,7 @@ public class FlowerController {
         return "flowers/itemMng";
     }
 
-    @PostMapping("/flowers/create")
+    @PostMapping("/admin/flowers/create")
     public String save(@Valid FlowerFormDto flowerFormDto,
                        BindingResult bindingResult,
                        RedirectAttributes redirectAttributes, Model model) throws Exception {
@@ -74,6 +77,7 @@ public class FlowerController {
             model.addAttribute("types", types);
             return "forms/flowerForm";
         }
+
         Long flowerId;
         log.info("FlowerController save 호출");
         try {
@@ -139,8 +143,7 @@ public class FlowerController {
     }
 
     //CartCount 추가
-    private void addCartCount(Integer cartService, Model model) {
-        Integer count = cartService;
+    private void addCartCount(Integer count, Model model) {
         log.info("카트의 수 = {} ", count);
         model.addAttribute("cartCount", count);
     }
@@ -150,7 +153,7 @@ public class FlowerController {
                             @PathVariable long flowerId, Model model){
         isPrincipal(principal, model);
 
-        FlowerDetailDto flower = flowerService.findOne(flowerId);
+        FlowerFormDto flower = flowerService.getFlowerDetail(flowerId);
         List<Type> types = typeService.allType();
 
         model.addAttribute("types", types);
@@ -159,5 +162,13 @@ public class FlowerController {
         return "flowers/flowerDetail";
     }
 
-
+    private void isPrincipal(Principal principal, Model model) {
+        if (principal != null) {
+            model.addAttribute("member", principal.getName());
+            addCartCount(cartService.getCartListCount(principal.getName()), model);
+        }
+        else{
+            model.addAttribute("cartCount", 0);
+        }
+    }
 }

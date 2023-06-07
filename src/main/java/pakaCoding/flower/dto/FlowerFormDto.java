@@ -11,6 +11,7 @@ import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.TimeEntity;
 import pakaCoding.flower.domain.entity.Type;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -32,9 +33,29 @@ public class FlowerFormDto extends TimeEntity {
 
     @NotNull(message = "타입 선택은 필수 입력 값입니다.")
     private Type type;
+
+    private FlowerSellStatus flowerSellStatus;
+
+
+    // 이미지 사용
     private MultipartFile thumbnails;
     private List<MultipartFile> multipartFile;
-    private FlowerSellStatus flowerSellStatus;
+
+    //상품 수정 시 사용되는 멤버 변수들
+    private List<ImageDto> imageDtolist = new ArrayList<>();
+    private List<Long> itemImgIds = new ArrayList<>();
+
+
+    public FlowerFormDto(Flower flower, List<ImageDto> imageDtolist) {
+        this.id = flower.getId();
+        this.name = flower.getName();
+        this.price = flower.getPrice();
+        this.stockQuantity = flower.getStockQuantity();
+        this.detailComment = flower.getDetailComment();
+        this.type = flower.getType();
+        this.flowerSellStatus = flower.getFlowerSellStatus();
+        this.imageDtolist = imageDtolist;
+    }
 
     /**
      * 파일저장때 사용
