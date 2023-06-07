@@ -17,7 +17,7 @@ import java.time.LocalDate;
 
 @SpringBootTest
 @Transactional
-@TestPropertySource(locations = "classpath:application-test.yml")
+@TestPropertySource(properties = {"spring.config.location=classpath:application-test.yml"})
 class MemberServiceTest {
 
 

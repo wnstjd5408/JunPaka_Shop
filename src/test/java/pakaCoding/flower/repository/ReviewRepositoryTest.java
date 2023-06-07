@@ -21,7 +21,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
-@TestPropertySource(locations = "classpath:application-test.yml")
+@TestPropertySource(properties = {"spring.config.location=classpath:application-test.yml"})
+
+//@TestPropertySource(locations = "classpath:application-test.yml")
+
 @Slf4j
 class ReviewRepositoryTest {
 
