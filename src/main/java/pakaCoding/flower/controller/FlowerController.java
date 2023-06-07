@@ -29,6 +29,15 @@ public class FlowerController {
 
     @GetMapping("/flowers/create")
     public String newFlower(Principal principal, Model model){
+        isPrincipal(principal, model);
+        List<Type> types = typeService.allType();
+
+        model.addAttribute("flowerFormDto", new FlowerFormDto());
+        model.addAttribute("types", types);
+        return "forms/flowerForm";
+    }
+
+    private void isPrincipal(Principal principal, Model model) {
         if (principal != null) {
             model.addAttribute("member", principal.getName());
             addCartCount(cartService.getCartListCount(principal.getName()), model);
@@ -36,12 +45,8 @@ public class FlowerController {
         else{
             model.addAttribute("cartCount", 0);
         }
-        List<Type> types = typeService.allType();
-
-        model.addAttribute("flowerFormDto", new FlowerFormDto());
-        model.addAttribute("types", types);
-        return "forms/flowerForm";
     }
+
     @GetMapping("/admin/flowers")
     public String itemManage(Model model,
                              @RequestParam(value = "page", defaultValue = "0") int page){
@@ -90,13 +95,7 @@ public class FlowerController {
                        Model model,
                        @RequestParam(value = "page", defaultValue = "0") int page){
 
-        if (principal != null) {
-            model.addAttribute("member", principal.getName());
-            addCartCount(cartService.getCartListCount(principal.getName()), model);
-        }
-        else{
-            model.addAttribute("cartCount", 0);
-        }
+        isPrincipal(principal, model);
 
         Page<MainFlowerDto> flowers = flowerService.findAllFlowers(page);
         log.info("flower 전체 수 = {}", flowers.getTotalElements());
@@ -126,13 +125,7 @@ public class FlowerController {
                                 @PathVariable int typeId,
                                 Model model,
                                 @RequestParam(value="page", defaultValue = "0") int page){
-        if(principal != null){
-            model.addAttribute("member", principal.getName());
-            addCartCount(cartService.getCartListCount(principal.getName()), model);
-        }
-        else{
-            model.addAttribute("cartCount", 0);
-        }
+        isPrincipal(principal, model);
 
         log.info("FlowerController 실행");
 
@@ -155,13 +148,7 @@ public class FlowerController {
     @GetMapping("/flowers/{flowerId}")
     public String oneFlower(Principal principal,
                             @PathVariable long flowerId, Model model){
-        if(principal != null){
-            model.addAttribute("member", principal.getName());
-            addCartCount(cartService.getCartListCount(principal.getName()), model);
-        }
-        else{
-            model.addAttribute("cartCount", 0);
-        }
+        isPrincipal(principal, model);
 
         FlowerDetailDto flower = flowerService.findOne(flowerId);
         List<Type> types = typeService.allType();
