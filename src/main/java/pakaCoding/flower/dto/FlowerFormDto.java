@@ -27,7 +27,7 @@ public class FlowerFormDto extends TimeEntity {
     @NotNull(message = "재고는 필수 입력 값입니다.")
     private Integer stockQuantity;
 
-
+    @NotBlank(message = "상품 상세는 필수 입력 값입니다.")
     private String detailComment;
 
     @NotNull(message = "타입 선택은 필수 입력 값입니다.")
