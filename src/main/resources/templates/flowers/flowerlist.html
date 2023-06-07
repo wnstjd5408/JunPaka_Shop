@@ -5,6 +5,11 @@
     <head>
         <title>Jun Flower</title>
     </head>
+
+    <th:block layout:fragment="navbar" class="py-5">
+        <th:block th:replace="~{fragments/header :: header}"></th:block>
+    </th:block>
+
     <!-- Section-->
     <th:block layout:fragment="section" class="py-5">
         <div class="container px-4 px-lg-5 mt-5">

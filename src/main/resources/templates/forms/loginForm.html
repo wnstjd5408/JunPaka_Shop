@@ -27,6 +27,10 @@
         <title>로그인</title>
 
     </head>
+
+    <th:block layout:fragment="navbar" class="py-5">
+        <th:block th:replace="~{fragments/header :: header}"></th:block>
+    </th:block>
     <!--Section-->
     <th:block layout:fragment="content" class="py-5">
         <div class="container-sm w-50 px-4 px-lg-4 mt-4">

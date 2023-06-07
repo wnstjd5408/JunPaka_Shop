@@ -17,8 +17,7 @@
     </head>
 
     <body class="d-flex flex-column min-vh-100">
-
-      <th:block th:replace="~{fragments/header :: header}"></th:block>
+      <th:block layout:fragment="navbar"></th:block>
       <th:block layout:fragment="section"></th:block>
       <th:block layout:fragment="paging"></th:block>
       <th:block layout:fragment="content"></th:block>
