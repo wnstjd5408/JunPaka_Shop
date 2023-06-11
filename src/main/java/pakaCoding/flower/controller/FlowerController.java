@@ -48,12 +48,43 @@ public class FlowerController {
     public String updatePageItem(@PathVariable(name = "flowerId") Long flowerId ,Model model){
 
         FlowerFormDto flower = flowerService.getItemDetail(flowerId);
+        List<Type> types = typeService.allType();
 
-        log.info("flower.getName() = {}", flower.getName());
         model.addAttribute("flowerFormDto", flower);
+        model.addAttribute("types", types);
 
         return "forms/flowerForm";
     }
+
+    @PostMapping("/admin/flowers/{flowerId}")
+    public String itemUpdate(@Valid FlowerFormDto flowerFormDto,
+                             BindingResult bindingResult,
+                             Model model){
+        Long flowerId;
+        List<Type> types = typeService.allType();
+
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("flowerFormDto", flowerFormDto);
+            model.addAttribute("types", types);
+
+            return "forms/flowerForm";
+        }
+
+        try{
+            flowerId = flowerService.updateItem(flowerFormDto);
+        }catch (Exception e){
+            model.addAttribute("errorMessage", "상품 수정 에러가 발생하였습니다");
+            model.addAttribute("flowerFormDto", flowerFormDto);
+            model.addAttribute("types", types);
+            return "forms/flowerForm";
+        }
+        model.addAttribute("flowerFormDto", flowerFormDto);
+
+        return "redirect:/admin/flowers";
+    }
+
+
 
 
     @DeleteMapping("/itemImage/{itemImageId}")

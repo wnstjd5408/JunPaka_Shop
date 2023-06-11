@@ -83,6 +83,16 @@ public class Flower extends BaseEntity {
         this.delYn = "N";
     }
 
+    public void updateItem(FlowerFormDto flowerFormDto){
+        this.name = flowerFormDto.getName();
+        this.price = flowerFormDto.getPrice();
+        this.stockQuantity = flowerFormDto.getStockQuantity();
+        this.detailComment = flowerFormDto.getDetailComment();
+        this.type = flowerFormDto.getType();
+        this.flowerSellStatus = flowerFormDto.getFlowerSellStatus();
+
+    }
+
     public void removeStockQuantity(int stock){
 
         int restStock = this.stockQuantity - stock;

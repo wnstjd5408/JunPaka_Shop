@@ -141,7 +141,17 @@ public class FlowerService {
         return new PageImpl<>(flowerDtoList, pageable, flowerList.getTotalElements());
     }
 
+    @Transactional
+    public Long updateItem(FlowerFormDto flowerFormDto) {
 
+        log.info("updateItem 사용");
+        Flower findFlower = flowerRepository.findById(flowerFormDto.getId()).orElseThrow(EntityNotFoundException::new);
 
+        log.info("flowerFormDto.getPrice = {}", flowerFormDto.getPrice());
+        log.info("flowerFormDto.getType = {}", flowerFormDto.getType());
 
+        findFlower.updateItem(flowerFormDto);
+
+        return findFlower.getId();
+    }
 }
