@@ -4,17 +4,18 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Type;
-import pakaCoding.flower.dto.FlowerDetailDto;
-import pakaCoding.flower.dto.FlowerFormDto;
-import pakaCoding.flower.dto.MainFlowerDto;
-import pakaCoding.flower.dto.MemberSessionDto;
+import pakaCoding.flower.dto.*;
 import pakaCoding.flower.service.CartService;
+import pakaCoding.flower.service.FileImageService;
 import pakaCoding.flower.service.FlowerService;
 import pakaCoding.flower.service.TypeService;
 
@@ -29,24 +30,88 @@ public class FlowerController {
     private final FlowerService flowerService;
     private final TypeService typeService;
     private final CartService cartService;
+    private final FileImageService fileImageService;
 
-    @GetMapping("/flowers/create")
-    public String newFlower(Principal principal, Model model){
-        if (principal != null) {
-            model.addAttribute("member", principal.getName());
-            addCartCount(cartService.getCartListCount(principal.getName()), model);
-        }
-        else{
-            model.addAttribute("cartCount", 0);
-        }
+    //상품 등록 페이지
+    @GetMapping("/admin/flowers/create")
+    public String newFlower(FlowerFormDto flowerFormDto ,Principal principal, Model model){
+        isPrincipal(principal, model);
         List<Type> types = typeService.allType();
 
-        model.addAttribute("flowerFormDto", new FlowerFormDto());
+        model.addAttribute("flowerFormDto", flowerFormDto);
         model.addAttribute("types", types);
         return "forms/flowerForm";
     }
 
-    @PostMapping("/flowers/create")
+
+    @GetMapping("/admin/flowers/{flowerId}")
+    public String updatePageItem(@PathVariable(name = "flowerId") Long flowerId ,Model model){
+
+        FlowerFormDto flower = flowerService.getItemDetail(flowerId);
+        List<Type> types = typeService.allType();
+
+        model.addAttribute("flowerFormDto", flower);
+        model.addAttribute("types", types);
+
+        return "forms/flowerForm";
+    }
+
+    @PostMapping("/admin/flowers/{flowerId}")
+    public String itemUpdate(@Valid FlowerFormDto flowerFormDto,
+                             BindingResult bindingResult,
+                             Model model){
+        Long flowerId;
+        List<Type> types = typeService.allType();
+
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("flowerFormDto", flowerFormDto);
+            model.addAttribute("types", types);
+
+            return "forms/flowerForm";
+        }
+
+        try{
+            flowerId = flowerService.updateItem(flowerFormDto);
+        }catch (Exception e){
+            model.addAttribute("errorMessage", "상품 수정 에러가 발생하였습니다");
+            model.addAttribute("flowerFormDto", flowerFormDto);
+            model.addAttribute("types", types);
+            return "forms/flowerForm";
+        }
+        model.addAttribute("flowerFormDto", flowerFormDto);
+
+        return "redirect:/admin/flowers";
+    }
+
+
+
+
+    @DeleteMapping("/itemImage/{itemImageId}")
+    @ResponseBody
+    public ResponseEntity deleteImage(@PathVariable Long itemImageId, Principal principal){
+        log.info("deleteImage 실행");
+        Flower flower = fileImageService.deleteImage(itemImageId);
+        return new ResponseEntity<Long>(flower.getId(), HttpStatus.OK);
+    }
+
+    @GetMapping("/admin/flowers")
+    public String itemManage(Model model,
+                             @RequestParam(value = "page", defaultValue = "0") int page){
+
+        Page<AdminItemListDto> items = flowerService.adminPageFindAllFlowers(page);
+
+        log.info("flower.getTotalPages = {}", items.getTotalPages());
+
+        model.addAttribute("maxPage", 5);
+        model.addAttribute("flowers", items);
+
+        pageModelPut(items, model);
+
+        return "flowers/itemMng";
+    }
+
+    @PostMapping("/admin/flowers/create")
     public String save(@Valid FlowerFormDto flowerFormDto,
                        BindingResult bindingResult,
                        RedirectAttributes redirectAttributes, Model model) throws Exception {
@@ -57,6 +122,7 @@ public class FlowerController {
             model.addAttribute("types", types);
             return "forms/flowerForm";
         }
+
         Long flowerId;
         log.info("FlowerController save 호출");
         try {
@@ -72,18 +138,13 @@ public class FlowerController {
         return "redirect:/flowers/{flowerId}";
     }
 
+
     @GetMapping(value = {"/flowers", "/"})
     public String list(Principal principal,
                        Model model,
                        @RequestParam(value = "page", defaultValue = "0") int page){
 
-        if (principal != null) {
-            model.addAttribute("member", principal.getName());
-            addCartCount(cartService.getCartListCount(principal.getName()), model);
-        }
-        else{
-            model.addAttribute("cartCount", 0);
-        }
+        isPrincipal(principal, model);
 
         Page<MainFlowerDto> flowers = flowerService.findAllFlowers(page);
         log.info("flower 전체 수 = {}", flowers.getTotalElements());
@@ -98,10 +159,11 @@ public class FlowerController {
         model.addAttribute("types", types);
 
         pageModelPut(flowers, model);
+
         return "flowers/flowerList";
     }
 
-    private void pageModelPut(Page<MainFlowerDto> results, Model model){
+    private <T> void pageModelPut(Page<T> results, Model model){
         model.addAttribute("totalCount", results.getTotalElements());
         model.addAttribute("size", results.getPageable().getPageSize());
         model.addAttribute("number", results.getPageable().getPageNumber());
@@ -112,15 +174,10 @@ public class FlowerController {
                                 @PathVariable int typeId,
                                 Model model,
                                 @RequestParam(value="page", defaultValue = "0") int page){
-        if(principal != null){
-            model.addAttribute("member", principal.getName());
-            addCartCount(cartService.getCartListCount(principal.getName()), model);
-        }
-        else{
-            model.addAttribute("cartCount", 0);
-        }
+        isPrincipal(principal, model);
 
         log.info("FlowerController 실행");
+
         Page<MainFlowerDto> flowersType = flowerService.findFlowersType(typeId, page);
         List<Type> types = typeService.allType();
 
@@ -131,8 +188,7 @@ public class FlowerController {
     }
 
     //CartCount 추가
-    private void addCartCount(Integer cartService, Model model) {
-        Integer count = cartService;
+    private void addCartCount(Integer count, Model model) {
         log.info("카트의 수 = {} ", count);
         model.addAttribute("cartCount", count);
     }
@@ -140,15 +196,9 @@ public class FlowerController {
     @GetMapping("/flowers/{flowerId}")
     public String oneFlower(Principal principal,
                             @PathVariable long flowerId, Model model){
-        if(principal != null){
-            model.addAttribute("member", principal.getName());
-            addCartCount(cartService.getCartListCount(principal.getName()), model);
-        }
-        else{
-            model.addAttribute("cartCount", 0);
-        }
+        isPrincipal(principal, model);
 
-        FlowerDetailDto flower = flowerService.findOne(flowerId);
+        FlowerFormDto flower = flowerService.getItemDetail(flowerId);
         List<Type> types = typeService.allType();
 
         model.addAttribute("types", types);
@@ -157,5 +207,13 @@ public class FlowerController {
         return "flowers/flowerDetail";
     }
 
-
+    private void isPrincipal(Principal principal, Model model) {
+        if (principal != null) {
+            model.addAttribute("member", principal.getName());
+            addCartCount(cartService.getCartListCount(principal.getName()), model);
+        }
+        else{
+            model.addAttribute("cartCount", 0);
+        }
+    }
 }

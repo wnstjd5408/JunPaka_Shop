@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
+<head>
+  <title>Admin 채널</title>
+</head>
+<!-- Section-->
+<th:block layout:fragment="section" class="py-5">
+  <div class="container px-4 px-lg-5 mt-5">
+    <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+      <div class="col mb-5" th:each="flower : ${flowers}">
+        <div class="card h-100">
+          <div class="card-body p-4">
+            <div class="text-center">
+              <!-- Product name-->
+              <h5 class="fw-bolder" th:text="${flower.itemName}">Fancy Product</h5>
+              <!-- Product price-->
+              <h6 class="fw-light"th:text="|\${flower.price}|"></h6>
+            </div>
+          </div>
+          <!-- Product actions-->
+          <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+            <div class="text-center"><a class="btn btn-outline-dark mt-auto" th:href="@{'/admin/flowers/' + ${flower.id}}">Update Option</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <th:block layout:fragment="paging" class="py-5">
+      <!-- page-->
+      <div th:if="${!flowers.isEmpty()}">
+        <nav class="container d-flex align-items-center justify-content-center navbar-light" aria-label="Page navigation example"
+             th:with="start=${(flowers.number/maxPage)*maxPage + 1},
+                  end=(${(flowers.totalPages == 0) ? 1 : (start + (maxPage - 1) < flowers.totalPages ? start + (maxPage - 1) : flowers.totalPages)})">
+
+          <ul class="pagination justify-content-center">
+            <li th:classappend="${start > 1}" class="page-item">
+              <a class="page-link"
+                 th:href="@{?(page=0)}" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;&laquo;</span>
+              </a>
+            </li>
+            <li th:classappend="${start > 1}" class="page-item">
+              <a class="page-link"
+                 th:href="@{?(page=${start - maxPage-1})}" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </a>
+            </li>
+            <li th:each="page : ${#numbers.sequence(start, end)}"
+                th:classappend="${page == flowers.number+1} ? 'active'"
+                class="page-item">
+              <a th:text="${page}" class="page-link" th:href="@{|?page=${page-1}|}">1</a>
+            </li>
+            <li th:if="${end < flowers.totalPages}" class ="page-item">
+              <a class="page-link" th:href="@{?(page=${start + maxPage - 1})}" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </a>
+            </li>
+            <li th:if="${end < flowers.totalPages}" class ="page-item">
+              <a class="page-link" th:href="@{?(page=${flowers.totalPages - 1})}" aria-label="Next">
+                <span aria-hidden="true">&raquo;&raquo;</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </th:block>
+  </div>
+</th:block>
+</html>

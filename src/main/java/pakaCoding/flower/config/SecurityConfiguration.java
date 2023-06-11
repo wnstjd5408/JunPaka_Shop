@@ -31,8 +31,8 @@ public class SecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws  Exception{
         httpSecurity
                 .authorizeHttpRequests()
-                    .requestMatchers( "/logout", "/orders/**", "reviews/**").authenticated()
-                    .requestMatchers("/flowers/create/**").hasRole("ADMIN")
+                    .requestMatchers( "/logout", "/orders/**", "/reviews/**").authenticated()
+                    .requestMatchers("/admin/flowers/**").hasRole("ADMIN")
                     .requestMatchers("/order", "/reviews/form/**").hasAnyRole("ADMIN", "USER")
                     .requestMatchers("/members/**").anonymous() //인증되지 않은 사용자만 접근허용
                     .anyRequest().permitAll()

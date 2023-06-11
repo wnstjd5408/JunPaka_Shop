@@ -43,6 +43,10 @@ public interface FlowerRepository extends JpaRepository<Flower, Long> {
      Page<MainFlowerDto> findFlowerListDto(Pageable pageable);
 
 
+     @Query("select f from Flower f" +
+             " order by f.createDate DESC")
+     Page<Flower> findAdminFlowers(Pageable pageable);
+
 //    private final EntityManager em;
 //
 //    public Flower save(Flower flower){

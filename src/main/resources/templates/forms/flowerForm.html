@@ -3,16 +3,23 @@
 
     <head>
         <title>Flower 등록</title>
+        <meta name="_csrf" th:content="${_csrf.token}"/>
+        <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     </head>
 
+    <th:block layout:fragment="navbar" class="py-5">
+        <th:block th:replace="~{fragments/header :: header}"></th:block>
+    </th:block>
     <!--Section    -->
     <th:block layout:fragment="section" class="py-5">
         <div class="container-sm w-50 px-4 px-lg-4 mt-4">
             <div class="py-5 text-center">
                 <h3>상품등록</h3>
             </div>
+
             <form th:object="${flowerFormDto}" method="post" enctype="multipart/form-data">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <input type="hidden" th:field="*{id}">
 
                 <div class="mb-3">
                     <label for="flowerSell" class="form-label">타입</label>
@@ -24,7 +31,7 @@
 
                 <div class="mb-3">
                     <label for="flowerName" class="form-label">꽃 이름</label>
-                    <input type="text" class="form-control" th:field="*{name}" id="flowerName">
+                    <input type="text" class="form-control"  th:field="*{name}" id="flowerName">
                 </div>
                 <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="alert-danger alert">Incorrect data</p>
                 <div class="mb-3">
@@ -35,33 +42,54 @@
 
                 <div class="mb-3">
                     <label for="flowerStockQuantity" class="form-label">수량</label>
-                    <input type="text" class="form-control" th:field="*{stockQuantity}" id="flowerStockQuantity">
+                    <input type="text" class="form-control"  th:field="*{stockQuantity}" id="flowerStockQuantity">
                 </div>
                 <p th:if="${#fields.hasErrors('stockQuantity')}" th:errors="*{stockQuantity}" class="alert-danger alert">Incorrect data</p>
                 <div class="mb-3">
                     <label for ="detailComment" class="form-label">상품 상세 내용</label>
-                    <textarea class="form-control" aria-label="With textarea" style="white-space: pre-line;" th:field="*{detailComment}" id="detailComment"></textarea>
+                    <textarea class="form-control" aria-label="With textarea" style="white-space: pre-line;"
+                              th:field="*{detailComment}" id="detailComment"></textarea>
                 </div>
                 <p th:if="${#fields.hasErrors('detailComment')}" th:errors="*{detailComment}" class="alert-danger alert">Incorrect data</p>
-                <div class="mb-3">
-                    <label for="type" class="form-label">타입</label>
-                    <select th:field="*{type}" class="form-control, form-select" id="type">
+                <label for="typeNot" class="form-label">타입</label>
+                    <select th:field="*{type}" class="form-control, form-select" id="typeNot">
                         <option value="">==타입 선택==</option>
                         <option th:each="type : ${types}" th:value="${type.id}" th:text="${type.typename}" ></option>
                     </select>
-                </div>
                 <p th:if="${#fields.hasErrors('type')}" th:errors="*{type}" class="alert-danger alert">Incorrect data</p>
 
-                <div class="mb-3">
+                <div th:if="${#lists.isEmpty(flowerFormDto.imageDtolist)}" class="mb-3">
                     <label for="thumbnails" class="form-label">썸네일 - 메인 사진</label>
                     <input type="file" class="form-control" name="thumbnails" id="thumbnails">
                 </div>
-                <div class="mb-3">
+                <div th:if="${#lists.isEmpty(flowerFormDto.imageDtolist)}" class="mb-3">
                     <label for="flowerImage" class="form-label">이미지</label>
                     <input type="file" class="form-control" name="multipartFile" multiple id="flowerImage">
                 </div>
-                <div class="mb-3">
+
+                <th:block th:if = "${not #lists.isEmpty(flowerFormDto.imageDtolist)}">
+                    <div id="file_list">
+                        <span class="form-text">이미지 추가</span>
+                        <a onclick="addFile()"><span class="ui-icon-plus" aria-hidden="true"></span>파일추가</a>
+                            <div class="mb-3" th:each="itemImgDto : ${flowerFormDto.imageDtolist}">
+                                <span class="form-text" th:text="${itemImgDto.originFileName}"></span>
+                                <input type="hidden" name="itemImgIds" th:value="${itemImgDto.id}">
+                                <span th:text="${itemImgDto.id}"></span>
+                                <button type="button" class="btn-close" aria-label="Close">
+                                    <span aria-hidden="true" th:data-id="${itemImgDto.id}"
+                                            onclick="deleteFile(this)">&times;
+                                    </span>
+                                </button>
+                            </div>
+
+                    </div>
+                </th:block>
+
+                <div class ="mb-3" th:if="${#strings.isEmpty(flowerFormDto.id)}">
                     <button type="submit" class="btn btn-sm btn-secondary form-control">등록하기</button>
+                </div>
+                <div class="mb-3" th:unless="${#strings.isEmpty(flowerFormDto.id)}">
+                    <button th:formaction="@{'/admin/flowers/' + ${flowerFormDto.id} }" type="submit" class="btn btn-sm btn-secondary form-control">수정하기</button>
                 </div>
             </form>
         </div>
@@ -69,11 +97,56 @@
     <th:block layout:fragment="script">
         <script th:inline = "javascript" >
             $(document).ready(function () {
-                var errorMessage = [${errorMessage}]
+                var errorMessage = /*[[${errorMessage}]]*/;
                 if (errorMessage != null) {
                     alert(errorMessage);
                 }
             });
+
+            function  addFile(){
+                var str = "<input type='file' class='form-control'><a href='#this' id='file-delete'>삭제</a>";
+
+                $('#file_list').append(str);
+                $("a[id='file-delete']").on("click",function (e){
+                    e.preventDefault();
+                    deleteFile($(this));
+                });
+            }
+
+            function deleteFile(obj) {
+                var itemImageId = obj.dataset.id;
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
+
+                var url = "/itemImage/" + itemImageId;
+
+                $.ajax({
+                    url: url,
+                    type: "DELETE",
+                    beforeSend: function (xhr) {
+                        /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                        console.log(itemImageId)
+                        xhr.setRequestHeader(header, token);
+                    },
+
+                    dataType: "json",
+                    cache: false,
+                    success: function (result, status) {
+                        alert('선택하신 이미지가 삭제되었습니다');
+                        location.href = '/admin/flowers/' + result;
+                    },
+
+                    error: function (jqXHR, status, error) {
+                        if (jqXHR.status == '401') {
+                            alert('로그인 후 이용해주세요');
+                            location.href = '/members/login';
+
+                        } else {
+                            alert(jqXHR.responseText);
+                        }
+                    }
+                });
+            }
 
             function bindDomEvent(){
                 $(".custom-file-input").on("change", function() {
