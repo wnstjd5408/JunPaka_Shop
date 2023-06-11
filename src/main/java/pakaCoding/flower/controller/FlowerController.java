@@ -4,14 +4,18 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.dto.*;
 import pakaCoding.flower.service.CartService;
+import pakaCoding.flower.service.FileImageService;
 import pakaCoding.flower.service.FlowerService;
 import pakaCoding.flower.service.TypeService;
 
@@ -26,6 +30,7 @@ public class FlowerController {
     private final FlowerService flowerService;
     private final TypeService typeService;
     private final CartService cartService;
+    private final FileImageService fileImageService;
 
     //상품 등록 페이지
     @GetMapping("/admin/flowers/create")
@@ -42,7 +47,7 @@ public class FlowerController {
     @GetMapping("/admin/flowers/{flowerId}")
     public String updatePageItem(@PathVariable(name = "flowerId") Long flowerId ,Model model){
 
-        FlowerFormDto flower = flowerService.getFlowerDetail(flowerId);
+        FlowerFormDto flower = flowerService.getItemDetail(flowerId);
 
         log.info("flower.getName() = {}", flower.getName());
         model.addAttribute("flowerFormDto", flower);
@@ -50,6 +55,14 @@ public class FlowerController {
         return "forms/flowerForm";
     }
 
+
+    @DeleteMapping("/itemImage/{itemImageId}")
+    @ResponseBody
+    public ResponseEntity deleteImage(@PathVariable Long itemImageId, Principal principal){
+        log.info("deleteImage 실행");
+        Flower flower = fileImageService.deleteImage(itemImageId);
+        return new ResponseEntity<Long>(flower.getId(), HttpStatus.OK);
+    }
 
     @GetMapping("/admin/flowers")
     public String itemManage(Model model,
@@ -154,7 +167,7 @@ public class FlowerController {
                             @PathVariable long flowerId, Model model){
         isPrincipal(principal, model);
 
-        FlowerFormDto flower = flowerService.getFlowerDetail(flowerId);
+        FlowerFormDto flower = flowerService.getItemDetail(flowerId);
         List<Type> types = typeService.allType();
 
         model.addAttribute("types", types);

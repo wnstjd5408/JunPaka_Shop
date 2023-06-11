@@ -62,6 +62,13 @@ public class ImageDto {
 
     /* Entity -> Dto */
     public ImageDto(Image image){
+        this.id = image.getId();
+        this.extension = image.getExtension();
+        this.contentType = image.getContentType();
+        this.repImgYn = image.getRepImgYn();
+        this.originFileName = image.getOriginFileImgName();
+        this.uploadDir = image.getUploadDir();
+        this.size = image.getSize();
         this.imgUrl = image.getSavedFileImgName();
     }
 

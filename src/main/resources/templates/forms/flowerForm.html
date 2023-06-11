@@ -3,6 +3,8 @@
 
     <head>
         <title>Flower 등록</title>
+        <meta name="_csrf" th:content="${_csrf.token}"/>
+        <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
     </head>
 
     <th:block layout:fragment="navbar" class="py-5">
@@ -63,14 +65,33 @@
 
                 <p th:if="${#fields.hasErrors('type')}" th:errors="*{type}" class="alert-danger alert">Incorrect data</p>
 
-                <div class="mb-3">
+                <div th:if="${#lists.isEmpty(flowerFormDto.imageDtolist)}" class="mb-3">
                     <label for="thumbnails" class="form-label">썸네일 - 메인 사진</label>
                     <input type="file" class="form-control" name="thumbnails" id="thumbnails">
                 </div>
-                <div class="mb-3">
+                <div th:if="${#lists.isEmpty(flowerFormDto.imageDtolist)}" class="mb-3">
                     <label for="flowerImage" class="form-label">이미지</label>
                     <input type="file" class="form-control" name="multipartFile" multiple id="flowerImage">
                 </div>
+
+                <th:block th:if = "${not #lists.isEmpty(flowerFormDto.imageDtolist)}">
+                    <div id="file_list">
+                        <span class="form-text">이미지 추가</span>
+                        <a onclick="addFile()"><span class="ui-icon-plus" aria-hidden="true"></span>파일추가</a>
+                            <div class="mb-3" th:each="itemImgDto : ${flowerFormDto.imageDtolist}">
+                                <span class="form-text" th:text="${itemImgDto.originFileName}"></span>
+                                <input type="hidden" name="itemImgIds" th:value="${itemImgDto.id}">
+                                <span th:text="${itemImgDto.id}"></span>
+                                <button type="button" class="btn-close" aria-label="Close">
+                                    <span aria-hidden="true" th:data-id="${itemImgDto.id}"
+                                            onclick="deleteFile(this)">&times;
+                                    </span>
+                                </button>
+                            </div>
+
+                    </div>
+                </th:block>
+
                 <div class ="mb-3" th:if="${#strings.isEmpty(flowerFormDto.id)}">
                     <button type="submit" class="btn btn-sm btn-secondary form-control">등록하기</button>
                 </div>
@@ -83,11 +104,56 @@
     <th:block layout:fragment="script">
         <script th:inline = "javascript" >
             $(document).ready(function () {
-                var errorMessage = [${errorMessage}]
+                var errorMessage = /*[[${errorMessage}]]*/;
                 if (errorMessage != null) {
                     alert(errorMessage);
                 }
             });
+
+            function  addFile(){
+                var str = "<input type='file' class='form-control'><a href='#this' id='file-delete'>삭제</a>";
+
+                $('#file_list').append(str);
+                $("a[id='file-delete']").on("click",function (e){
+                    e.preventDefault();
+                    deleteFile($(this));
+                });
+            }
+
+            function deleteFile(obj) {
+                var itemImageId = obj.dataset.id;
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
+
+                var url = "/itemImage/" + itemImageId;
+
+                $.ajax({
+                    url: url,
+                    type: "DELETE",
+                    beforeSend: function (xhr) {
+                        /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                        console.log(itemImageId)
+                        xhr.setRequestHeader(header, token);
+                    },
+
+                    dataType: "json",
+                    cache: false,
+                    success: function (result, status) {
+                        alert('선택하신 이미지가 삭제되었습니다');
+                        location.href = '/admin/flowers/' + result;
+                    },
+
+                    error: function (jqXHR, status, error) {
+                        if (jqXHR.status == '401') {
+                            alert('로그인 후 이용해주세요');
+                            location.href = '/members/login';
+
+                        } else {
+                            alert(jqXHR.responseText);
+                        }
+                    }
+                });
+            }
 
             function bindDomEvent(){
                 $(".custom-file-input").on("change", function() {

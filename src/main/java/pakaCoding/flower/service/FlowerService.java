@@ -9,7 +9,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.ItemImage;
 import pakaCoding.flower.domain.entity.Type;
@@ -57,20 +56,20 @@ public class FlowerService {
         return flower.getId();
     }
     @Transactional(readOnly = true)
-    public FlowerFormDto getFlowerDetail(Long flowerId){
+    public FlowerFormDto getItemDetail(Long flowerId){
 
         // 상품 이미지 엔티티들을 fileImageDto 객체로 변환하여 fileImageDtoList에 담습니다.
         List<ItemImage> fileImageList = fileImageRepository.findByFlowerId(flowerId);
-        List<ImageDto> imgUrlList = new ArrayList<>();
+        List<ImageDto> imgDtoList = new ArrayList<>();
 
         for (ItemImage itemImage : fileImageList) {
             ImageDto fileImageDto = new ImageDto(itemImage);
-            log.info("fileImageDto.getImgUrl() = {} ", fileImageDto.getImgUrl());
-            imgUrlList.add(fileImageDto);
+            log.info("fileImageDto.getId() = {} ", fileImageDto.getId());
+            imgDtoList.add(fileImageDto);
         }
 
         Flower flower = flowerRepository.findById(flowerId).orElseThrow(EntityNotFoundException::new);
-        return new FlowerFormDto(flower, imgUrlList);
+        return new FlowerFormDto(flower, imgDtoList);
     }
 
 

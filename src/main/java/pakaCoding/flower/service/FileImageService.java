@@ -1,5 +1,6 @@
 package pakaCoding.flower.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import pakaCoding.flower.domain.entity.Flower;
+import pakaCoding.flower.domain.entity.ItemImage;
 import pakaCoding.flower.domain.entity.Review;
 import pakaCoding.flower.dto.FlowerFormDto;
 import pakaCoding.flower.dto.ImageDto;
@@ -32,6 +34,19 @@ public class FileImageService {
 
     private final ItemImageRepository fileImageRepository;
 
+
+    //이미지 삭제
+    public Flower deleteImage(Long itemImageId){
+
+        ItemImage itemImage = fileImageRepository.findById(itemImageId).orElseThrow(EntityNotFoundException::new);
+
+        Flower flower = itemImage.getFlower();
+
+
+        fileImageRepository.delete(itemImage);
+
+        return flower;
+    }
 
 
     //리뷰 이미지 저장
