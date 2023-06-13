@@ -52,7 +52,6 @@ public class FileImageService {
     //리뷰 이미지 저장
     public List<ImageDto> saveReviewFile(ReviewFormDto reviewFormDto){
         log.info("saveReviewFile 실행");
-        Review review = reviewFormDto.toEntity();
 
 
         List<MultipartFile> multipartFileList =  reviewFormDto.getMultipartFile();
@@ -61,9 +60,7 @@ public class FileImageService {
 
         Map<String, Object> result = new HashMap<>();
         ImageDto file = null;
-        Long fileId = null;
 
-        List<Long> fileIds = new ArrayList<>();
 
         int count = 0;
         try{
@@ -92,14 +89,10 @@ public class FileImageService {
                         InputStream fileStream = file1.getInputStream();
                         copyInputStreamToFile(fileStream, targetFile); //파일저장
 
-                        //배열에 담기
-                        fileIds.add(fileId);
-                        result.put("fileIdxs", fileIds.toString());
-                        result.put("result", "OK");
+
                     } catch (Exception e) {
                         deleteQuietly(targetFile); //저장된 현재 파일 삭제
                         e.printStackTrace();
-                        result.put("result", "FAIL");
                         break;
                     }
 
@@ -117,8 +110,6 @@ public class FileImageService {
     //아이템 파일 저장
     public List<ImageDto> saveFile(FlowerFormDto flowerDto) throws Exception {
         log.info("saveFile 실행");
-        Flower flower = flowerDto.toEntity();
-
 
         List<MultipartFile> multipartFileList  = flowerDto.getMultipartFile();
         List<ImageDto> files = new ArrayList<>();
@@ -130,9 +121,7 @@ public class FileImageService {
         //결과 map
         Map<String, Object> result = new HashMap<>();
         ImageDto file = null;
-        Long fileId = null;
-        //파일 시퀀스 리스트
-        List<Long> fileIds = new ArrayList<>();
+
         int count = 0;
         try{
             if (!multipartFileList.get(0).getOriginalFilename().equals("")) {
@@ -161,15 +150,9 @@ public class FileImageService {
                     try {
                         InputStream fileStream = file1.getInputStream();
                         copyInputStreamToFile(fileStream, targetFile); //파일저장
-
-                        //배열에 담기
-                        fileIds.add(fileId);
-                        result.put("fileIdxs", fileIds.toString());
-                        result.put("result", "OK");
                     } catch (Exception e) {
                         deleteQuietly(targetFile); //저장된 현재 파일 삭제
                         e.printStackTrace();
-                        result.put("result", "FAIL");
                         break;
                     }
 
