@@ -55,22 +55,25 @@ public class FlowerService {
 
         return flower.getId();
     }
-    @Transactional(readOnly = true)
-    public FlowerFormDto getItemDetail(Long flowerId){
 
-        // 상품 이미지 엔티티들을 fileImageDto 객체로 변환하여 fileImageDtoList에 담습니다.
-        List<ItemImage> fileImageList = fileImageRepository.findByFlowerId(flowerId);
+
+    @Transactional(readOnly = true)
+    public FlowerFormDto getFetchItemDetail(Long flowerId) {
+
+        Flower findFlower = flowerRepository.findAllByFileImagesAndType(flowerId);
+
+
         List<ImageDto> imgDtoList = new ArrayList<>();
 
-        for (ItemImage itemImage : fileImageList) {
-            ImageDto fileImageDto = new ImageDto(itemImage);
-            log.info("fileImageDto.getId() = {} ", fileImageDto.getId());
-            imgDtoList.add(fileImageDto);
-        }
 
-        Flower flower = flowerRepository.findById(flowerId).orElseThrow(EntityNotFoundException::new);
-        return new FlowerFormDto(flower, imgDtoList);
+        List<ItemImage> fileImages = findFlower.getFileImages();
+
+        fileImages.forEach(i -> imgDtoList.add(new ImageDto(i)));
+
+        return new FlowerFormDto(findFlower, imgDtoList);
     }
+
+
 
 
 //    @Transactional(readOnly = true)

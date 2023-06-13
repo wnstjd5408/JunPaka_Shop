@@ -47,11 +47,9 @@ public class FlowerController {
     @GetMapping("/admin/flowers/{flowerId}")
     public String updatePageItem(@PathVariable(name = "flowerId") Long flowerId ,Model model){
 
-        FlowerFormDto flower = flowerService.getItemDetail(flowerId);
-        List<Type> types = typeService.allType();
+        FlowerFormDto flower = flowerService.getFetchItemDetail(flowerId);
 
         model.addAttribute("flowerFormDto", flower);
-        model.addAttribute("types", types);
 
         return "forms/flowerForm";
     }
@@ -66,8 +64,9 @@ public class FlowerController {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("flowerFormDto", flowerFormDto);
-            model.addAttribute("types", types);
 
+            log.info("flowerFormDto.getImageDtolist() 사이즈 : ", flowerFormDto.getImageDtolist().size());
+            model.addAttribute("types", types);
             return "forms/flowerForm";
         }
 
@@ -198,7 +197,7 @@ public class FlowerController {
                             @PathVariable long flowerId, Model model){
         isPrincipal(principal, model);
 
-        FlowerFormDto flower = flowerService.getItemDetail(flowerId);
+        FlowerFormDto flower = flowerService.getFetchItemDetail(flowerId);
         List<Type> types = typeService.allType();
 
         model.addAttribute("types", types);

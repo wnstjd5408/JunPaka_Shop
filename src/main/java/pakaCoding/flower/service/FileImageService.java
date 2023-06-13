@@ -39,9 +39,7 @@ public class FileImageService {
     public Flower deleteImage(Long itemImageId){
 
         ItemImage itemImage = fileImageRepository.findById(itemImageId).orElseThrow(EntityNotFoundException::new);
-
         Flower flower = itemImage.getFlower();
-
 
         fileImageRepository.delete(itemImage);
 
@@ -57,10 +55,7 @@ public class FileImageService {
         List<MultipartFile> multipartFileList =  reviewFormDto.getMultipartFile();
         List<ImageDto> files = new ArrayList<>();
 
-
-        Map<String, Object> result = new HashMap<>();
         ImageDto file = null;
-
 
         int count = 0;
         try{
@@ -74,7 +69,6 @@ public class FileImageService {
 
                     File targetFile = new File(uploadDir + saveFileName);
 
-                    result.put("result", "FAIL");
 
                     if (count != 0) {
                         file = buildFileDto(file1, originalFilename, extension, saveFileName,  "N");
@@ -119,7 +113,6 @@ public class FileImageService {
         multipartFileList.add(0, thumbnails);
 
         //결과 map
-        Map<String, Object> result = new HashMap<>();
         ImageDto file = null;
 
         int count = 0;
@@ -134,9 +127,6 @@ public class FileImageService {
 
                     java.io.File targetFile = new File(uploadDir + saveFileName);
 
-
-                    //초기값으로 fail 설정
-                    result.put("result", "FAIL");
 
                     if (count != 0) {
                         file = buildFileDto(file1, originalFilename, extension, saveFileName,  "N");
@@ -179,6 +169,7 @@ public class FileImageService {
                 .repImgYn(repImgYn)
                 .build();
     }
+
 
 
 }
