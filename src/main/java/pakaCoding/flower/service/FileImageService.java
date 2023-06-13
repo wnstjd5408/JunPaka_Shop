@@ -33,7 +33,7 @@ public class FileImageService {
     private String uploadDir;
 
     private final ItemImageRepository fileImageRepository;
-
+    private ImageDto file;
 
     //이미지 삭제
     public Flower deleteImage(Long itemImageId){
@@ -54,8 +54,6 @@ public class FileImageService {
 
         List<MultipartFile> multipartFileList =  reviewFormDto.getMultipartFile();
         List<ImageDto> files = new ArrayList<>();
-
-        ImageDto file = null;
 
         int count = 0;
         try{
@@ -98,7 +96,46 @@ public class FileImageService {
         }
         return files;
     }
+    //리뷰 추가 이미지 저장
+    public List<ImageDto> saveUpdateImageFile(FlowerFormDto flowerFormDto) throws Exception{
+        log.info("saveUpdateImageFile 실행");
 
+
+        List<MultipartFile> multipartFileList  = flowerFormDto.getMultipartFile();
+        List<ImageDto> files = new ArrayList<>();
+        log.info("multipartFileList ={}", multipartFileList);
+
+        try{
+            if(!multipartFileList.get(0).getOriginalFilename().equals(""))
+                for (MultipartFile file1 : multipartFileList) {
+                    log.info("file1 = {}", file1.getOriginalFilename());
+
+                    String originalFilename = file1.getOriginalFilename();
+                    String extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+                    String saveFileName = UUID.randomUUID() + extension;
+
+                    File targetFile = new File(uploadDir + saveFileName);
+
+                    file = buildFileDto(file1, originalFilename, extension, saveFileName,  "N");
+
+                    //List 파일 추가
+                    files.add(file);
+
+                    try {
+                        InputStream fileStream = file1.getInputStream();
+                        copyInputStreamToFile(fileStream, targetFile); //파일저장
+                    } catch (Exception e) {
+                        deleteQuietly(targetFile); //저장된 현재 파일 삭제
+                        e.printStackTrace();
+                        break;
+                    }
+                }
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return files;
+    }
 
 
     //아이템 파일 저장
@@ -112,8 +149,6 @@ public class FileImageService {
         MultipartFile thumbnails = flowerDto.getThumbnails();
         multipartFileList.add(0, thumbnails);
 
-        //결과 map
-        ImageDto file = null;
 
         int count = 0;
         try{

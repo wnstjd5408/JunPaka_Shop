@@ -55,18 +55,14 @@ public class FlowerController {
     }
 
     @PostMapping("/admin/flowers/{flowerId}")
-    public String itemUpdate(@Valid FlowerFormDto flowerFormDto,
+    public String itemUpdate(@Valid @ModelAttribute FlowerFormDto flowerFormDto,
                              BindingResult bindingResult,
                              Model model){
         Long flowerId;
-        List<Type> types = typeService.allType();
 
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("flowerFormDto", flowerFormDto);
-
-            log.info("flowerFormDto.getImageDtolist() 사이즈 : ", flowerFormDto.getImageDtolist().size());
-            model.addAttribute("types", types);
+            log.info("사이즈 : {}", flowerFormDto.getImageDtolist().size());
             return "forms/flowerForm";
         }
 
@@ -75,7 +71,6 @@ public class FlowerController {
         }catch (Exception e){
             model.addAttribute("errorMessage", "상품 수정 에러가 발생하였습니다");
             model.addAttribute("flowerFormDto", flowerFormDto);
-            model.addAttribute("types", types);
             return "forms/flowerForm";
         }
         model.addAttribute("flowerFormDto", flowerFormDto);

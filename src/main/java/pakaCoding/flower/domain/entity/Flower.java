@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import org.springframework.web.multipart.MultipartFile;
 import pakaCoding.flower.domain.constant.FlowerSellStatus;
 import pakaCoding.flower.dto.FlowerFormDto;
+import pakaCoding.flower.dto.ImageDto;
 import pakaCoding.flower.exception.OutOfStockException;
 
 import java.util.ArrayList;
@@ -90,7 +92,6 @@ public class Flower extends BaseEntity {
         this.detailComment = flowerFormDto.getDetailComment();
         this.type = flowerFormDto.getType();
         this.flowerSellStatus = flowerFormDto.getFlowerSellStatus();
-
     }
 
     public void removeStockQuantity(int stock){

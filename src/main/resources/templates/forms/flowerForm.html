@@ -5,6 +5,13 @@
         <title>Flower 등록</title>
         <meta name="_csrf" th:content="${_csrf.token}"/>
         <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+        <style>
+
+            .real-upload {
+                display: none;
+            }
+        </style>
     </head>
 
     <th:block layout:fragment="navbar" class="py-5">
@@ -51,37 +58,59 @@
                               th:field="*{detailComment}" id="detailComment"></textarea>
                 </div>
                 <p th:if="${#fields.hasErrors('detailComment')}" th:errors="*{detailComment}" class="alert-danger alert">Incorrect data</p>
-                <label for="typeNot" class="form-label">타입</label>
-                    <select th:field="*{type}" class="form-control, form-select" id="typeNot">
-                        <option value="">==타입 선택==</option>
-                        <option th:each="type : ${types}" th:value="${type.id}" th:text="${type.typename}" ></option>
-                    </select>
-                <p th:if="${#fields.hasErrors('type')}" th:errors="*{type}" class="alert-danger alert">Incorrect data</p>
 
-                <div th:if="${#lists.isEmpty(flowerFormDto.imageDtolist)}" class="mb-3">
-                    <label for="thumbnails" class="form-label">썸네일 - 메인 사진</label>
-                    <input type="file" class="form-control" name="thumbnails" id="thumbnails">
-                </div>
-                <div th:if="${#lists.isEmpty(flowerFormDto.imageDtolist)}" class="mb-3">
-                    <label for="flowerImage" class="form-label">이미지</label>
-                    <input type="file" class="form-control" name="multipartFile" multiple id="flowerImage">
-                </div>
+                <th:block th:if ="${#lists.isEmpty(flowerFormDto.type)}">
+                    <div class="mb-3">
+                        <label for="typeNot" class="form-label">타입</label>
+                        <select th:field="*{type}" class="form-control, form-select" id="typeNot">
+                            <option value="">==타입 선택==</option>
+                            <option th:each="type : ${types}" th:value="${type.id}" th:text="${type.typename}" ></option>
+                        </select>
+                    </div>
+                </th:block>
+                <th:block th:unless ="${#lists.isEmpty(flowerFormDto.type)}">
+                    <div class="mb-3">
+                        <label for="typeIs" class="form-label">타입</label>
+                        <p class="form-control" id="typeIs" th:field="*{type}" th:value="${flowerFormDto.type.id}" th:text="${flowerFormDto.type.typename }"></p>
+                        <input type="hidden" th:field="*{type}"/>
+                    </div>
+                </th:block>
+                <p th:if="${#fields.hasErrors('type')}" th:errors="*{type}" class="alert-danger alert">Incorrect data</p>
+                <th:block th:if = "${#lists.isEmpty(flowerFormDto.imageDtolist)}">
+                    <div class="mb-3">
+                        <label for="thumbnails" class="form-label">썸네일 - 메인 사진</label>
+                        <input type="file" class="form-control" name="thumbnails" id="thumbnails">
+                    </div>
+                    <div class="mb-3">
+                        <label for="flowerImage" class="form-label">이미지</label>
+                        <input type="file" class="form-control" accept="image/*" name="multipartFile" multiple id="flowerImage">
+                    </div>
+                </th:block>
 
                 <th:block th:if = "${not #lists.isEmpty(flowerFormDto.imageDtolist)}">
-                    <div id="file_list">
-                        <span class="form-text">이미지 추가</span>
-                        <a onclick="addFile()"><span class="ui-icon-plus" aria-hidden="true"></span>파일추가</a>
-                            <div class="mb-3" th:each="itemImgDto : ${flowerFormDto.imageDtolist}">
-                                <span class="form-text" th:text="${itemImgDto.originFileName}"></span>
-                                <input type="hidden" name="itemImgIds" th:value="${itemImgDto.id}">
-                                <span th:text="${itemImgDto.id}"></span>
-                                <button type="button" class="btn-close" aria-label="Close">
-                                    <span aria-hidden="true" th:data-id="${itemImgDto.id}"
-                                            onclick="deleteFile(this)">&times;
-                                    </span>
-                                </button>
-                            </div>
+                    <div id="file_list mb-3">
+                        <label class="form-label">이미지 추가</label>
+                        <div class="mb-3">
+                             <input type="file" accept="image/*" id="addFile"
+                                    name="multipartFile" multiple class="real-upload" onchange="loadFile(this)"/>
+                             <input type="button" class="btn btn-sm btn-outline-secondary form-control" value="파일추가"
+                                    onclick="document.getElementById('addFile').click();"/>
+                        </div>
+                        <div class="mb-3" th:each="itemImgDto : ${flowerFormDto.imageDtolist}">
+                            <span class="form-text" th:text="${itemImgDto.originFileName}"></span>
+                            <input type="hidden" name="itemImgIds" th:value="${itemImgDto.id}">
+                            <button type="button" class="btn-close" aria-label="Close">
+                                <span aria-hidden="true" th:data-id="${itemImgDto.id}"
+                                      onclick="deleteFile(this)">&times;
+                                </span>
+                            </button>
+                        </div>
+                        <div class="file_input">
+                            <label class="form-label" for="addFile">추가 된 이미지</label>
+                            <ul class="addFileName" id="submitFile">
 
+                            </ul>
+                        </div>
                     </div>
                 </th:block>
 
@@ -103,15 +132,51 @@
                 }
             });
 
-            function  addFile(){
-                var str = "<input type='file' class='form-control'><a href='#this' id='file-delete'>삭제</a>";
+            const realUpload = document.querySelector('.real-upload');
+            realUpload.addEventListener('change', loadFile);
+            function loadFile(e) {
+                const uploadFiles = []
+                const files = e.currentTarget.files;
+                const imagePreview = document.querySelector('.addFileName');
 
-                $('#file_list').append(str);
-                $("a[id='file-delete']").on("click",function (e){
-                    e.preventDefault();
-                    deleteFile($(this));
+                while(imagePreview.firstChild){
+                    imagePreview.firstChild.remove();
+                }
+                const docFrag = new DocumentFragment();
+
+
+
+                //파일 타입 검사
+                [...files].forEach(file => {
+                    if (!file.type.match("image/.*")) {
+                        alert('이미지 파일만 업로드가 가능합니다.');
+                        return
+                    }
+                    if([...files].length < 5){
+                        uploadFiles.push(file);
+                        const fileReader = new FileReader();
+                        fileReader.onload = (e) => {
+                            const preview = createElement(e, file);
+                            imagePreview.appendChild(preview);
+
+                         };
+                        fileReader.readAsText(file);
+                    }
+
                 });
+
+
             }
+
+            function createElement(e, file){
+                const name = file.name;
+                const li = document.createElement('li');
+                const message = document.createTextNode(name);
+                li.appendChild(message);
+                return li;
+            }
+
+
 
             function deleteFile(obj) {
                 var itemImageId = obj.dataset.id;
@@ -147,25 +212,6 @@
                     }
                 });
             }
-
-            function bindDomEvent(){
-                $(".custom-file-input").on("change", function() {
-                    var fileName = $(this).val().split("\\").pop();  //이미지 파일명
-                    var fileExt = fileName.substring(fileName.lastIndexOf(".")+1); // 확장자 추출
-                    fileExt = fileExt.toLowerCase(); //소문자 변환
-
-                    if(fileExt != "jpg" && fileExt != "jpeg" && fileExt != "gif"
-                        && fileExt != "png" && fileExt != "bmp"){
-                        alert("이미지 파일만 등록이 가능합니다.");
-                        return;
-                    }
-
-                    $(this).siblings(".custom-file-label").html(fileName);
-                });
-            }
-
         </script>
-
-
     </th:block>
 </html>
