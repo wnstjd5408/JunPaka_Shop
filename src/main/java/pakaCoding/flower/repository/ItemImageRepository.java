@@ -8,8 +8,8 @@ import java.util.Optional;
 
 public interface ItemImageRepository extends JpaRepository<ItemImage, Long> {
 
-    List<ItemImage> findByFlowerId(Long flowerId);
-    ItemImage findByFlowerIdAndRepImgYn(Long flowerId, String repImgYn);
+    List<ItemImage> findByItemId(Long itemId);
+    ItemImage findByItemIdAndRepImgYn(Long itemId, String repImgYn);
 
     Optional<ItemImage> findBySavedFileImgName(String savedFileImgName);
 }

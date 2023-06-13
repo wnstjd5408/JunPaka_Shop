@@ -2,7 +2,6 @@ package pakaCoding.flower.dto;
 
 import lombok.Builder;
 import lombok.Data;
-import pakaCoding.flower.domain.entity.Flower;
 
 @Data
 public class AdminItemListDto {
@@ -21,7 +20,5 @@ public class AdminItemListDto {
         this.price = price;
         this.stockQuantity = stockQuantity;
     }
-
-    //DTO -> Flower
 
 }

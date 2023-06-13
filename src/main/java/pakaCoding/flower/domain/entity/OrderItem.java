@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
-import org.aspectj.weaver.ast.Or;
 import pakaCoding.flower.domain.constant.ReviewStatus;
 
 @Entity
@@ -22,8 +21,8 @@ public class OrderItem {
     private Order order;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "flower_id")
-    private Flower flower;
+    @JoinColumn(name = "item_id")
+    private Item item;
 
 
     @NotNull
@@ -45,14 +44,14 @@ public class OrderItem {
     }
 
     //== 생성 메서드 ==//
-    public static OrderItem createOrderItem(Flower flower, int orderPrice, int count) {
+    public static OrderItem createOrderItem(Item item, int orderPrice, int count) {
         OrderItem orderItem = new OrderItem();;
-        orderItem.setFlower(flower);
+        orderItem.setItem(item);
         orderItem.setCount(count);
         orderItem.setOrderPrice(orderPrice);
 
         orderItem.changeReviewId(ReviewStatus.NO);
-        flower.removeStockQuantity(count);
+        item.removeStockQuantity(count);
 
         return orderItem;
     }
@@ -73,6 +72,6 @@ public class OrderItem {
     //==주문 취소==//
     public void cancel() {
         this.reviewStatus = ReviewStatus.CANCEL;
-        this.getFlower().addStockQuantity(count);
+        this.getItem().addStockQuantity(count);
     }
 }

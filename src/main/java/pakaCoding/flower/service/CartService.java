@@ -1,16 +1,13 @@
 package pakaCoding.flower.service;
 
-import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 import pakaCoding.flower.domain.entity.Cart;
 import pakaCoding.flower.domain.entity.CartItem;
-import pakaCoding.flower.domain.entity.Flower;
+import pakaCoding.flower.domain.entity.Item;
 import pakaCoding.flower.domain.entity.Member;
 import pakaCoding.flower.dto.CartItemDto;
 import pakaCoding.flower.dto.CartListDto;
@@ -29,7 +26,7 @@ public class CartService {
 
     private final CartRepository cartRepository;
     private final MemberRepository memberRepository;
-    private final FlowerRepository flowerRepository;
+    private final ItemRepository itemRepository;
     private final CartItemRepository cartItemRepository;
 
     private final OrderService orderService;
@@ -44,14 +41,14 @@ public class CartService {
             cartRepository.save(cart);
         }
         log.info("cart.getMember().getName() ={}", cart.getMember().getUsername());
-        Flower flower = flowerRepository.findById(cartItemDto.getFlowerId())
+        Item item = itemRepository.findById(cartItemDto.getItemId())
                 .orElseThrow(EntityNotFoundException::new);
-        CartItem cartItem = cartItemRepository.findByCartIdAndFlowerId(cart.getId(), flower.getId());
+        CartItem cartItem = cartItemRepository.findByCartIdAndItemId(cart.getId(), item.getId());
 
 
         //해당 상품이 장바구니에 존재하지 않는다면 생성 후 추가
         if(cartItem == null){
-            cartItem =  CartItem.createCartItem(cart, flower, cartItemDto.getCount());
+            cartItem =  CartItem.createCartItem(cart, item, cartItemDto.getCount());
             cartItemRepository.save(cartItem);
         }
 
@@ -111,7 +108,7 @@ public class CartService {
         for (CartOrderDto cartOrderDto : cartOrderDtoList) {
             CartItem cartItem = cartItemRepository.findById(cartOrderDto.getCartItemId()).orElseThrow(EntityNotFoundException::new);
             OrderDto orderDto = new OrderDto();
-            orderDto.setFlowerId(cartItem.getFlower().getId());
+            orderDto.setOrderId(cartItem.getItem().getId());
             orderDto.setCount(cartItem.getCount());
             orderDtoList.add(orderDto);
         }

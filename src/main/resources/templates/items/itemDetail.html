@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
     <head>
-        <title th:text="${flower.name}">${flower.name}</title>
+        <title th:text="${item.name}">${item.name}</title>
         <meta name="_csrf" th:content="${_csrf.token}">
         <meta name="_csrf_header" th:content="${_csrf.headerName}">
         <style>
@@ -16,27 +16,27 @@
     </th:block>
     <!-- content   -->
     <th:block layout:fragment="content" class="py-5">
-        <input type="hidden" id="flowerId" th:value="${flower.id}">
+        <input type="hidden" id="itemId" th:value="${item.id}">
         <div class="container px-5 px-lg-5 mt-5">
             <div class="row gx-3 gx-lg-5 row-cols-1 row-cols-md-3 row-cols-xl-2 justify-content-center">
                 <div class="col mb-2">
-                    <img class="card-img-top" th:src="'/display/fileImage='+${flower.imageDtolist[0].imgUrl}"
+                    <img class="card-img-top" th:src="'/display/fileImage='+${item.imageDtolist[0].imgUrl}"
                          src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
                 </div>
                 <div class="text-start">
                     <div class="p-2">
-                        <span th:if="${flower.flowerSellStatus == T(pakaCoding.flower.domain.constant.FlowerSellStatus).SELL}"
+                        <span th:if="${item.itemSellStatus == T(pakaCoding.flower.domain.constant.ItemSellStatus).SELL}"
                               class="badge ms-auto"> 판매중</span>
-                        <span th:unless="${flower.flowerSellStatus == T(pakaCoding.flower.domain.constant.FlowerSellStatus).SELL}"
+                        <span th:unless="${item.itemSellStatus == T(pakaCoding.flower.domain.constant.ItemSellStatus).SELL}"
                               class="badge ms-auto"> 품절</span>
                     </div>
                     <div class="p-2">
-                        <span class="fw-bolder" th:text="${flower.name}"> </span>
+                        <span class="fw-bolder" th:text="${item.name}"> </span>
                     </div>
                     <hr class="mt-2">
 
                     <div class="p-2">
-                        <span class="fw-light" name="price" id="price"   th:text="|${flower.price}원|"></span>
+                        <span class="fw-light" name="price" id="price"   th:text="|${item.price}원|"></span>
                     </div>
                     <div class="input-group p-2">
                         <div class="input-group">
@@ -49,13 +49,13 @@
                         <h5>결제 금액</h5>
                         <h3 name ="totalPrice" id="totalPrice" class="fw-bolder"></h3>
                     </div>
-                    <div th:if="${flower.flowerSellStatus == T(pakaCoding.flower.domain.constant.FlowerSellStatus).SELL}"
+                    <div th:if="${item.itemSellStatus == T(pakaCoding.flower.domain.constant.ItemSellStatus).SELL}"
                          class="text-end mt-1">
                         <button type="button" class="btn btn-outline-dark btn-lg mt-1"
                                 onclick="addCart()">장바구니 담기</button>
                         <button type="button" class="btn btn-outline-dark btn-lg mt-1" onclick="order()">주문하기</button>
                     </div>
-                    <div th:unless="${flower.flowerSellStatus == T(pakaCoding.flower.domain.constant.FlowerSellStatus).SELL}"
+                    <div th:unless="${item.itemSellStatus == T(pakaCoding.flower.domain.constant.ItemSellStatus).SELL}"
                         class="text-end mt-1">
                         <button type="button" class="btn btn-outline-danger btn-lg" disabled="disabled" >품절</button>
                     </div>
@@ -78,10 +78,10 @@
                 <div>
                     <hr class="mt-2">
                     <div class="my-2">
-                        <span class="fw-light fs-6" th:text="${flower.detailComment}" style="white-space: pre-line;"></span>
+                        <span class="fw-light fs-6" th:text="${item.detailComment}" style="white-space: pre-line;"></span>
                     </div>
-                    <div th:each="flowerImg : ${flower.imageDtolist}" class="text-center my-1 rounded">
-                        <img class="  p-2 " th:src="'/display/fileImage='+${flowerImg.imgUrl}"
+                    <div th:each="itemImg : ${item.imageDtolist}" class="text-center my-1 rounded">
+                        <img class="  p-2 " th:src="'/display/fileImage='+${itemImg.imgUrl}"
                              src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..."  width="800"/>
                     </div>
                 </div>
@@ -107,12 +107,12 @@
 
             function calculateTotalPrice(){
                 var count = $("#count").val();
-                var price = /*[[ ${flower.price} ]]*/;
+                var price = /*[[ ${item.price} ]]*/;
                 var totalPrice = price*count;
                 $("#totalPrice").html(totalPrice + '원');
             }
             function showReview(){
-                var url ="/reviews/" + $("#flowerId").val();
+                var url ="/reviews/" + $("#itemId").val();
                 $.ajax({
                     url : url,
                     type : "GET",
@@ -146,7 +146,7 @@
 
                 var url ="/order";
                 var paramData = {
-                    flowerId : $("#flowerId").val(),
+                    itemId : $("#itemId").val(),
                     count : $("#count").val()
                 };
 
@@ -185,7 +185,7 @@
 
                 var url = "/cart";
                 var paramData = {
-                    flowerId : $("#flowerId").val(),
+                    itemId : $("#itemId").val(),
                     count : $("#count").val()
                 };
 
@@ -203,7 +203,7 @@
                     cache: false,
                     success: function (result, status) {
                         alert("상품이 장바구니에 담겼습니다.");
-                        location.href = '/';
+                        location.href = '/cart';
                     },
                     error: function (jqXHR, status, error) {
                         if (jqXHR.status == '401') {

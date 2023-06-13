@@ -14,7 +14,7 @@ import pakaCoding.flower.dto.OrderDto;
 import pakaCoding.flower.dto.OrderItemDto;
 import pakaCoding.flower.dto.OrderMyPageDto;
 import pakaCoding.flower.repository.ItemImageRepository;
-import pakaCoding.flower.repository.FlowerRepository;
+import pakaCoding.flower.repository.ItemRepository;
 import pakaCoding.flower.repository.MemberRepository;
 import pakaCoding.flower.repository.OrderRepository;
 
@@ -30,8 +30,8 @@ public class OrderService {
 
     private final MemberRepository memberRepository;
     private final OrderRepository orderRepository;
-    private final ItemImageRepository fileImageRepository;
-    private final FlowerRepository flowerRepository;
+    private final ItemImageRepository itemImageRepository;
+    private final ItemRepository itemRepository;
 
 
     @Transactional
@@ -39,9 +39,9 @@ public class OrderService {
         log.info("OrderService에서 order 실행");
         //엔티티 조회
         List<OrderItem> orderItemList = new ArrayList<>();
-        Flower flower = flowerRepository.findById(orderDto.getFlowerId())
+        Item item = itemRepository.findById(orderDto.getOrderId())
                 .orElseThrow(EntityNotFoundException::new);
-        orderItemList.add(OrderItem.createOrderItem(flower, flower.getPrice(), orderDto.getCount()));
+        orderItemList.add(OrderItem.createOrderItem(item, item.getPrice(), orderDto.getCount()));
 
         Member member = memberRepository.findByUserid(userid).orElseThrow(EntityNotFoundException::new);
         //배송정보 생성
@@ -64,8 +64,8 @@ public class OrderService {
 
         List<OrderItem> orderItemList = new ArrayList<>();
         for (OrderDto orderDto : orderDtoList) {
-            Flower flower = flowerRepository.findById(orderDto.getFlowerId()).orElseThrow(EntityNotFoundException::new);
-            OrderItem orderItem = OrderItem.createOrderItem(flower, flower.getPrice(), orderDto.getCount());
+            Item item = itemRepository.findById(orderDto.getOrderId()).orElseThrow(EntityNotFoundException::new);
+            OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), orderDto.getCount());
             orderItemList.add(orderItem);
         }
         //Delivery 객체 생성
@@ -88,7 +88,7 @@ public class OrderService {
                     List<OrderItem> orderItems = o.getOrderItems();
                     for (OrderItem orderItem : orderItems) {
 
-                        Image image = fileImageRepository.findByFlowerIdAndRepImgYn(orderItem.getFlower().getId(), "Y");
+                        Image image = itemImageRepository.findByItemIdAndRepImgYn(orderItem.getItem().getId(), "Y");
                         OrderItemDto orderItemDto = new OrderItemDto(orderItem, image.getSavedFileImgName());
                         orderMyPageDto.addOrderItemDto(orderItemDto);
                     }

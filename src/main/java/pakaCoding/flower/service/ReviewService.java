@@ -28,20 +28,20 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final MemberRepository memberRepository;
-    private final FileImageService fileImageService;
+    private final ItemImageService itemImageService;
     private final OrderItemRepository orderItemRepository;
 
     public void saveReview(ReviewFormDto reviewFormDto, String userId){
         log.info("ReviewService에서 saveReview 실행");
 
         OrderItem orderItem = orderItemRepository.findById(reviewFormDto.getOrderItemId()).orElseThrow(EntityNotFoundException::new);
-        Flower flower = orderItem.getFlower();
+        Item item = orderItem.getItem();
 
         Member member = memberRepository.findByUserid(userId).orElseThrow(EntityNotFoundException::new);
-        Review review = Review.createReview(member, flower, orderItem, reviewFormDto.getComment(), reviewFormDto.getRating());
+        Review review = Review.createReview(member, item, orderItem, reviewFormDto.getComment(), reviewFormDto.getRating());
         reviewRepository.save(review);
 
-        List<ImageDto> reviewFiles =fileImageService.saveReviewFile(reviewFormDto);
+        List<ImageDto> reviewFiles = itemImageService.saveReviewFile(reviewFormDto);
         List<ReviewImage> reviewImages = reviewFiles.stream().
                         map(ImageDto::toEntityReviewImage).
                         collect(Collectors.toList());
@@ -53,7 +53,7 @@ public class ReviewService {
         Pageable pageable = PageRequest.of(page, 10);
         log.info("ReviewService에 findAllReview 시작");
 
-        Page<Review> reviews = reviewRepository.findByFlower_Id(flowerId, pageable);
+        Page<Review> reviews = reviewRepository.findByItem_Id(flowerId, pageable);
 
         List<ReviewDto> reviewDtos = reviews.stream()
                 .map(ReviewDto::new).toList();

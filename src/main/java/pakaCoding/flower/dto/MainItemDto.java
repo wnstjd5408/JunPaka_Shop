@@ -4,18 +4,18 @@ import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class MainFlowerDto {
+public class MainItemDto {
 
 
     private Long id;
-    private String flowerName;
+    private String itemName;
     private String imgURL;
     private Integer price;
 
     @Builder
-    public MainFlowerDto(Long id, String flowerName, String imgURL, Integer price) {
+    public MainItemDto(Long id, String itemName, String imgURL, Integer price) {
         this.id = id;
-        this.flowerName = flowerName;
+        this.itemName = itemName;
         this.imgURL = imgURL;
         this.price = price;
     }

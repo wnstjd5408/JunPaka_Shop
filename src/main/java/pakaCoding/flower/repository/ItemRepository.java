@@ -1,0 +1,61 @@
+package pakaCoding.flower.repository;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+import pakaCoding.flower.domain.entity.Item;
+import pakaCoding.flower.dto.MainItemDto;
+
+import java.util.Optional;
+
+@Repository
+public interface ItemRepository extends JpaRepository<Item, Long> {
+
+
+//     @Query(value = "SELECT f FROM Flower f left join  f.fileImages fi where f.type.id = :typeId and  fi.repimgYn = 'Y' order by f.createDate DESC ")
+//     @EntityGraph(attributePaths = {"fileImages"})
+//     Page<Flower> findAllByTypeIdQuery(@Param("typeId") int typeId, Pageable pageable);
+
+     @Query(value = "Select new pakaCoding.flower.dto.MainItemDto(i.id, i.name, ii.savedFileImgName, i.price) " +
+             "from Item i join i.itemImages ii " +
+             "where i.type.id = :typeId " +
+             "and ii.repImgYn = 'Y' " +
+             "and i.id = ii.item.id " +
+             "order by i.createDate desc")
+     Page<MainItemDto> findAllByTypeIdListDtos(@Param("typeId") int typeId, Pageable pageable);
+
+
+//     @Query(value = "SELECT f FROM Flower f join FileImage fi on f.id = fi.flower.id where fi.repimgYn = 'Y' order by f.createDate DESC ")
+//     @EntityGraph(attributePaths = {"fileImages"})
+//     Page<Flower> findFlower(Pageable pageable);
+
+
+     @Query ("select new pakaCoding.flower.dto.MainItemDto(i.id, i.name, ii.savedFileImgName, i.price) " +
+             "from Item i join i.itemImages ii " +
+             "where ii.repImgYn= 'Y' " +
+             "and i.id = ii.item.id " +
+             "order by  i.createDate DESC")
+     Page<MainItemDto> findItemListDto(Pageable pageable);
+
+
+     @Query("select i from Item i" +
+             " order by i.createDate DESC")
+     Page<Item> findAdminItems(Pageable pageable);
+
+
+     @Query("select distinct i from Item i" +
+             " join fetch i.type t " +
+             " where i.id = :itemId")
+     Optional<Item> findAllByType(Long itemId);
+
+
+     @Query("select i from Item i" +
+             " join fetch i.type t " +
+             " join fetch i.itemImages ii " +
+             " where i.id = :itemId")
+     Item findAllByItemImagesAndType(Long itemId);
+
+}

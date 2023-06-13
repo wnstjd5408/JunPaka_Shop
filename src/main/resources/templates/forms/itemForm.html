@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
 
     <head>
-        <title>Flower 등록</title>
+        <title>Item 등록</title>
         <meta name="_csrf" th:content="${_csrf.token}"/>
         <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 
@@ -24,32 +24,32 @@
                 <h3>상품등록</h3>
             </div>
 
-            <form th:object="${flowerFormDto}" method="post" enctype="multipart/form-data">
+            <form th:object="${itemFormDto}" method="post" enctype="multipart/form-data">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                 <input type="hidden" th:field="*{id}">
 
                 <div class="mb-3">
-                    <label for="flowerSell" class="form-label">타입</label>
-                    <select name="flowerSellStatus" class="form-control, form-select" id="flowerSell">
+                    <label for="itemSell" class="form-label">타입</label>
+                    <select name="itemSellStatus" class="form-control, form-select" id="itemSell">
                         <option value="SELL">판매중</option>
                         <option value="SOLD_OUT">품절</option>
                     </select>
                 </div>
 
                 <div class="mb-3">
-                    <label for="flowerName" class="form-label">꽃 이름</label>
-                    <input type="text" class="form-control"  th:field="*{name}" id="flowerName">
+                    <label for="itemName" class="form-label">제품 이름</label>
+                    <input type="text" class="form-control"  th:field="*{name}" id="itemName">
                 </div>
                 <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="alert-danger alert">Incorrect data</p>
                 <div class="mb-3">
-                    <label for="flowerPrice" class="form-label">가격</label>
-                    <input type="text" class="form-control" th:field="*{price}" id="flowerPrice">
+                    <label for="itemPrice" class="form-label">가격</label>
+                    <input type="text" class="form-control" th:field="*{price}" id="itemPrice">
                 </div>
                 <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="alert-danger alert">Incorrect data</p>
 
                 <div class="mb-3">
-                    <label for="flowerStockQuantity" class="form-label">수량</label>
-                    <input type="text" class="form-control"  th:field="*{stockQuantity}" id="flowerStockQuantity">
+                    <label for="itemStockQuantity" class="form-label">수량</label>
+                    <input type="text" class="form-control"  th:field="*{stockQuantity}" id="itemStockQuantity">
                 </div>
                 <p th:if="${#fields.hasErrors('stockQuantity')}" th:errors="*{stockQuantity}" class="alert-danger alert">Incorrect data</p>
                 <div class="mb-3">
@@ -59,7 +59,7 @@
                 </div>
                 <p th:if="${#fields.hasErrors('detailComment')}" th:errors="*{detailComment}" class="alert-danger alert">Incorrect data</p>
 
-                <th:block th:if ="${#lists.isEmpty(flowerFormDto.type)}">
+                <th:block th:if ="${#lists.isEmpty(itemFormDto.type)}">
                     <div class="mb-3">
                         <label for="typeNot" class="form-label">타입</label>
                         <select th:field="*{type}" class="form-control, form-select" id="typeNot">
@@ -68,26 +68,26 @@
                         </select>
                     </div>
                 </th:block>
-                <th:block th:unless ="${#lists.isEmpty(flowerFormDto.type)}">
+                <th:block th:unless ="${#lists.isEmpty(itemFormDto.type)}">
                     <div class="mb-3">
                         <label for="typeIs" class="form-label">타입</label>
-                        <p class="form-control" id="typeIs" th:field="*{type}" th:value="${flowerFormDto.type.id}" th:text="${flowerFormDto.type.typename }"></p>
+                        <p class="form-control" id="typeIs" th:field="*{type}" th:value="${itemFormDto.type.id}" th:text="${itemFormDto.type.typename }"></p>
                         <input type="hidden" th:field="*{type}"/>
                     </div>
                 </th:block>
                 <p th:if="${#fields.hasErrors('type')}" th:errors="*{type}" class="alert-danger alert">Incorrect data</p>
-                <th:block th:if = "${#lists.isEmpty(flowerFormDto.imageDtolist)}">
+                <th:block th:if = "${#lists.isEmpty(itemFormDto.imageDtolist)}">
                     <div class="mb-3">
                         <label for="thumbnails" class="form-label">썸네일 - 메인 사진</label>
                         <input type="file" class="form-control" name="thumbnails" id="thumbnails">
                     </div>
                     <div class="mb-3">
-                        <label for="flowerImage" class="form-label">이미지</label>
-                        <input type="file" class="form-control" accept="image/*" name="multipartFile" multiple id="flowerImage">
+                        <label for="itemImage" class="form-label">이미지</label>
+                        <input type="file" class="form-control" accept="image/*" name="multipartFile" multiple id="itemImage">
                     </div>
                 </th:block>
 
-                <th:block th:if = "${not #lists.isEmpty(flowerFormDto.imageDtolist)}">
+                <th:block th:if = "${not #lists.isEmpty(itemFormDto.imageDtolist)}">
                     <div id="file_list mb-3">
                         <label class="form-label">이미지 추가</label>
                         <div class="mb-3">
@@ -96,7 +96,7 @@
                              <input type="button" class="btn btn-sm btn-outline-secondary form-control" value="파일추가"
                                     onclick="document.getElementById('addFile').click();"/>
                         </div>
-                        <div class="mb-3" th:each="itemImgDto : ${flowerFormDto.imageDtolist}">
+                        <div class="mb-3" th:each="itemImgDto : ${itemFormDto.imageDtolist}">
                             <span class="form-text" th:text="${itemImgDto.originFileName}"></span>
                             <input type="hidden" name="itemImgIds" th:value="${itemImgDto.id}">
                             <button type="button" class="btn-close" aria-label="Close">
@@ -114,11 +114,11 @@
                     </div>
                 </th:block>
 
-                <div class ="mb-3" th:if="${#strings.isEmpty(flowerFormDto.id)}">
+                <div class ="mb-3" th:if="${#strings.isEmpty(itemFormDto.id)}">
                     <button type="submit" class="btn btn-sm btn-secondary form-control">등록하기</button>
                 </div>
-                <div class="mb-3" th:unless="${#strings.isEmpty(flowerFormDto.id)}">
-                    <button th:formaction="@{'/admin/flowers/' + ${flowerFormDto.id} }" type="submit" class="btn btn-sm btn-secondary form-control">수정하기</button>
+                <div class="mb-3" th:unless="${#strings.isEmpty(itemFormDto.id)}">
+                    <button th:formaction="@{'/admin/items/' + ${itemFormDto.id} }" type="submit" class="btn btn-sm btn-secondary form-control">수정하기</button>
                 </div>
             </form>
         </div>
@@ -198,7 +198,7 @@
                     cache: false,
                     success: function (result, status) {
                         alert('선택하신 이미지가 삭제되었습니다');
-                        location.href = '/admin/flowers/' + result;
+                        location.href = '/admin/items/' + result;
                     },
 
                     error: function (jqXHR, status, error) {

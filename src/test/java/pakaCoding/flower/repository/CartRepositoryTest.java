@@ -49,7 +49,6 @@ class CartRepositoryTest {
 
         Member member = getMember();
         Cart cart = Cart.createCart(member);
-//        cartRepository.save(cart);
 
         Cart findCart = cartRepository.findByMemberId(member.getId());
 

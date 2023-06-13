@@ -3,8 +3,6 @@ package pakaCoding.flower.domain.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import pakaCoding.flower.domain.constant.ReviewStatus;
 
 import java.util.ArrayList;
@@ -33,8 +31,8 @@ public class Review extends TimeEntity{
     private int rating;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="flower_id") //외래키
-    private Flower flower;
+    @JoinColumn(name="item_id") //외래키
+    private Item item;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="member_id")//외래키
@@ -51,12 +49,12 @@ public class Review extends TimeEntity{
         reviewImages.forEach(reviewImage -> reviewImage.setReview(this));
     }
     //==생성 메서드==//
-    public static Review createReview(Member member, Flower flower, OrderItem orderItem, String comment, int rating){
+    public static Review createReview(Member member, Item item, OrderItem orderItem, String comment, int rating){
 
         Review review = new Review();
         review.setComment(comment);
         review.setRating(rating);
-        review.setFlower(flower);
+        review.setItem(item);
         review.setMember(member);
 
         orderItem.changeReviewId(ReviewStatus.YES);

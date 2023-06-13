@@ -41,11 +41,11 @@
                                 <td class="d-flex">
                                     <div class="me-2">
                                         <img th:src="'/display/fileImage='+${cartItem.imgUrl}"
-                                             src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" th:alt="${cartItem.flowerName}"
+                                             src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" th:alt="${cartItem.getItemName}"
                                         height="330" width="230">
                                     </div>
                                     <div class="align-self-center">
-                                        <span th:text="${cartItem.flowerName}" class="fw-bold"></span>
+                                        <span th:text="${cartItem.getItemName}" class="fw-bold"></span>
                                         <div class="fw-light">
                                             <span class="input-group mt-2">
                                                 <span th:id="price_ + ${cartItem.cartItemId}"

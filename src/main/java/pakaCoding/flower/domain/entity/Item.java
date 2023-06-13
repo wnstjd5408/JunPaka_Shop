@@ -4,10 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.web.multipart.MultipartFile;
-import pakaCoding.flower.domain.constant.FlowerSellStatus;
-import pakaCoding.flower.dto.FlowerFormDto;
-import pakaCoding.flower.dto.ImageDto;
+import pakaCoding.flower.domain.constant.ItemSellStatus;
+import pakaCoding.flower.dto.ItemFormDto;
 import pakaCoding.flower.exception.OutOfStockException;
 
 import java.util.ArrayList;
@@ -19,14 +17,14 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Flower extends BaseEntity {
+public class Item extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name ="flower_id")
+    @Column(name ="item_id")
     private Long id;            //번호
 
-    @Column(name = "flower_name", length = 100)
+    @Column(name = "item_name", length = 100)
     private String name;        //이름
 
     @Column(nullable = false)
@@ -49,14 +47,14 @@ public class Flower extends BaseEntity {
     @NotNull
     private String delYn;       //삭제여부
 
-    @OneToMany(mappedBy = "flower", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    private List<ItemImage> fileImages = new ArrayList<>();
+    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    private List<ItemImage> itemImages = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
-    private FlowerSellStatus flowerSellStatus;
+    private ItemSellStatus itemSellStatus;
 
 
-    public Flower delete(String delYn){
+    public Item delete(String delYn){
         this.delYn = delYn;
         return this;
     }
@@ -67,31 +65,31 @@ public class Flower extends BaseEntity {
 //    }
 
 
-    public void addFiles(List<ItemImage> fileImages){
-        this.fileImages = fileImages;
-        fileImages.forEach(ii -> ii.setFlower(this));
+    public void addFiles(List<ItemImage> itemImages){
+        this.itemImages = itemImages;
+        itemImages.forEach(ii -> ii.setItem(this));
     }
 
 
     @Builder
-    public Flower(FlowerFormDto flowerDto) {
-        this.name = flowerDto.getName();
-        this.price = flowerDto.getPrice();
-        this.stockQuantity = flowerDto.getStockQuantity();
-        this.detailComment = flowerDto.getDetailComment();
-        this.type = flowerDto.getType();
-        this.flowerSellStatus =flowerDto.getFlowerSellStatus();
+    public Item(ItemFormDto itemFormDto) {
+        this.name = itemFormDto.getName();
+        this.price = itemFormDto.getPrice();
+        this.stockQuantity = itemFormDto.getStockQuantity();
+        this.detailComment = itemFormDto.getDetailComment();
+        this.type = itemFormDto.getType();
+        this.itemSellStatus =itemFormDto.getItemSellStatus();
         this.hitCount = 0L;
         this.delYn = "N";
     }
 
-    public void updateItem(FlowerFormDto flowerFormDto){
-        this.name = flowerFormDto.getName();
-        this.price = flowerFormDto.getPrice();
-        this.stockQuantity = flowerFormDto.getStockQuantity();
-        this.detailComment = flowerFormDto.getDetailComment();
-        this.type = flowerFormDto.getType();
-        this.flowerSellStatus = flowerFormDto.getFlowerSellStatus();
+    public void updateItem(ItemFormDto itemFormDto){
+        this.name = itemFormDto.getName();
+        this.price = itemFormDto.getPrice();
+        this.stockQuantity = itemFormDto.getStockQuantity();
+        this.detailComment = itemFormDto.getDetailComment();
+        this.type = itemFormDto.getType();
+        this.itemSellStatus = itemFormDto.getItemSellStatus();
     }
 
     public void removeStockQuantity(int stock){

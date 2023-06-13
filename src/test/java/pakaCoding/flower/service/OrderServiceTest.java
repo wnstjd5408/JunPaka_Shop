@@ -2,27 +2,22 @@ package pakaCoding.flower.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
-import org.w3c.dom.Entity;
-import pakaCoding.flower.domain.constant.FlowerSellStatus;
+import pakaCoding.flower.domain.constant.ItemSellStatus;
 import pakaCoding.flower.domain.constant.Gender;
 import pakaCoding.flower.domain.constant.OrderStatus;
 import pakaCoding.flower.domain.constant.Role;
 import pakaCoding.flower.domain.entity.*;
 import pakaCoding.flower.dto.OrderDto;
-import pakaCoding.flower.repository.FlowerRepository;
+import pakaCoding.flower.repository.ItemRepository;
 import pakaCoding.flower.repository.MemberRepository;
 import pakaCoding.flower.repository.OrderRepository;
 import pakaCoding.flower.repository.TypeRepository;
-import pakaCoding.flower.service.OrderService;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -43,7 +38,7 @@ class OrderServiceTest {
 
 
     @Autowired
-    FlowerRepository flowerRepository;
+    ItemRepository itemRepository;
 
     @Autowired
     MemberRepository memberRepository;
@@ -52,15 +47,15 @@ class OrderServiceTest {
     @Autowired
     TypeRepository typeRepository;
 
-    private Flower registerFLower(String name, int price, int stockQuantity, Type type){
-        return Flower.builder()
+    private Item registerItem(String name, int price, int stockQuantity, Type type){
+        return Item.builder()
                 .name(name)
                 .price(price)
                 .stockQuantity(stockQuantity)
                 .detailComment("테스트 설명")
-                .flowerSellStatus(FlowerSellStatus.SELL)
+                .itemSellStatus(ItemSellStatus.SELL)
                 .hitCount(0L)
-                .fileImages(null)
+                .itemImages(null)
                 .delYn("Y")
                 .build();
     }
@@ -68,15 +63,15 @@ class OrderServiceTest {
     @DisplayName("주문 취소 테스트")
     public void cancelOrder() {
         //given
-        Flower flower = registerFLower("테스트" , 1000, 11, getType());
-        Flower saveFlower = flowerRepository.save(flower);
+        Item item = registerItem("테스트" , 1000, 11, getType());
+        Item saveItem = itemRepository.save(item);
         Member member = getMember();
 
         //상품 상세 페이지 화면에서 넘어오는 값들 설정
 
         OrderDto orderDto = new OrderDto();
         orderDto.setCount(10);
-        orderDto.setFlowerId(saveFlower.getId());
+        orderDto.setOrderId(saveItem.getId());
 
         //주문 객체 DB에 저장
         Long orderId = orderService.order(orderDto, member.getUserid());
@@ -88,16 +83,16 @@ class OrderServiceTest {
 
         //then
         assertThat(OrderStatus.CANCEL).isEqualTo(order.getOrderStatus());
-        assertThat(11).isEqualTo(flower.getStockQuantity());
+        assertThat(11).isEqualTo(item.getStockQuantity());
     }
     @DisplayName("주문자 테스트")
     @Test
     void create(){
         //given
-        Flower flower = registerFLower("테스트" , 1000, 11, getType());
-        log.info("flower.getId() = {}", flower.getId());
-        Flower saveFlower = flowerRepository.save(flower);
-        log.info("saveFlower.getId() = {}", saveFlower.getId());
+        Item item = registerItem("테스트" , 1000, 11, getType());
+        log.info("item.getId() = {}", item.getId());
+        Item saveItem = itemRepository.save(item);
+        log.info("saveItem.getId() = {}", saveItem.getId());
 
         Member member = getMember();
 
@@ -105,7 +100,7 @@ class OrderServiceTest {
 
         OrderDto orderDto = new OrderDto();
         orderDto.setCount(10);
-        orderDto.setFlowerId(saveFlower.getId());
+        orderDto.setOrderId(saveItem.getId());
 
         //주문 객체 DB에 저장
         Long orderId = orderService.order(orderDto, member.getUserid());
@@ -116,7 +111,7 @@ class OrderServiceTest {
 
         List<OrderItem> orderItems = order.getOrderItems();
 
-        int totalPrice = orderDto.getCount() * saveFlower.getPrice();
+        int totalPrice = orderDto.getCount() * saveItem.getPrice();
 
         log.info("order.getCreateDate() = {}", order.getCreateDate());
         log.info("order.getCreatedBy() = {}", order.getCreatedBy());

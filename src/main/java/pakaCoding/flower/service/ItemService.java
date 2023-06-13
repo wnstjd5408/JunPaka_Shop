@@ -1,0 +1,139 @@
+package pakaCoding.flower.service;
+
+import jakarta.persistence.EntityNotFoundException;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import pakaCoding.flower.domain.entity.Item;
+import pakaCoding.flower.domain.entity.ItemImage;
+import pakaCoding.flower.domain.entity.Type;
+import pakaCoding.flower.dto.*;
+import pakaCoding.flower.repository.ItemRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static java.util.stream.Collectors.*;
+
+@Service
+@Slf4j
+@RequiredArgsConstructor
+public class ItemService {
+    private final ItemRepository itemRepository;
+    private final ItemImageService itemImageService;
+
+    @Transactional
+    public Long saveItem(ItemFormDto itemFormDto) throws Exception {
+        Item item = null;
+        log.info("ItemService에서 saveItem 실행");
+
+        //insert
+        if(itemFormDto.getId() == null){
+            item = itemFormDto.toEntity();
+            itemRepository.save(item);
+        }
+        //상품 update
+        else{
+            item = itemRepository.findById(itemFormDto.getId()).get();
+        }
+
+        //파일저장
+        List<ImageDto> files = itemImageService.saveFile(itemFormDto);
+        List<ItemImage> fileImages = files.stream().map(ImageDto::toEntity).collect(toList());
+        item.addFiles(fileImages);
+
+        log.info("item.getId() = {}", item.getId());
+
+        Type type = item.getType();
+        type.addTypeCount();
+
+        return item.getId();
+    }
+
+
+    @Transactional(readOnly = true)
+    public ItemFormDto getFetchItemDetail(Long itemId) {
+
+        Item findItem = itemRepository.findAllByItemImagesAndType(itemId);
+
+
+        List<ImageDto> imgDtoList = new ArrayList<>();
+
+
+        List<ItemImage> fileImages = findItem.getItemImages();
+
+        fileImages.forEach(i -> imgDtoList.add(new ImageDto(i)));
+
+        return new ItemFormDto(findItem, imgDtoList);
+    }
+
+
+
+
+    @Transactional(readOnly = true)
+    public Page<AdminItemListDto> adminPageFindAllItems(int page){
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Item> adminItems = itemRepository.findAdminItems(pageable);
+
+        return adminItems.map(f -> AdminItemListDto.builder()
+                .itemName(f.getName())
+                .stockQuantity(f.getStockQuantity())
+                .price(f.getPrice())
+                .id(f.getId())
+                .build());
+    }
+
+    @Transactional(readOnly = true)
+    //list에 기본 페이지 Select
+    public Page<MainItemDto> findAllItems(int page){
+        Pageable pageable = PageRequest.of(page, 8);
+        log.info("findAllItems 시작");
+
+        Page<MainItemDto> itemList = itemRepository.findItemListDto(pageable);
+        List<MainItemDto> itemDtoList = itemList.getContent();
+
+        return new PageImpl<>(itemDtoList, pageable, itemList.getTotalElements());
+    }
+
+    @Transactional(readOnly = true)
+    //type별로 출력
+    public Page<MainItemDto> findItemsType(int typeId, int page){
+        Pageable pageable = PageRequest.of(page, 16);
+        log.info("Item Service findItemsType 시작");
+        log.info("findItemsType 함수를 사용한 service repository 개수 ={}",
+                itemRepository.findAllByTypeIdListDtos(typeId, pageable).stream().count());
+        Page<MainItemDto> itemList = itemRepository.findAllByTypeIdListDtos(typeId, pageable);
+        List<MainItemDto> itemDtoList = itemList.getContent();
+        return new PageImpl<>(itemDtoList, pageable, itemList.getTotalElements());
+    }
+
+
+
+    @Transactional
+    public Long updateItem(ItemFormDto itemFormDto) {
+
+        log.info("updateItem 사용");
+        Item findItem = itemRepository.findById(itemFormDto.getId()).orElseThrow(EntityNotFoundException::new);
+
+        log.info("itemFormDto.getPrice = {}", itemFormDto.getPrice());
+        log.info("itemFormDto.getType = {}", itemFormDto.getType());
+
+        findItem.updateItem(itemFormDto);
+
+        try {
+            List<ImageDto> imageDtoList = itemImageService.saveUpdateImageFile(itemFormDto);
+            List<ItemImage> fileImages = imageDtoList.stream().map(ImageDto::toEntity).collect(toList());
+            findItem.addFiles(fileImages);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+
+        return findItem.getId();
+    }
+}

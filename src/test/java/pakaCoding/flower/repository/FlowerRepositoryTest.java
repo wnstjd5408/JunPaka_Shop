@@ -10,13 +10,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
-import pakaCoding.flower.domain.constant.FlowerSellStatus;
-import pakaCoding.flower.domain.entity.Flower;
+import pakaCoding.flower.domain.constant.ItemSellStatus;
+import pakaCoding.flower.domain.entity.Item;
 import pakaCoding.flower.domain.entity.ItemImage;
 import pakaCoding.flower.domain.entity.Type;
-import pakaCoding.flower.dto.MainFlowerDto;
-
-import java.util.List;
+import pakaCoding.flower.dto.MainItemDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -27,7 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Slf4j
 class FlowerRepositoryTest {
     @Autowired
-    FlowerRepository flowerRepository;
+    ItemRepository itemRepository;
 
     @Autowired
     TypeRepository typeRepository;
@@ -55,8 +53,8 @@ class FlowerRepositoryTest {
         typeRepository.save(type1);
 
         for(int i = 1; i<=100; i++){
-            Flower fs = registerFLower("장미꽃다발", 15000, 1, type1);
-            flowerRepository.save(fs);
+            Item is = registerItem("장미꽃다발", 15000, 1, type1);
+            itemRepository.save(is);
             ItemImage image = ItemImage.builder()
                     .repImgYn("Y")
                     .contentType("10000")
@@ -75,9 +73,9 @@ class FlowerRepositoryTest {
 
         log.info("id  = {}", type1.getId());
         Pageable pageable = PageRequest.of(0, 10);
-        Page<MainFlowerDto> flowers = flowerRepository.findAllByTypeIdListDtos(type1.getId(), pageable);
-        log.info("flowers.getTotalElements = {}", flowers.getTotalElements());
-        log.info("flower 사이즈 ={}", flowers.getSize());
+        Page<MainItemDto> items = itemRepository.findAllByTypeIdListDtos(type1.getId(), pageable);
+        log.info("items.getTotalElements = {}", items.getTotalElements());
+        log.info("item 사이즈 ={}", items.getSize());
 
     }
 
@@ -94,28 +92,28 @@ class FlowerRepositoryTest {
 
         log.info("id = {}",  type1.getId());
 
-        Flower fs = registerFLower("장미꽃다발", 15000, 1, type1);
-        Flower fBasket = registerFLower("장미꽃바구니", 35000, 1, type1);
-        flowerRepository.save(fs);
-        flowerRepository.save(fBasket);
+        Item is = registerItem("장미꽃다발", 15000, 1, type1);
+        Item iBasket = registerItem("장미꽃바구니", 35000, 1, type1);
+        itemRepository.save(is);
+        itemRepository.save(iBasket);
         //when
-        Flower findFlower = flowerRepository.findById(fs.getId()).orElseThrow(() ->
-                new IllegalArgumentException("Wrong MemberId:<" + fs.getId() + ">"));
+        Item findItem = itemRepository.findById(is.getId()).orElseThrow(() ->
+                new IllegalArgumentException("Wrong MemberId:<" + is.getId() + ">"));
 
 
-        assertThat(fs.getName()).isEqualTo(findFlower.getName());
-        assertThat(fs.getPrice()).isEqualTo(findFlower.getPrice());
+        assertThat(is.getName()).isEqualTo(findItem.getName());
+        assertThat(is.getPrice()).isEqualTo(findItem.getPrice());
 
-        assertThat(flowerRepository.findAll().size()).isEqualTo(2);
+        assertThat(itemRepository.findAll().size()).isEqualTo(2);
     }
 
-    private Flower registerFLower(String name, int price, int stockQuantity, Type type){
-        return Flower.builder()
+    private Item registerItem(String name, int price, int stockQuantity, Type type){
+        return Item.builder()
                 .name(name)
                 .price(price)
                 .stockQuantity(stockQuantity)
                 .type(type)
-                .flowerSellStatus(FlowerSellStatus.SELL)
+                .itemSellStatus(ItemSellStatus.SELL)
                 .delYn("N")
                 .hitCount(0L)
                 .build();

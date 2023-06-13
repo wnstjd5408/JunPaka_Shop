@@ -11,12 +11,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pakaCoding.flower.domain.entity.Flower;
+import pakaCoding.flower.domain.entity.Item;
 import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.dto.*;
 import pakaCoding.flower.service.CartService;
-import pakaCoding.flower.service.FileImageService;
-import pakaCoding.flower.service.FlowerService;
+import pakaCoding.flower.service.ItemImageService;
+import pakaCoding.flower.service.ItemService;
 import pakaCoding.flower.service.TypeService;
 
 import java.security.Principal;
@@ -25,57 +25,54 @@ import java.util.List;
 @Controller
 @Slf4j
 @RequiredArgsConstructor
-public class FlowerController {
+public class ItemController {
 
-    private final FlowerService flowerService;
+    private final ItemService itemService;
     private final TypeService typeService;
     private final CartService cartService;
-    private final FileImageService fileImageService;
+    private final ItemImageService fileImageService;
 
     //상품 등록 페이지
-    @GetMapping("/admin/flowers/create")
-    public String newFlower(FlowerFormDto flowerFormDto ,Principal principal, Model model){
+    @GetMapping("/admin/items/create")
+    public String newItem(ItemFormDto itemFormDto , Principal principal, Model model){
         isPrincipal(principal, model);
         List<Type> types = typeService.allType();
 
-        model.addAttribute("flowerFormDto", flowerFormDto);
+        model.addAttribute("itemFormDto", itemFormDto);
         model.addAttribute("types", types);
-        return "forms/flowerForm";
+        return "forms/itemForm";
     }
 
 
-    @GetMapping("/admin/flowers/{flowerId}")
-    public String updatePageItem(@PathVariable(name = "flowerId") Long flowerId ,Model model){
+    @GetMapping("/admin/items/{itemId}")
+    public String updatePageItem(@PathVariable(name = "itemId") Long itemId ,Model model){
 
-        FlowerFormDto flower = flowerService.getFetchItemDetail(flowerId);
+        ItemFormDto item = itemService.getFetchItemDetail(itemId);
 
-        model.addAttribute("flowerFormDto", flower);
+        model.addAttribute("itemFormDto", item);
 
-        return "forms/flowerForm";
+        return "forms/itemForm";
     }
 
-    @PostMapping("/admin/flowers/{flowerId}")
-    public String itemUpdate(@Valid @ModelAttribute FlowerFormDto flowerFormDto,
+    @PostMapping("/admin/items/{itemId}")
+    public String itemUpdate(@Valid @ModelAttribute ItemFormDto itemFormDto,
                              BindingResult bindingResult,
                              Model model){
-        Long flowerId;
-
-
         if (bindingResult.hasErrors()) {
-            log.info("사이즈 : {}", flowerFormDto.getImageDtolist().size());
-            return "forms/flowerForm";
+            log.info("사이즈 : {}", itemFormDto.getImageDtolist().size());
+            return "forms/itemForm";
         }
 
         try{
-            flowerId = flowerService.updateItem(flowerFormDto);
+            itemService.updateItem(itemFormDto);
         }catch (Exception e){
             model.addAttribute("errorMessage", "상품 수정 에러가 발생하였습니다");
-            model.addAttribute("flowerFormDto", flowerFormDto);
-            return "forms/flowerForm";
+            model.addAttribute("itemFormDto", itemFormDto);
+            return "forms/itemForm";
         }
-        model.addAttribute("flowerFormDto", flowerFormDto);
+        model.addAttribute("itemFormDto", itemFormDto);
 
-        return "redirect:/admin/flowers";
+        return "redirect:/admin/items";
     }
 
 
@@ -83,30 +80,30 @@ public class FlowerController {
 
     @DeleteMapping("/itemImage/{itemImageId}")
     @ResponseBody
-    public ResponseEntity deleteImage(@PathVariable Long itemImageId, Principal principal){
+    public ResponseEntity deleteImage(@PathVariable Long itemImageId){
         log.info("deleteImage 실행");
-        Flower flower = fileImageService.deleteImage(itemImageId);
-        return new ResponseEntity<Long>(flower.getId(), HttpStatus.OK);
+        Item item = fileImageService.deleteImage(itemImageId);
+        return new ResponseEntity<Long>(item.getId(), HttpStatus.OK);
     }
 
-    @GetMapping("/admin/flowers")
+    @GetMapping("/admin/items")
     public String itemManage(Model model,
                              @RequestParam(value = "page", defaultValue = "0") int page){
 
-        Page<AdminItemListDto> items = flowerService.adminPageFindAllFlowers(page);
+        Page<AdminItemListDto> items = itemService.adminPageFindAllItems(page);
 
-        log.info("flower.getTotalPages = {}", items.getTotalPages());
+        log.info("items.getTotalPages = {}", items.getTotalPages());
 
         model.addAttribute("maxPage", 5);
-        model.addAttribute("flowers", items);
+        model.addAttribute("items", items);
 
         pageModelPut(items, model);
 
-        return "flowers/itemMng";
+        return "items/itemMng";
     }
 
-    @PostMapping("/admin/flowers/create")
-    public String save(@Valid FlowerFormDto flowerFormDto,
+    @PostMapping("/admin/items/create")
+    public String save(@Valid ItemFormDto itemFormDto,
                        BindingResult bindingResult,
                        RedirectAttributes redirectAttributes, Model model) throws Exception {
 
@@ -114,47 +111,48 @@ public class FlowerController {
 
         if(bindingResult.hasErrors()){
             model.addAttribute("types", types);
-            return "forms/flowerForm";
+            return "forms/itemForm";
         }
 
-        Long flowerId;
-        log.info("FlowerController save 호출");
+        Long itemId;
+        log.info("ItemController save 호출");
         try {
-            flowerId = flowerService.saveFlower(flowerFormDto);
+            itemId = itemService.saveItem(itemFormDto);
         }catch (Exception e){
             model.addAttribute("errorMessage", "상품 등록 중 에러가 발생했습니다.");
-            return "forms/flowerForm";
+            return "forms/itemForm";
+
         }
 
-        redirectAttributes.addAttribute("flowerId", flowerId);
+        redirectAttributes.addAttribute("itemId", itemId);
 
 
-        return "redirect:/flowers/{flowerId}";
+        return "redirect:/items/{itemId}";
     }
 
 
-    @GetMapping(value = {"/flowers", "/"})
+    @GetMapping(value = {"/items", "/"})
     public String list(Principal principal,
                        Model model,
                        @RequestParam(value = "page", defaultValue = "0") int page){
 
         isPrincipal(principal, model);
 
-        Page<MainFlowerDto> flowers = flowerService.findAllFlowers(page);
-        log.info("flower 전체 수 = {}", flowers.getTotalElements());
+        Page<MainItemDto> items = itemService.findAllItems(page);
+        log.info("Item 전체 수 = {}", items.getTotalElements());
         List<Type> types = typeService.allType();
 
-        log.info("flower.getTotalPages = {}", flowers.getTotalPages());
+        log.info("items.getTotalPages = {}", items.getTotalPages());
 
 
 
         model.addAttribute("maxPage", 5);
-        model.addAttribute("flowers", flowers);
+        model.addAttribute("items", items);
         model.addAttribute("types", types);
 
-        pageModelPut(flowers, model);
+        pageModelPut(items, model);
 
-        return "flowers/flowerList";
+        return "items/itemList";
     }
 
     private <T> void pageModelPut(Page<T> results, Model model){
@@ -170,15 +168,15 @@ public class FlowerController {
                                 @RequestParam(value="page", defaultValue = "0") int page){
         isPrincipal(principal, model);
 
-        log.info("FlowerController 실행");
+        log.info("ItemController 실행");
 
-        Page<MainFlowerDto> flowersType = flowerService.findFlowersType(typeId, page);
+        Page<MainItemDto> itemsType = itemService.findItemsType(typeId, page);
         List<Type> types = typeService.allType();
 
         model.addAttribute("types", types);
         model.addAttribute("maxPage", 5);
-        model.addAttribute("flowers", flowersType);
-        return "flowers/flowerList";
+        model.addAttribute("items", itemsType);
+        return "items/itemList";
     }
 
     //CartCount 추가
@@ -187,18 +185,19 @@ public class FlowerController {
         model.addAttribute("cartCount", count);
     }
 
-    @GetMapping("/flowers/{flowerId}")
+    //아이템 자세히 보기
+    @GetMapping("/items/{itemId}")
     public String oneFlower(Principal principal,
-                            @PathVariable long flowerId, Model model){
+                            @PathVariable long itemId, Model model){
         isPrincipal(principal, model);
 
-        FlowerFormDto flower = flowerService.getFetchItemDetail(flowerId);
+        ItemFormDto item = itemService.getFetchItemDetail(itemId);
         List<Type> types = typeService.allType();
 
         model.addAttribute("types", types);
-        model.addAttribute("flower", flower);
+        model.addAttribute("item", item);
 
-        return "flowers/flowerDetail";
+        return "items/itemDetail";
     }
 
     private void isPrincipal(Principal principal, Model model) {
