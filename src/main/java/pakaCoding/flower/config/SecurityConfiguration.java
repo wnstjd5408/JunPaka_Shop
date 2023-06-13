@@ -32,7 +32,7 @@ public class SecurityConfiguration {
         httpSecurity
                 .authorizeHttpRequests()
                     .requestMatchers( "/logout", "/orders/**", "/reviews/**").authenticated()
-                    .requestMatchers("/admin/flowers/**").hasRole("ADMIN")
+                    .requestMatchers("/admin/items/**").hasRole("ADMIN")
                     .requestMatchers("/order", "/reviews/form/**").hasAnyRole("ADMIN", "USER")
                     .requestMatchers("/members/**").anonymous() //인증되지 않은 사용자만 접근허용
                     .anyRequest().permitAll()

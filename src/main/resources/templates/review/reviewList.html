@@ -3,6 +3,7 @@
   <th:block layout:fragment="review" th:if="${not #strings.isEmpty(reviews)}"  class="py-5">
     <div id="reviewList"  class="text-sm-start my-1 rounded">
         <h2 th:text="|리뷰 (${total})|"></h2>
+        <hr class="mt-2">
         <th:block th:each="review : ${reviews}">
             <hr class="mt-2">
             <div class="text-start mb-4">

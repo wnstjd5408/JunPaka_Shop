@@ -3,7 +3,6 @@ package pakaCoding.flower.domain.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.Getter;
 
 @Entity
 @Table(name = "cart_item")
@@ -21,16 +20,16 @@ public class CartItem {
 
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="flower_id")
-    private Flower flower;
+    @JoinColumn(name ="item_id")
+    private Item item;
 
     @NotNull
     private int count;
 
-    public static CartItem createCartItem(Cart cart, Flower flower, int count){
+    public static CartItem createCartItem(Cart cart, Item item, int count){
         CartItem cartItem = new CartItem();
         cartItem.setCart(cart);
-        cartItem.setFlower(flower);
+        cartItem.setItem(item);
         cartItem.setCount(count);
         return cartItem;
     }

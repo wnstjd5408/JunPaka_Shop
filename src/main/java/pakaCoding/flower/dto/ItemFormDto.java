@@ -1,14 +1,12 @@
 package pakaCoding.flower.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.web.multipart.MultipartFile;
-import pakaCoding.flower.domain.constant.FlowerSellStatus;
-import pakaCoding.flower.domain.entity.Flower;
+import pakaCoding.flower.domain.constant.ItemSellStatus;
+import pakaCoding.flower.domain.entity.Item;
 import pakaCoding.flower.domain.entity.TimeEntity;
 import pakaCoding.flower.domain.entity.Type;
 
@@ -17,7 +15,7 @@ import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class FlowerFormDto extends TimeEntity {
+public class ItemFormDto extends TimeEntity {
 
     private Long id;
 
@@ -36,7 +34,7 @@ public class FlowerFormDto extends TimeEntity {
     @NotNull(message = "타입 선택은 필수 입력 값입니다.")
     private Type type;
 
-    private FlowerSellStatus flowerSellStatus;
+    private ItemSellStatus itemSellStatus;
 
 
     // 이미지 사용
@@ -47,17 +45,17 @@ public class FlowerFormDto extends TimeEntity {
     private List<ImageDto> imageDtolist = new ArrayList<>();
     private List<Long> itemImgIds = new ArrayList<>();
 
-    public FlowerFormDto() {
+    public ItemFormDto() {
     }
 
-    public FlowerFormDto(Flower flower, List<ImageDto> imageDtolist) {
-        this.id = flower.getId();
-        this.name = flower.getName();
-        this.price = flower.getPrice();
-        this.stockQuantity = flower.getStockQuantity();
-        this.detailComment = flower.getDetailComment();
-        this.type = flower.getType();
-        this.flowerSellStatus = flower.getFlowerSellStatus();
+    public ItemFormDto(Item item, List<ImageDto> imageDtolist) {
+        this.id = item.getId();
+        this.name = item.getName();
+        this.price = item.getPrice();
+        this.stockQuantity = item.getStockQuantity();
+        this.detailComment = item.getDetailComment();
+        this.type = item.getType();
+        this.itemSellStatus = item.getItemSellStatus();
         this.imageDtolist = imageDtolist;
     }
 
@@ -65,14 +63,14 @@ public class FlowerFormDto extends TimeEntity {
      * 파일저장때 사용
      */
     //DTO -> Flower
-    public Flower toEntity(){
-        return Flower.builder()
+    public Item toEntity(){
+        return Item.builder()
                 .type(type)
                 .name(name)
                 .price(price)
                 .stockQuantity(stockQuantity)
                 .detailComment(detailComment)
-                .flowerSellStatus(flowerSellStatus)
+                .itemSellStatus(itemSellStatus)
                 .delYn("N")
                 .hitCount(0L)
                 .build();

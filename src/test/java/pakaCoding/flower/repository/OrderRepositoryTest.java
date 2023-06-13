@@ -1,6 +1,5 @@
 package pakaCoding.flower.repository;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.persistence.PersistenceContext;
@@ -9,8 +8,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,7 +15,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import pakaCoding.flower.domain.constant.*;
 import pakaCoding.flower.domain.entity.*;
-import pakaCoding.flower.dto.OrderDto;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -36,7 +32,7 @@ class OrderRepositoryTest {
     OrderRepository orderRepository;
 
     @Autowired
-    FlowerRepository flowerRepository;
+    ItemRepository itemRepository;
 
     @Autowired
     TypeRepository typeRepository;
@@ -50,15 +46,15 @@ class OrderRepositoryTest {
     EntityManager em;
 
 
-    private Flower registerFLower(String name, int price, int stockQuantity, Type type){
-        return Flower.builder()
+    private Item registerItem(String name, int price, int stockQuantity, Type type){
+        return Item.builder()
                 .name(name)
                 .price(price)
                 .stockQuantity(stockQuantity)
                 .type(type)
-                .flowerSellStatus(FlowerSellStatus.SELL)
+                .itemSellStatus(ItemSellStatus.SELL)
                 .hitCount(0L)
-                .fileImages(null)
+                .itemImages(null)
                 .delYn("Y")
                 .build();
     }
@@ -77,12 +73,12 @@ class OrderRepositoryTest {
         order.setDelivery(delivery);
 
         for (int i = 0; i < 3; i++) {
-            Flower flower = this.registerFLower("테스트" + i, 1000, 1, type1);
-            flowerRepository.save(flower);
+            Item item = this.registerItem("테스트" + i, 1000, 1, type1);
+            itemRepository.save(item);
 
             // 3. OrderItem 생성 및 초기화
             OrderItem orderItem = new OrderItem();
-            orderItem.setFlower(flower);
+            orderItem.setItem(item);
             orderItem.setCount(10);
             orderItem.setOrderPrice(1000);
             orderItem.setOrder(order);
@@ -110,11 +106,11 @@ class OrderRepositoryTest {
 
         Delivery delivery = Delivery.createDelivery(member);
 
-        Flower flower = this.registerFLower("테스트", 1000, 11, type1);
-        flowerRepository.save(flower);
+        Item item = this.registerItem("테스트", 1000, 11, type1);
+        itemRepository.save(item);
         List<OrderItem> orderItemList = new ArrayList<>();
         // 3. OrderItem 생성 및 초기화
-        OrderItem orderItem = OrderItem.createOrderItem(flower,10000, 10);
+        OrderItem orderItem = OrderItem.createOrderItem(item,10000, 10);
         orderItemList.add(orderItem);
 
 
@@ -133,7 +129,7 @@ class OrderRepositoryTest {
         log.info("배송 전송상태  :  {}", findOrder.getDelivery().getDeliveryStatus());
         assertThat(DeliveryStatus.CANCEL).isEqualTo(findOrder.getDelivery().getDeliveryStatus());
         assertThat(OrderStatus.CANCEL).isEqualTo(findOrder.getOrderStatus());
-        assertThat(11).isEqualTo(flower.getStockQuantity());
+        assertThat(11).isEqualTo(item.getStockQuantity());
 
 
 
@@ -159,12 +155,12 @@ class OrderRepositoryTest {
     public Order createOrder(){
         Order order = new Order();
         for(int i = 0; i<3; i++){
-            Flower flower = registerFLower("테스트" + i, 1000, 1, getType());
+            Item item = registerItem("테스트" + i, 1000, 1, getType());
 
 
-            flowerRepository.save(flower);
+            itemRepository.save(item);
             OrderItem orderItem = new OrderItem();
-            orderItem.setFlower(flower);
+            orderItem.setItem(item);
             orderItem.setCount(10);
             orderItem.setOrderPrice(1000);
             orderItem.setOrder(order);

@@ -2,13 +2,7 @@ package pakaCoding.flower.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.BatchSize;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -19,8 +13,8 @@ import java.time.LocalDateTime;
 public class ItemImage extends  Image{
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "flower_id")
-    private Flower flower;
+    @JoinColumn(name = "item_id")
+    private Item item;
 
 
     @Builder

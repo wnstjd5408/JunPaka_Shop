@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import pakaCoding.flower.domain.constant.FlowerSellStatus;
-import pakaCoding.flower.domain.entity.Flower;
+import pakaCoding.flower.domain.constant.ItemSellStatus;
+import pakaCoding.flower.domain.entity.Item;
 import pakaCoding.flower.domain.entity.Image;
 import pakaCoding.flower.domain.entity.ItemImage;
 import pakaCoding.flower.domain.entity.Type;
@@ -24,7 +24,7 @@ class FileImageRepositoryTest {
     @Autowired
     ItemImageRepository imageRepository;
     @Autowired
-    FlowerRepository flowerRepository;
+    ItemRepository itemRepository;
 
     @Autowired
     TypeRepository typeRepository;
@@ -43,9 +43,9 @@ class FileImageRepositoryTest {
 
     @Test
     public void fileImageTest(){
-        Flower flower1 = flowerRepository.findById(1L).get();
+        Item flower1 = itemRepository.findById(1L).get();
 
-        List<ItemImage> byFlowerId = imageRepository.findByFlowerId(flower1.getId());
+        List<ItemImage> byFlowerId = imageRepository.findByItemId(flower1.getId());
 
         log.info("1번의 개수 = {}", byFlowerId.size());
     }
@@ -55,8 +55,8 @@ class FileImageRepositoryTest {
         Type type1 = typeRepository.findById(1).get();
 
         for (int i = 1; i <= 100; i++) {
-            Flower fs = registerFLower("장미꽃다발", 15000, 1, type1);
-            flowerRepository.save(fs);
+            Item fs = registerItem("장미꽃다발", 15000, 1, type1);
+            itemRepository.save(fs);
             ItemImage image = ItemImage.builder()
                     .repImgYn("Y")
                     .contentType("10000")
@@ -72,8 +72,8 @@ class FileImageRepositoryTest {
 
         for(Long i = 1L; i<=100L; i+= 1L){
 
-            Flower flower = flowerRepository.findById(i).get();
-            Image image = imageRepository.findByFlowerIdAndRepImgYn(flower.getId(), "Y");
+            Item flower = itemRepository.findById(i).get();
+            Image image = imageRepository.findByItemIdAndRepImgYn(flower.getId(), "Y");
             fileImageList.add(image);
         }
 
@@ -81,13 +81,13 @@ class FileImageRepositoryTest {
 
     }
 
-    private Flower registerFLower(String name, int price, int stockQuantity, Type type){
-        return Flower.builder()
+    private Item registerItem(String name, int price, int stockQuantity, Type type){
+        return Item.builder()
                 .name(name)
                 .price(price)
                 .stockQuantity(stockQuantity)
                 .type(type)
-                .flowerSellStatus(FlowerSellStatus.SELL)
+                .itemSellStatus(ItemSellStatus.SELL)
                 .delYn("N")
                 .hitCount(0L)
                 .build();

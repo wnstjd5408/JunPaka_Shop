@@ -15,7 +15,7 @@ class JasyptConfigTest extends JasyptConfig{
 
     @Test
     public void jasypt_encrypt_decrypt_test() {
-        String url = "jdbc:mariadb://localhost:3306/flower_site";
+        String url = "jdbc:mariadb://localhost:3306/junpakashop";
         String username = "boardAdmin";
         String password = "1234";
 

@@ -7,10 +7,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import pakaCoding.flower.domain.entity.Flower;
+import pakaCoding.flower.domain.entity.Item;
 import pakaCoding.flower.domain.entity.ItemImage;
-import pakaCoding.flower.domain.entity.Review;
-import pakaCoding.flower.dto.FlowerFormDto;
+import pakaCoding.flower.dto.ItemFormDto;
 import pakaCoding.flower.dto.ImageDto;
 import pakaCoding.flower.dto.ReviewFormDto;
 import pakaCoding.flower.repository.ItemImageRepository;
@@ -27,23 +26,23 @@ import static org.apache.commons.io.FileUtils.deleteQuietly;
 @RequiredArgsConstructor
 @Slf4j
 @Transactional
-public class FileImageService {
+public class ItemImageService {
 
     @Value("${upload.path}")
     private String uploadDir;
 
-    private final ItemImageRepository fileImageRepository;
+    private final ItemImageRepository itemImageRepository;
     private ImageDto file;
 
     //이미지 삭제
-    public Flower deleteImage(Long itemImageId){
+    public Item deleteImage(Long itemImageId){
 
-        ItemImage itemImage = fileImageRepository.findById(itemImageId).orElseThrow(EntityNotFoundException::new);
-        Flower flower = itemImage.getFlower();
+        ItemImage itemImage = itemImageRepository.findById(itemImageId).orElseThrow(EntityNotFoundException::new);
+        Item item = itemImage.getItem();
 
-        fileImageRepository.delete(itemImage);
+        itemImageRepository.delete(itemImage);
 
-        return flower;
+        return item;
     }
 
 
@@ -97,7 +96,7 @@ public class FileImageService {
         return files;
     }
     //리뷰 추가 이미지 저장
-    public List<ImageDto> saveUpdateImageFile(FlowerFormDto flowerFormDto) throws Exception{
+    public List<ImageDto> saveUpdateImageFile(ItemFormDto flowerFormDto) throws Exception{
         log.info("saveUpdateImageFile 실행");
 
 
@@ -139,7 +138,7 @@ public class FileImageService {
 
 
     //아이템 파일 저장
-    public List<ImageDto> saveFile(FlowerFormDto flowerDto) throws Exception {
+    public List<ImageDto> saveFile(ItemFormDto flowerDto) throws Exception {
         log.info("saveFile 실행");
 
         List<MultipartFile> multipartFileList  = flowerDto.getMultipartFile();

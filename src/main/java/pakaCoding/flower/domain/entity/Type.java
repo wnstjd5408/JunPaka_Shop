@@ -2,7 +2,6 @@ package pakaCoding.flower.domain.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Null;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,7 +29,7 @@ public class Type {
     private Integer count;
 
     @OneToMany(mappedBy = "type")
-    private List<Flower> flowers = new ArrayList<>();
+    private List<Item> items = new ArrayList<>();
 
     @Builder
     public Type(int id, String typename, Integer count) {

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout}">
     <head>
-        <title>Jun Flower</title>
+        <title>Jun Item</title>
     </head>
 
     <th:block layout:fragment="navbar" class="py-5">
@@ -12,32 +12,32 @@
     <th:block layout:fragment="section" class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
             <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                <div class="col mb-5" th:each="flower : ${flowers}">
+                <div class="col mb-5" th:each="item : ${items}">
                     <div class="card h-100">
                         <!-- Product image-->
-                        <img class="card-img-top" th:src="'/display/fileImage='+${flower.imgURL}" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                        <img class="card-img-top" th:src="'/display/fileImage='+${item.imgURL}" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
                         <!-- Product details-->
                         <div class="card-body p-4">
                             <div class="text-center">
                                 <!-- Product name-->
-                                <h5 class="fw-bolder" th:text="${flower.flowerName}">Fancy Product</h5>
+                                <h5 class="fw-bolder" th:text="${item.itemName}">Fancy Product</h5>
                                 <!-- Product price-->
-                                <h6 class="fw-light"th:text="|\${flower.price}|"></h6>
+                                <h6 class="fw-light"th:text="|\${item.price}|"></h6>
                             </div>
                         </div>
                         <!-- Product actions-->
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
-                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" th:href="@{'/flowers/' + ${flower.id}}">View options</a></div>
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" th:href="@{'/items/' + ${item.id}}">View options</a></div>
                         </div>
                     </div>
                 </div>
             </div>
             <th:block layout:fragment="paging" class="py-5">
             <!-- page-->
-            <div th:if="${!flowers.isEmpty()}">
+            <div th:if="${!items.isEmpty()}">
                 <nav class="container d-flex align-items-center justify-content-center navbar-light" aria-label="Page navigation example"
-                    th:with="start=${(flowers.number/maxPage)*maxPage + 1},
-                  end=(${(flowers.totalPages == 0) ? 1 : (start + (maxPage - 1) < flowers.totalPages ? start + (maxPage - 1) : flowers.totalPages)})">
+                    th:with="start=${(items.number/maxPage)*maxPage + 1},
+                  end=(${(items.totalPages == 0) ? 1 : (start + (maxPage - 1) < items.totalPages ? start + (maxPage - 1) : items.totalPages)})">
 
                     <ul class="pagination justify-content-center">
                         <li th:classappend="${start > 1}" class="page-item">
@@ -53,17 +53,17 @@
                             </a>
                         </li>
                         <li th:each="page : ${#numbers.sequence(start, end)}"
-                            th:classappend="${page == flowers.number+1} ? 'active'"
+                            th:classappend="${page == items.number+1} ? 'active'"
                             class="page-item">
                             <a th:text="${page}" class="page-link" th:href="@{|?page=${page-1}|}">1</a>
                         </li>
-                        <li th:if="${end < flowers.totalPages}" class ="page-item">
+                        <li th:if="${end < items.totalPages}" class ="page-item">
                             <a class="page-link" th:href="@{?(page=${start + maxPage - 1})}" aria-label="Next">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
-                        <li th:if="${end < flowers.totalPages}" class ="page-item">
-                            <a class="page-link" th:href="@{?(page=${flowers.totalPages - 1})}" aria-label="Next">
+                        <li th:if="${end < items.totalPages}" class ="page-item">
+                            <a class="page-link" th:href="@{?(page=${items.totalPages - 1})}" aria-label="Next">
                                 <span aria-hidden="true">&raquo;&raquo;</span>
                             </a>
                         </li>

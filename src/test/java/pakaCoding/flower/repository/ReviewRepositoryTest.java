@@ -10,14 +10,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.transaction.annotation.Transactional;
-import pakaCoding.flower.domain.constant.FlowerSellStatus;
+import pakaCoding.flower.domain.constant.ItemSellStatus;
 import pakaCoding.flower.domain.constant.Gender;
 import pakaCoding.flower.domain.constant.Role;
 import pakaCoding.flower.domain.entity.*;
 
 import java.time.LocalDate;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional
@@ -36,20 +34,20 @@ class ReviewRepositoryTest {
     private MemberRepository memberRepository;
 
     @Autowired
-    private FlowerRepository flowerRepository;
+    private ItemRepository itemRepository;
 
     @Test
     @DisplayName("flowerId로 검색")
     public void findFlowerID(){
         Member saveMember = getMember();
-        Flower saveFlower1 = flowerRepository.save(registerFLower("테스트꽃1", 10000, 10));
-        Flower saveFlower2 = flowerRepository.save(registerFLower("테스트꽃2", 10000, 10));
-        Flower saveFlower3 = flowerRepository.save(registerFLower("테스트꽃3", 10000, 10));
+        Item saveFlower1 = itemRepository.save(registerFLower("테스트꽃1", 10000, 10));
+        Item saveFlower2 = itemRepository.save(registerFLower("테스트꽃2", 10000, 10));
+        Item saveFlower3 = itemRepository.save(registerFLower("테스트꽃3", 10000, 10));
 
-        Review review1 = Review.builder().flower(saveFlower1).comment("테스트입니다.").rating(5).member(saveMember).build();
-        Review review2 = Review.builder().flower(saveFlower1).comment("테스트입니다.").rating(5).member(saveMember).build();
-        Review review3 = Review.builder().flower(saveFlower1).comment("테스트입니다.").rating(5).member(saveMember).build();
-        Review review4 = Review.builder().flower(saveFlower2).comment("테스트입니다.").rating(5).member(saveMember).build();
+        Review review1 = Review.builder().item(saveFlower1).comment("테스트입니다.").rating(5).member(saveMember).build();
+        Review review2 = Review.builder().item(saveFlower1).comment("테스트입니다.").rating(5).member(saveMember).build();
+        Review review3 = Review.builder().item(saveFlower1).comment("테스트입니다.").rating(5).member(saveMember).build();
+        Review review4 = Review.builder().item(saveFlower2).comment("테스트입니다.").rating(5).member(saveMember).build();
         reviewRepository.save(review1);
         reviewRepository.save(review2);
         reviewRepository.save(review3);
@@ -58,7 +56,7 @@ class ReviewRepositoryTest {
 
         Pageable pageable = PageRequest.of(0, 10);
 
-        Page<Review> reviews = reviewRepository.findByFlower_Id(saveFlower1.getId(), pageable);
+        Page<Review> reviews = reviewRepository.findByItem_Id(saveFlower1.getId(), pageable);
 
         log.info("reviews.size() = {}", reviews.getSize());
         log.info("reviews.getTotalElements() = {}", reviews.getTotalElements());
@@ -72,14 +70,14 @@ class ReviewRepositoryTest {
         return member;
     }
 
-    private Flower registerFLower(String name, int price, int stockQuantity){
-        return Flower.builder()
+    private Item registerFLower(String name, int price, int stockQuantity){
+        return Item.builder()
                 .name(name)
                 .price(price)
                 .stockQuantity(stockQuantity)
-                .flowerSellStatus(FlowerSellStatus.SELL)
+                .itemSellStatus(ItemSellStatus.SELL)
                 .hitCount(0L)
-                .fileImages(null)
+                .itemImages(null)
                 .delYn("Y")
                 .build();
     }

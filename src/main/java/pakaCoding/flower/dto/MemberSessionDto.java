@@ -1,5 +1,6 @@
 package pakaCoding.flower.dto;
 
+import lombok.Data;
 import lombok.Getter;
 import pakaCoding.flower.domain.constant.Gender;
 import pakaCoding.flower.domain.constant.Role;
@@ -9,7 +10,7 @@ import pakaCoding.flower.domain.entity.Member;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-@Getter
+@Data
 public class MemberSessionDto implements Serializable {
 
     private String userid;

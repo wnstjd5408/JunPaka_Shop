@@ -11,7 +11,7 @@ public class OrderItemDto {
 
     //리뷰 시 사용
     private Long orderItemId;
-    private String flowerName;
+    private String itemName;
     private int count;
     private int orderPrice;
     private ReviewStatus reviewYn;
@@ -20,7 +20,7 @@ public class OrderItemDto {
 
     public OrderItemDto(OrderItem orderItem, String imgUrl) {
         this.orderItemId = orderItem.getId();
-        this.flowerName = orderItem.getFlower().getName();
+        this.itemName = orderItem.getItem().getName();
         this.count = orderItem.getCount();
         this.orderPrice = orderItem.getOrderPrice();
         this.reviewYn = orderItem.getReviewStatus();
