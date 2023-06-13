@@ -11,7 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.dto.MainFlowerDto;
 
+import javax.swing.text.html.Option;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface FlowerRepository extends JpaRepository<Flower, Long> {
@@ -46,6 +48,19 @@ public interface FlowerRepository extends JpaRepository<Flower, Long> {
      @Query("select f from Flower f" +
              " order by f.createDate DESC")
      Page<Flower> findAdminFlowers(Pageable pageable);
+
+
+     @Query("select distinct f from Flower f" +
+             " join fetch f.type t " +
+             " where f.id = :flowerId")
+     Optional<Flower> findAllByType(Long flowerId);
+
+
+     @Query("select f from Flower f" +
+             " join fetch f.type t " +
+             " join fetch f.fileImages fi " +
+             " where f.id = :flowerId")
+     Flower findAllByFileImagesAndType(Long flowerId);
 
 //    private final EntityManager em;
 //

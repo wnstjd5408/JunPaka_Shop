@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import pakaCoding.flower.domain.entity.Flower;
 import pakaCoding.flower.domain.entity.ItemImage;
 import pakaCoding.flower.domain.entity.Type;
@@ -20,13 +21,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.*;
+
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class FlowerService {
     private final FlowerRepository flowerRepository;
     private final FileImageService fileImageService;
-    private final ItemImageRepository fileImageRepository;
+    private final ItemImageRepository itemImageRepository;
 
     @Transactional
     public Long saveFlower(FlowerFormDto flowerFormDto) throws Exception {
@@ -45,7 +48,7 @@ public class FlowerService {
 
         //파일저장
         List<ImageDto> files = fileImageService.saveFile(flowerFormDto);
-        List<ItemImage> fileImages = files.stream().map(ImageDto::toEntity).collect(Collectors.toList());
+        List<ItemImage> fileImages = files.stream().map(ImageDto::toEntity).collect(toList());
         flower.addFiles(fileImages);
 
         log.info("flower.getId() = {}", flower.getId());
@@ -55,39 +58,25 @@ public class FlowerService {
 
         return flower.getId();
     }
-    @Transactional(readOnly = true)
-    public FlowerFormDto getItemDetail(Long flowerId){
 
-        // 상품 이미지 엔티티들을 fileImageDto 객체로 변환하여 fileImageDtoList에 담습니다.
-        List<ItemImage> fileImageList = fileImageRepository.findByFlowerId(flowerId);
+
+    @Transactional(readOnly = true)
+    public FlowerFormDto getFetchItemDetail(Long flowerId) {
+
+        Flower findFlower = flowerRepository.findAllByFileImagesAndType(flowerId);
+
+
         List<ImageDto> imgDtoList = new ArrayList<>();
 
-        for (ItemImage itemImage : fileImageList) {
-            ImageDto fileImageDto = new ImageDto(itemImage);
-            log.info("fileImageDto.getId() = {} ", fileImageDto.getId());
-            imgDtoList.add(fileImageDto);
-        }
 
-        Flower flower = flowerRepository.findById(flowerId).orElseThrow(EntityNotFoundException::new);
-        return new FlowerFormDto(flower, imgDtoList);
+        List<ItemImage> fileImages = findFlower.getFileImages();
+
+        fileImages.forEach(i -> imgDtoList.add(new ImageDto(i)));
+
+        return new FlowerFormDto(findFlower, imgDtoList);
     }
 
 
-//    @Transactional(readOnly = true)
-//    public FlowerFormDto findAdminOne(Long flowerId){
-//        // 상품 이미지 엔티티들을 fileImageDto 객체로 변환하여 fileImageDtoList에 담습니다.
-//        List<ItemImage> fileImageList = fileImageRepository.findByFlowerId(flowerId);
-//
-//
-//        List<String> imgUrlList = fileImageList.stream().map(itemImage -> {
-//                    ImageDto imageDto = new ImageDto(itemImage);
-//                    return imageDto.getImgUrl();
-//                }
-//        ).toList();
-//        Flower flower = flowerRepository.findById(flowerId).orElseThrow(EntityNotFoundException::new);
-//
-//
-//    }
 
 
     @Transactional(readOnly = true)
@@ -128,18 +117,6 @@ public class FlowerService {
     }
 
 
-    //FlowerList를 Dto로 변경
-    private PageImpl<MainFlowerDto> getMainFlowerDtos(Page<Flower> flowerList, Pageable pageable){
-        List<MainFlowerDto> flowerDtoList = flowerList.stream()
-                .map(m -> MainFlowerDto.builder()
-                        .id(m.getId())
-                        .flowerName(m.getName())
-                        .price(m.getPrice())
-                        .imgURL(m.getFileImages().get(0).getSavedFileImgName())
-                        .build())
-                .collect(Collectors.toList());
-        return new PageImpl<>(flowerDtoList, pageable, flowerList.getTotalElements());
-    }
 
     @Transactional
     public Long updateItem(FlowerFormDto flowerFormDto) {
@@ -151,6 +128,15 @@ public class FlowerService {
         log.info("flowerFormDto.getType = {}", flowerFormDto.getType());
 
         findFlower.updateItem(flowerFormDto);
+
+        try {
+            List<ImageDto> imageDtoList = fileImageService.saveUpdateImageFile(flowerFormDto);
+            List<ItemImage> fileImages = imageDtoList.stream().map(ImageDto::toEntity).collect(toList());
+            findFlower.addFiles(fileImages);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
 
         return findFlower.getId();
     }
