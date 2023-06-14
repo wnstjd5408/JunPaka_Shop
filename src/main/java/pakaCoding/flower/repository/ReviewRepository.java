@@ -8,7 +8,7 @@ import pakaCoding.flower.domain.entity.Review;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    @Query(value = "select r from Review r join fetch r.member where r.item.id = :itemId",
+    @Query(value = "select r from Review r join fetch r.member join r.reviewImages ri where r.item.id = :itemId",
     countQuery = "select count(r) from Review r where r.item.id = :itemId")
     Page<Review> findByItem_Id(Long itemId, Pageable pageable);
 }

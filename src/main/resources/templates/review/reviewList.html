@@ -34,6 +34,10 @@
                     </div>
                     <div class="list-group-item">
                         <span th:text="${review.comment}" class="mb-3"></span>
+
+                        <div class="flex-fill">
+                            <img class="card-img-top" th:src="'/display/fileImage='+${review.imgUrlList[0]}" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                        </div>
                     </div>
                 </div>
 
