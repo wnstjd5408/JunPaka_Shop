@@ -32,12 +32,11 @@
                                </strong>
                         </span>
                     </div>
-                    <div class="list-group-item">
-                        <span th:text="${review.comment}" class="mb-3"></span>
-
-                        <div class="flex-fill">
-                            <img class="card-img-top" th:src="'/display/fileImage='+${review.imgUrlList[0]}" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
-                        </div>
+                    <div class="list-group-item row d-flex justify-content-center align-items-md-center">
+                        <p th:text="${review.comment}" class="mb-3 w-75 text-center"></p>
+                        <img class ="img-thumbnail" th:src="'/display/fileImage='+${review.imgUrlList[0]}"
+                             src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..."
+                             style="width: 200px; height: 250px" />
                     </div>
                 </div>
 
