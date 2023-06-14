@@ -9,7 +9,7 @@ import lombok.Data;
 public class OrderDto {
 
     @NotNull(message = "상품 아이디는 필수 입력 값 입니다.")
-    private Long orderId;
+    private Long itemId;
 
 
     @Min(value=1, message = "최소 주문 수량은 1개 입니다.")

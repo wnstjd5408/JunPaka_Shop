@@ -108,7 +108,7 @@ public class CartService {
         for (CartOrderDto cartOrderDto : cartOrderDtoList) {
             CartItem cartItem = cartItemRepository.findById(cartOrderDto.getCartItemId()).orElseThrow(EntityNotFoundException::new);
             OrderDto orderDto = new OrderDto();
-            orderDto.setOrderId(cartItem.getItem().getId());
+            orderDto.setItemId(cartItem.getItem().getId());
             orderDto.setCount(cartItem.getCount());
             orderDtoList.add(orderDto);
         }

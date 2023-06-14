@@ -62,8 +62,9 @@ public class OrderController {
     @ResponseBody
     public ResponseEntity order(@RequestBody @Valid OrderDto orderDto,
                                 BindingResult bindingResult, Principal principal) {
-
+        log.info("order 실행");
         if (bindingResult.hasErrors()) {
+            log.info("bindingResult 에러발생");
             StringBuilder sb = new StringBuilder();
             List<FieldError> fieldErrors = bindingResult.getFieldErrors();
             for (FieldError fieldError : fieldErrors) {
