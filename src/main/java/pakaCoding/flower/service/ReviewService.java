@@ -17,6 +17,7 @@ import pakaCoding.flower.repository.MemberRepository;
 import pakaCoding.flower.repository.OrderItemRepository;
 import pakaCoding.flower.repository.ReviewRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,8 +56,16 @@ public class ReviewService {
 
         Page<Review> reviews = reviewRepository.findByItem_Id(flowerId, pageable);
 
+
         List<ReviewDto> reviewDtos = reviews.stream()
-                .map(ReviewDto::new).toList();
+                .map(review -> {
+                    ReviewDto reviewDto = new ReviewDto(review);
+                    List<ReviewImage> reviewImages = review.getReviewImages();
+                    reviewImages.forEach(reviewImage -> {
+                        reviewDto.addImgUrlList(reviewImage.getSavedFileImgName());
+                    });
+                    return reviewDto;
+                }).toList();
         return new PageImpl<>(reviewDtos, pageable, reviews.getTotalElements());
     }
 }

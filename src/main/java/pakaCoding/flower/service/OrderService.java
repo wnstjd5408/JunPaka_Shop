@@ -39,10 +39,11 @@ public class OrderService {
         log.info("OrderService에서 order 실행");
         //엔티티 조회
         List<OrderItem> orderItemList = new ArrayList<>();
-        Item item = itemRepository.findById(orderDto.getOrderId())
+        Item item = itemRepository.findById(orderDto.getItemId())
                 .orElseThrow(EntityNotFoundException::new);
         orderItemList.add(OrderItem.createOrderItem(item, item.getPrice(), orderDto.getCount()));
 
+        log.info("OrderService에서 userid ={}", userid);
         Member member = memberRepository.findByUserid(userid).orElseThrow(EntityNotFoundException::new);
         //배송정보 생성
         Delivery delivery = Delivery.createDelivery(member);
@@ -64,7 +65,7 @@ public class OrderService {
 
         List<OrderItem> orderItemList = new ArrayList<>();
         for (OrderDto orderDto : orderDtoList) {
-            Item item = itemRepository.findById(orderDto.getOrderId()).orElseThrow(EntityNotFoundException::new);
+            Item item = itemRepository.findById(orderDto.getItemId()).orElseThrow(EntityNotFoundException::new);
             OrderItem orderItem = OrderItem.createOrderItem(item, item.getPrice(), orderDto.getCount());
             orderItemList.add(orderItem);
         }

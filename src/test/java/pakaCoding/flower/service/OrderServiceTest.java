@@ -71,7 +71,7 @@ class OrderServiceTest {
 
         OrderDto orderDto = new OrderDto();
         orderDto.setCount(10);
-        orderDto.setOrderId(saveItem.getId());
+        orderDto.setItemId(saveItem.getId());
 
         //주문 객체 DB에 저장
         Long orderId = orderService.order(orderDto, member.getUserid());
@@ -100,7 +100,7 @@ class OrderServiceTest {
 
         OrderDto orderDto = new OrderDto();
         orderDto.setCount(10);
-        orderDto.setOrderId(saveItem.getId());
+        orderDto.setItemId(saveItem.getId());
 
         //주문 객체 DB에 저장
         Long orderId = orderService.order(orderDto, member.getUserid());
