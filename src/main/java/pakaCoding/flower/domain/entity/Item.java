@@ -41,6 +41,10 @@ public class Item extends BaseEntity {
     @JoinColumn(name ="type_id")
     private Type type;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="brand_id")
+    private Brand brand;
+
     @ColumnDefault("0")
     private Long hitCount;      //조회수
 
