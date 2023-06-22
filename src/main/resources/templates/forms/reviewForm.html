@@ -58,18 +58,55 @@
             </div>
             <div class="mb-3">
                 <label for ="reviewImage" class="form-label fs-4">이미지</label>
-                <input type="file" class="form-control" name="multipartFile" multiple id="reviewImage"/>
+                <input type="file" accept="image/*" class="form-control real-upload" name="multipartFile" onchange="fileCheck(this)" multiple id="reviewImage"/>
             </div>
             <div class="mb-3">
-                <legend for="comment" class="form-label fs-4">리뷰 남기기</legend>
+                <legend class="form-label fs-4">리뷰 남기기</legend>
                 <textarea class="form-control border-0 h-50" rows="15" aria-label="With textarea" style="white-space: pre-line;" th:field="*{comment}" id="comment"></textarea>
             </div>
             <p th:if="${#fields.hasErrors('comment')}" th:errors="*{comment}" class="alert-danger alert">Incorrect data</p>
             <input type="hidden" th:value="${orderItemNo}" name="orderItemId" >
             <div class="mb-3">
-                <button type="submit" class="btn btn-sm btn-secondary form-control">등록하기</button>
+                <button type="submit" class="btn btn-sm btn-secondary form-control" id="uploadBtn">등록하기</button>
             </div>
         </form>
     </div>
+</th:block>
+<th:block layout:fragment="script">
+    <script th:inline = "javascript" >
+
+        $(document).ready(function (){
+            var errorMessage = /*[[${errorMessage}]]*/;
+            if(errorMessage != null){
+                alert(errorMessage);
+            }
+
+        });
+        const realUpload = document.querySelector('.real-upload');
+        realUpload.addEventListener('change', fileCheck);
+
+
+        const docFrag = new DocumentFragment();
+
+        function fileCheck(e){
+            const files = e.currentTarget.files;
+
+            //파일 타입 검사
+            [...files].forEach(file => {
+                if (!file.type.match("image/.*")) {
+                    alert('이미지 파일만 업로드가 가능합니다.');
+                    $(".real-upload").val("");
+                    return false;
+                }
+                return true;
+            });
+        }
+
+
+
+
+    </script>
+
+
 </th:block>
 </html>

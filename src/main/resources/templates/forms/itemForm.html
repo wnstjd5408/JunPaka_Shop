@@ -79,11 +79,11 @@
                 <th:block th:if = "${#lists.isEmpty(itemFormDto.imageDtolist)}">
                     <div class="mb-3">
                         <label for="thumbnails" class="form-label">썸네일 - 메인 사진</label>
-                        <input type="file" class="form-control" name="thumbnails" id="thumbnails">
+                        <input type="file" accept="image/*" class="form-control imageFile" onchange="fileCheck(this)" name="thumbnails" id="thumbnails">
                     </div>
                     <div class="mb-3">
                         <label for="itemImage" class="form-label">이미지</label>
-                        <input type="file" class="form-control" accept="image/*" name="multipartFile" multiple id="itemImage">
+                        <input type="file" accept="image/*" class="form-control imageFile" onchange="fileCheck(this)" name="multipartFile" multiple id="itemImage">
                     </div>
                 </th:block>
 
@@ -130,88 +130,118 @@
                 if (errorMessage != null) {
                     alert(errorMessage);
                 }
-            });
+                const isItemFormDto = /*[[${#lists.isEmpty(itemFormDto.imageDtolist)}]]*/;
 
-            const realUpload = document.querySelector('.real-upload');
-            realUpload.addEventListener('change', loadFile);
-            function loadFile(e) {
-                const uploadFiles = []
-                const files = e.currentTarget.files;
-                const imagePreview = document.querySelector('.addFileName');
-
-                while(imagePreview.firstChild){
-                    imagePreview.firstChild.remove();
+                if(isItemFormDto){
+                    const imageFile = document.querySelectorAll('.imageFile');
+                    [...imageFile].forEach(file =>{
+                            file.addEventListener('change', fileCheck);
+                        });
                 }
+                else{
+                    const realUpload = document.querySelector('.real-upload');
+                    realUpload.addEventListener('change', loadFile);
+                }
+
+
                 const docFrag = new DocumentFragment();
 
-
-
-                //파일 타입 검사
-                [...files].forEach(file => {
-                    if (!file.type.match("image/.*")) {
-                        alert('이미지 파일만 업로드가 가능합니다.');
-                        return
-                    }
-                    if([...files].length < 5){
-                        uploadFiles.push(file);
-                        const fileReader = new FileReader();
-                        fileReader.onload = (e) => {
-                            const preview = createElement(e, file);
-                            imagePreview.appendChild(preview);
-
-                         };
-                        fileReader.readAsText(file);
-                    }
-
-                });
-
-
-            }
-
-            function createElement(e, file){
-                const name = file.name;
-                const li = document.createElement('li');
-                const message = document.createTextNode(name);
-                li.appendChild(message);
-                return li;
-            }
-
-
-
-            function deleteFile(obj) {
-                var itemImageId = obj.dataset.id;
-                var token = $("meta[name='_csrf']").attr("content");
-                var header = $("meta[name='_csrf_header']").attr("content");
-
-                var url = "/itemImage/" + itemImageId;
-
-                $.ajax({
-                    url: url,
-                    type: "DELETE",
-                    beforeSend: function (xhr) {
-                        /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
-                        console.log(itemImageId)
-                        xhr.setRequestHeader(header, token);
-                    },
-
-                    dataType: "json",
-                    cache: false,
-                    success: function (result, status) {
-                        alert('선택하신 이미지가 삭제되었습니다');
-                        location.href = '/admin/items/' + result;
-                    },
-
-                    error: function (jqXHR, status, error) {
-                        if (jqXHR.status == '401') {
-                            alert('로그인 후 이용해주세요');
-                            location.href = '/members/login';
-
-                        } else {
-                            alert(jqXHR.responseText);
+                function fileCheck(e){
+                    const files = e.currentTarget.files;
+                    console.log("files", files[0].name);
+                    //파일 타입 검사
+                    [...files].forEach(file => {
+                        if (!file.type.match("image/.*")) {
+                            alert('이미지 파일만 업로드가 가능합니다.');
+                            console.log(this)
+                            $(this).val("");
+                            return false;
                         }
+                        return true;
+                    });
+                }
+
+                function loadFile(e) {
+                    const uploadFiles = []
+                    const files = e.currentTarget.files;
+                    const imagePreview = document.querySelector('.addFileName');
+
+                    while(imagePreview.firstChild){
+                        imagePreview.firstChild.remove();
                     }
-                });
-            }
+
+
+
+                    //파일 타입 검사
+                    [...files].forEach(file => {
+                        if (!file.type.match("image/.*")) {
+                            alert('이미지 파일만 업로드가 가능합니다.');
+                            $(".real-upload").val("");
+                            return;
+                        }
+                        if([...files].length < 5){
+                            uploadFiles.push(file);
+                            const fileReader = new FileReader();
+                            fileReader.onload = (e) => {
+                                const preview = createElement(e, file);
+                                imagePreview.appendChild(preview);
+
+                            };
+                            fileReader.readAsText(file);
+                        }
+
+                    });
+
+
+                }
+
+                function createElement(e, file){
+                    const name = file.name;
+                    const li = document.createElement('li');
+                    const message = document.createTextNode(name);
+                    li.appendChild(message);
+                    return li;
+                }
+
+
+
+                function deleteFile(obj) {
+                    var itemImageId = obj.dataset.id;
+                    var token = $("meta[name='_csrf']").attr("content");
+                    var header = $("meta[name='_csrf_header']").attr("content");
+
+                    var url = "/itemImage/" + itemImageId;
+
+                    $.ajax({
+                        url: url,
+                        type: "DELETE",
+                        beforeSend: function (xhr) {
+                            /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                            console.log(itemImageId)
+                            xhr.setRequestHeader(header, token);
+                        },
+
+                        dataType: "json",
+                        cache: false,
+                        success: function (result, status) {
+                            alert('선택하신 이미지가 삭제되었습니다');
+                            location.href = '/admin/items/' + result;
+                        },
+
+                        error: function (jqXHR, status, error) {
+                            if (jqXHR.status == '401') {
+                                alert('로그인 후 이용해주세요');
+                                location.href = '/members/login';
+
+                            } else {
+                                alert(jqXHR.responseText);
+                            }
+                        }
+                    });
+                }
+            });
+
+
         </script>
     </th:block>
 </html>
