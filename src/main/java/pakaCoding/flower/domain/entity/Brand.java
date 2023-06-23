@@ -48,6 +48,8 @@ public class Brand extends TimeEntity{
         brandImages.forEach(bi -> bi.setBrand(this));
     }
 
+
+
     //브랜드 제품 증가
     public void addBrandCount(){
         this.count += 1;

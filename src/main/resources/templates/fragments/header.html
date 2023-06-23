@@ -20,6 +20,15 @@
                         </li>
                     </ul>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link dropdown-toggle" id="navbarBrandDropdown" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Brand</a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarBrandDropdown">
+                        <li><hr class="dropdown-divider" /></li>
+                        <li th:each="brand : ${brands}">
+                            <a class="dropdown-item h-auto" th:href="@{'/brands/' + ${brand.id}}" href="#!" th:text="${brand.name}"></a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
             <div th:if="${member}" class="d-flex">
                 <div class="px-1">

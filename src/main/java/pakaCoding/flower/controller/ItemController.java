@@ -130,7 +130,23 @@ public class ItemController {
 
         return "items/itemMng";
     }
+    //아이템 자세히 보기
+    @GetMapping("/items/{itemId}")
+    public String oneFlower(Principal principal,
+                            @PathVariable long itemId, Model model){
+        isPrincipal(principal, model);
 
+        ItemFormDto item = itemService.getFetchItemDetail(itemId);
+        List<Type> types = typeService.allType();
+        List<Brand> brands = brandService.findAll();
+
+
+        model.addAttribute("types", types);
+        model.addAttribute("brands", brands);
+        model.addAttribute("item", item);
+
+        return "items/itemDetail";
+    }
 
 
 
@@ -144,6 +160,7 @@ public class ItemController {
         Page<MainItemDto> items = itemService.findAllItems(page);
         log.info("Item 전체 수 = {}", items.getTotalElements());
         List<Type> types = typeService.allType();
+        List<Brand> brands = brandService.findAll();
 
         log.info("items.getTotalPages = {}", items.getTotalPages());
 
@@ -152,6 +169,7 @@ public class ItemController {
         model.addAttribute("maxPage", 5);
         model.addAttribute("items", items);
         model.addAttribute("types", types);
+        model.addAttribute("brands", brands);
 
         pageModelPut(items, model);
 
@@ -175,8 +193,10 @@ public class ItemController {
 
         Page<MainItemDto> itemsType = itemService.findItemsType(typeId, page);
         List<Type> types = typeService.allType();
+        List<Brand> brands = brandService.findAll();
 
         model.addAttribute("types", types);
+        model.addAttribute("brands", brands);
         model.addAttribute("maxPage", 5);
         model.addAttribute("items", itemsType);
         return "items/itemList";
@@ -188,20 +208,7 @@ public class ItemController {
         model.addAttribute("cartCount", count);
     }
 
-    //아이템 자세히 보기
-    @GetMapping("/items/{itemId}")
-    public String oneFlower(Principal principal,
-                            @PathVariable long itemId, Model model){
-        isPrincipal(principal, model);
 
-        ItemFormDto item = itemService.getFetchItemDetail(itemId);
-        List<Type> types = typeService.allType();
-
-        model.addAttribute("types", types);
-        model.addAttribute("item", item);
-
-        return "items/itemDetail";
-    }
 
     private void isPrincipal(Principal principal, Model model) {
         if (principal != null) {
