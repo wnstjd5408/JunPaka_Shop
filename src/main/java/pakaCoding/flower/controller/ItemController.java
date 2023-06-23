@@ -15,7 +15,7 @@ import pakaCoding.flower.domain.entity.Item;
 import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.dto.*;
 import pakaCoding.flower.service.CartService;
-import pakaCoding.flower.service.ItemImageService;
+import pakaCoding.flower.service.ImageService;
 import pakaCoding.flower.service.ItemService;
 import pakaCoding.flower.service.TypeService;
 
@@ -30,7 +30,7 @@ public class ItemController {
     private final ItemService itemService;
     private final TypeService typeService;
     private final CartService cartService;
-    private final ItemImageService fileImageService;
+    private final ImageService fileImageService;
 
     //상품 등록 페이지
     @GetMapping("/admin/items/create")

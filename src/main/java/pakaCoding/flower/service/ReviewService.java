@@ -17,7 +17,6 @@ import pakaCoding.flower.repository.MemberRepository;
 import pakaCoding.flower.repository.OrderItemRepository;
 import pakaCoding.flower.repository.ReviewRepository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +28,7 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
     private final MemberRepository memberRepository;
-    private final ItemImageService itemImageService;
+    private final ImageService itemImageService;
     private final OrderItemRepository orderItemRepository;
 
     public void saveReview(ReviewFormDto reviewFormDto, String userId){
@@ -42,7 +41,7 @@ public class ReviewService {
         Review review = Review.createReview(member, item, orderItem, reviewFormDto.getComment(), reviewFormDto.getRating());
         reviewRepository.save(review);
 
-        List<ImageDto> reviewFiles = itemImageService.saveReviewFile(reviewFormDto);
+        List<ImageDto> reviewFiles = itemImageService.saveImageFile(reviewFormDto.getMultipartFile());
         List<ReviewImage> reviewImages = reviewFiles.stream().
                         map(ImageDto::toEntityReviewImage).
                         collect(Collectors.toList());

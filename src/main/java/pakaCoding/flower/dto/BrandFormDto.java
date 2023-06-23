@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
+import pakaCoding.flower.domain.entity.Brand;
 
 import java.util.List;
 
@@ -21,6 +22,14 @@ public class BrandFormDto {
 
     private List<MultipartFile> brandImages;
 
+
+    //DTO -> Brand
+    public Brand toEntity(){
+        return Brand.builder()
+                .brandComment(detailBrandComment)
+                .name(brandName)
+                .build();
+    }
 
 
 }

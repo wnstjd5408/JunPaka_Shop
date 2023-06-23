@@ -62,7 +62,7 @@ public class ItemFormDto extends TimeEntity {
     /**
      * 파일저장때 사용
      */
-    //DTO -> Flower
+    //DTO -> Item
     public Item toEntity(){
         return Item.builder()
                 .type(type)
