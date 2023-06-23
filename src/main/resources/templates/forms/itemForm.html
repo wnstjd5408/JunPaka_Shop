@@ -92,7 +92,7 @@
                         <label class="form-label">이미지 추가</label>
                         <div class="mb-3">
                              <input type="file" accept="image/*" id="addFile"
-                                    name="multipartFile" multiple class="real-upload" onchange="loadFile(this)"/>
+                                    name="multipartFile" multiple class="real-upload"/>
                              <input type="button" class="btn btn-sm btn-outline-secondary form-control" value="파일추가"
                                     onclick="document.getElementById('addFile').click();"/>
                         </div>
@@ -202,45 +202,42 @@
                     li.appendChild(message);
                     return li;
                 }
-
-
-
-                function deleteFile(obj) {
-                    var itemImageId = obj.dataset.id;
-                    var token = $("meta[name='_csrf']").attr("content");
-                    var header = $("meta[name='_csrf_header']").attr("content");
-
-                    var url = "/itemImage/" + itemImageId;
-
-                    $.ajax({
-                        url: url,
-                        type: "DELETE",
-                        beforeSend: function (xhr) {
-                            /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
-                            console.log(itemImageId)
-                            xhr.setRequestHeader(header, token);
-                        },
-
-                        dataType: "json",
-                        cache: false,
-                        success: function (result, status) {
-                            alert('선택하신 이미지가 삭제되었습니다');
-                            location.href = '/admin/items/' + result;
-                        },
-
-                        error: function (jqXHR, status, error) {
-                            if (jqXHR.status == '401') {
-                                alert('로그인 후 이용해주세요');
-                                location.href = '/members/login';
-
-                            } else {
-                                alert(jqXHR.responseText);
-                            }
-                        }
-                    });
-                }
             });
 
+            function deleteFile(obj) {
+                var itemImageId = obj.dataset.id;
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
+
+                var url = "/itemImage/" + itemImageId;
+
+                $.ajax({
+                    url: url,
+                    type: "DELETE",
+                    beforeSend: function (xhr) {
+                        /* 데이터를 전송하기 전에 헤더에 csrf값을 설정 */
+                        console.log(itemImageId)
+                        xhr.setRequestHeader(header, token);
+                    },
+
+                    dataType: "json",
+                    cache: false,
+                    success: function (result, status) {
+                        alert('선택하신 이미지가 삭제되었습니다');
+                        location.href = '/admin/items/' + result;
+                    },
+
+                    error: function (jqXHR, status, error) {
+                        if (jqXHR.status == '401') {
+                            alert('로그인 후 이용해주세요');
+                            location.href = '/members/login';
+
+                        } else {
+                            alert(jqXHR.responseText);
+                        }
+                    }
+                });
+            }
 
         </script>
     </th:block>
