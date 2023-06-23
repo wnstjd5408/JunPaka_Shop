@@ -46,6 +46,8 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
      Page<Item> findAdminItems(Pageable pageable);
 
 
+
+
      @Query("select distinct i from Item i" +
              " join fetch i.type t " +
              " where i.id = :itemId")
