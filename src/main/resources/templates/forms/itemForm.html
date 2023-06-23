@@ -30,12 +30,18 @@
 
                 <div class="mb-3">
                     <label for="itemSell" class="form-label">타입</label>
-                    <select name="itemSellStatus" class="form-control, form-select" id="itemSell">
+                    <select name="itemSellStatus" class="form-control form-select" id="itemSell">
                         <option value="SELL">판매중</option>
                         <option value="SOLD_OUT">품절</option>
                     </select>
                 </div>
-
+                <div class="mb-3">
+                    <label for="brand" class="form-label">브랜드</label>
+                    <select th:field="*{brand}" class="form-select" id="brand">
+                        <option value="">==브랜드 선택==</option>
+                        <option th:each="brand : ${brands}" th:value="${brand.id}" th:text="${brand.name}" ></option>
+                    </select>
+                </div>
                 <div class="mb-3">
                     <label for="itemName" class="form-label">제품 이름</label>
                     <input type="text" class="form-control"  th:field="*{name}" id="itemName">
@@ -62,7 +68,7 @@
                 <th:block th:if ="${#lists.isEmpty(itemFormDto.type)}">
                     <div class="mb-3">
                         <label for="typeNot" class="form-label">타입</label>
-                        <select th:field="*{type}" class="form-control, form-select" id="typeNot">
+                        <select th:field="*{type}" class="form-control form-select" id="typeNot">
                             <option value="">==타입 선택==</option>
                             <option th:each="type : ${types}" th:value="${type.id}" th:text="${type.typename}" ></option>
                         </select>

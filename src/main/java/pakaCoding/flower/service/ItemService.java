@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import pakaCoding.flower.domain.entity.Brand;
 import pakaCoding.flower.domain.entity.Item;
 import pakaCoding.flower.domain.entity.ItemImage;
 import pakaCoding.flower.domain.entity.Type;
@@ -57,6 +58,9 @@ public class ItemService {
 
         Type type = item.getType();
         type.addTypeCount();
+
+        Brand brand = item.getBrand();
+        brand.addBrandCount();
 
         return item.getId();
     }

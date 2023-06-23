@@ -28,6 +28,10 @@ public class BrandService {
     private final BrandRepository brandRepository;
     private final ImageService imageService;
 
+    public List<Brand> findAll(){
+        return brandRepository.findAll();
+    }
+
 
     public Long saveBrand(BrandFormDto brandFormDto){
         log.info("BrandService에서 saveBrand를 실행");

@@ -11,13 +11,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pakaCoding.flower.domain.entity.Brand;
 import pakaCoding.flower.domain.entity.Item;
 import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.dto.*;
-import pakaCoding.flower.service.CartService;
-import pakaCoding.flower.service.ImageService;
-import pakaCoding.flower.service.ItemService;
-import pakaCoding.flower.service.TypeService;
+import pakaCoding.flower.service.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -31,18 +29,50 @@ public class ItemController {
     private final TypeService typeService;
     private final CartService cartService;
     private final ImageService fileImageService;
+    private final BrandService brandService;
 
     //상품 등록 페이지
     @GetMapping("/admin/items/create")
     public String newItem(ItemFormDto itemFormDto , Principal principal, Model model){
         isPrincipal(principal, model);
         List<Type> types = typeService.allType();
+        List<Brand> brands = brandService.findAll();
 
         model.addAttribute("itemFormDto", itemFormDto);
         model.addAttribute("types", types);
+        model.addAttribute("brands", brands);
         return "forms/itemForm";
     }
 
+    @PostMapping("/admin/items/create")
+    public String save(@Valid ItemFormDto itemFormDto,
+                       BindingResult bindingResult,
+                       RedirectAttributes redirectAttributes, Model model) throws Exception {
+
+        if(bindingResult.hasErrors()){
+            List<Type> types = typeService.allType();
+            List<Brand> brands = brandService.findAll();
+
+            model.addAttribute("types", types);
+            model.addAttribute("brands", brands);
+            return "forms/itemForm";
+        }
+
+        Long itemId;
+        log.info("ItemController save 호출");
+        try {
+            itemId = itemService.saveItem(itemFormDto);
+        }catch (Exception e){
+            model.addAttribute("errorMessage", "상품 등록 중 에러가 발생했습니다.");
+            return "forms/itemForm";
+
+        }
+
+        redirectAttributes.addAttribute("itemId", itemId);
+
+
+        return "redirect:/items/{itemId}";
+    }
 
     @GetMapping("/admin/items/{itemId}")
     public String updatePageItem(@PathVariable(name = "itemId") Long itemId ,Model model){
@@ -59,7 +89,6 @@ public class ItemController {
                              BindingResult bindingResult,
                              Model model){
         if (bindingResult.hasErrors()) {
-            log.info("사이즈 : {}", itemFormDto.getImageDtolist().size());
             return "forms/itemForm";
         }
 
@@ -102,33 +131,7 @@ public class ItemController {
         return "items/itemMng";
     }
 
-    @PostMapping("/admin/items/create")
-    public String save(@Valid ItemFormDto itemFormDto,
-                       BindingResult bindingResult,
-                       RedirectAttributes redirectAttributes, Model model) throws Exception {
 
-        List<Type> types = typeService.allType();
-
-        if(bindingResult.hasErrors()){
-            model.addAttribute("types", types);
-            return "forms/itemForm";
-        }
-
-        Long itemId;
-        log.info("ItemController save 호출");
-        try {
-            itemId = itemService.saveItem(itemFormDto);
-        }catch (Exception e){
-            model.addAttribute("errorMessage", "상품 등록 중 에러가 발생했습니다.");
-            return "forms/itemForm";
-
-        }
-
-        redirectAttributes.addAttribute("itemId", itemId);
-
-
-        return "redirect:/items/{itemId}";
-    }
 
 
     @GetMapping(value = {"/items", "/"})
