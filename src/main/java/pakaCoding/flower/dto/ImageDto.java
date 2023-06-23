@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
+import pakaCoding.flower.domain.entity.BrandImage;
 import pakaCoding.flower.domain.entity.Image;
 import pakaCoding.flower.domain.entity.ItemImage;
 import pakaCoding.flower.domain.entity.ReviewImage;
@@ -29,13 +31,28 @@ public class ImageDto {
 
     private String contentType; //ContentType
 
+    @ColumnDefault("N")
     private String repImgYn;
 
 
 
+    //DTO -> Entity
+
+    public BrandImage toEntity(){
+        return BrandImage.builder()
+                .originFileImgName(originFileName)
+                .savedFileImgName(imgUrl)
+                .uploadDir(uploadDir)
+                .extension(extension)
+                .size(size)
+                .contentType(contentType)
+                .repImgYn(repImgYn)
+                .build();
+    }
+
 
     /* DTO -> Entity*/
-    public ItemImage toEntity(){
+    public ItemImage toEntityItemImage(){
         return ItemImage.builder()
                 .originFileImgName(originFileName)
                 .savedFileImgName(imgUrl)

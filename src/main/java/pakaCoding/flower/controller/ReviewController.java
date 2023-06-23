@@ -12,14 +12,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pakaCoding.flower.domain.entity.Brand;
 import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.dto.OrderMyPageDto;
 import pakaCoding.flower.dto.ReviewDto;
 import pakaCoding.flower.dto.ReviewFormDto;
-import pakaCoding.flower.service.CartService;
-import pakaCoding.flower.service.OrderService;
-import pakaCoding.flower.service.ReviewService;
-import pakaCoding.flower.service.TypeService;
+import pakaCoding.flower.service.*;
 
 import java.security.Principal;
 import java.util.List;
@@ -33,6 +31,7 @@ public class ReviewController {
     private final TypeService typeService;
     private final CartService cartService;
     private final ReviewService reviewService;
+    private final BrandService brandService;
 
     @GetMapping("/reviews/form")
     public String review(Principal principal, @RequestParam long orderItemNo, Model model){
@@ -44,9 +43,12 @@ public class ReviewController {
             model.addAttribute("cartCount", 0);
         }
         List<Type> types = typeService.allType();
+        List<Brand> brands = brandService.findAll();
+
 
         model.addAttribute("orderItemNo", orderItemNo);
         model.addAttribute("types", types);
+        model.addAttribute("brands", brands);
         model.addAttribute("reviewFormDto", new ReviewFormDto());
 
         return "forms/reviewForm";
@@ -57,10 +59,15 @@ public class ReviewController {
                          BindingResult bindingResult,
                          Principal principal,
                          Model model){
-        List<Type> types = typeService.allType();
+
+
 
         if(bindingResult.hasErrors()){
+            List<Type> types = typeService.allType();
+            List<Brand> brands = brandService.findAll();
+
             model.addAttribute("types", types);
+            model.addAttribute("brands",brands);
             return "forms/reviewForm";
         }
         log.info("Post : review 호출");

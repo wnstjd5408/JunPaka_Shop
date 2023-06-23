@@ -11,10 +11,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import pakaCoding.flower.domain.entity.Brand;
 import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.dto.MemberSessionDto;
 import pakaCoding.flower.dto.OrderDto;
 import pakaCoding.flower.dto.OrderMyPageDto;
+import pakaCoding.flower.service.BrandService;
 import pakaCoding.flower.service.CartService;
 import pakaCoding.flower.service.OrderService;
 import pakaCoding.flower.service.TypeService;
@@ -30,6 +32,7 @@ public class OrderController {
     private final TypeService typeService;
     private final OrderService orderService;
     private final CartService cartService;
+    private final BrandService brandService;
 
     @GetMapping(value = {"/orders", "/orders/{page}"})
     public String orderMyPage(Principal principal,
@@ -47,9 +50,11 @@ public class OrderController {
         log.info("GET : orderPage 실행");
         Page<OrderMyPageDto> orderList = orderService.getOrderList(principal.getName(), page);
         List<Type> types = typeService.allType();
+        List<Brand> brands = brandService.findAll();
 
         model.addAttribute("maxPage", 5);
         model.addAttribute("types", types);
+        model.addAttribute("brands", brands);
         model.addAttribute("orders", orderList);
 
         return "order/orderMyPage";

@@ -46,6 +46,8 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
      Page<Item> findAdminItems(Pageable pageable);
 
 
+
+
      @Query("select distinct i from Item i" +
              " join fetch i.type t " +
              " where i.id = :itemId")
@@ -55,7 +57,8 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
      @Query("select i from Item i" +
              " join fetch i.type t " +
              " join fetch i.itemImages ii " +
+             " join fetch i.brand b" +
              " where i.id = :itemId")
-     Item findAllByItemImagesAndType(Long itemId);
+     Item findAllByItemImagesAndTypeAndBrand(Long itemId);
 
 }

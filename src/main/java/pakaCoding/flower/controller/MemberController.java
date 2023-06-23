@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import pakaCoding.flower.domain.entity.Address;
+import pakaCoding.flower.domain.entity.Brand;
 import pakaCoding.flower.domain.entity.Member;
 import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.dto.MemberDto;
 import pakaCoding.flower.dto.MemberFormDto;
 import pakaCoding.flower.dto.MemberSessionDto;
+import pakaCoding.flower.service.BrandService;
 import pakaCoding.flower.service.MemberService;
 import pakaCoding.flower.service.TypeService;
 
@@ -30,6 +32,7 @@ public class MemberController {
 
     private final TypeService typeService;
     private final MemberService memberService;
+    private final BrandService brandService;
 
     @GetMapping("/members/login")
     public String login(@RequestParam(value="error", required = false)String error,
@@ -37,10 +40,12 @@ public class MemberController {
                         Model model){
 
         List<Type> types = typeService.allType();
+        List<Brand> brands = brandService.findAll();
         /* 에러와 예외를 모델에 담아 view resolve */
         model.addAttribute("error", error);
         model.addAttribute("exception", exception);
         model.addAttribute("types", types);
+        model.addAttribute("brands", brands);
         model.addAttribute("memberFormDto", new MemberFormDto());
 
         return "forms/loginForm";
@@ -49,13 +54,14 @@ public class MemberController {
     @GetMapping("/members/join")
     public String join(Model model){
 
-
-
         List<Type> types = typeService.allType();
+        List<Brand> brands = brandService.findAll();
+
         LocalDate now = LocalDate.now();
 
         model.addAttribute("memberDto", new MemberDto());
         model.addAttribute("types", types);
+        model.addAttribute("brands", brands);
         model.addAttribute("now", now);
 
         return "forms/joinForm";
@@ -64,17 +70,19 @@ public class MemberController {
     @PostMapping("/members/join")
     public String join(@Valid MemberDto memberDto,
                        BindingResult bindingResult, Model model){
-        List<Type> types = typeService.allType();
+
         LocalDate now = LocalDate.now();
 
         if(bindingResult.hasErrors()){
+            List<Type> types = typeService.allType();
+            List<Brand> brands = brandService.findAll();
+
             model.addAttribute("types", types);
+            model.addAttribute("brands", brands);
+
             model.addAttribute("now", now);
             return "forms/joinForm";
         }
-
-        log.info("MemberController 실행");
-
         memberService.join(memberDto);
 
         return "redirect:/members/login";

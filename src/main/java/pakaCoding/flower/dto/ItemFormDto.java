@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.web.multipart.MultipartFile;
 import pakaCoding.flower.domain.constant.ItemSellStatus;
+import pakaCoding.flower.domain.entity.Brand;
 import pakaCoding.flower.domain.entity.Item;
 import pakaCoding.flower.domain.entity.TimeEntity;
 import pakaCoding.flower.domain.entity.Type;
@@ -34,6 +35,9 @@ public class ItemFormDto extends TimeEntity {
     @NotNull(message = "타입 선택은 필수 입력 값입니다.")
     private Type type;
 
+    @NotNull(message = "브랜드 선택은 필수 입력 값입니다.")
+    private Brand brand;
+
     private ItemSellStatus itemSellStatus;
 
 
@@ -55,6 +59,7 @@ public class ItemFormDto extends TimeEntity {
         this.stockQuantity = item.getStockQuantity();
         this.detailComment = item.getDetailComment();
         this.type = item.getType();
+        this.brand = item.getBrand();
         this.itemSellStatus = item.getItemSellStatus();
         this.imageDtolist = imageDtolist;
     }
@@ -62,9 +67,10 @@ public class ItemFormDto extends TimeEntity {
     /**
      * 파일저장때 사용
      */
-    //DTO -> Flower
+    //DTO -> Item
     public Item toEntity(){
         return Item.builder()
+                .brand(brand)
                 .type(type)
                 .name(name)
                 .price(price)

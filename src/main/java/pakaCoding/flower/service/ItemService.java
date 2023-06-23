@@ -9,6 +9,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import pakaCoding.flower.domain.entity.Brand;
 import pakaCoding.flower.domain.entity.Item;
 import pakaCoding.flower.domain.entity.ItemImage;
 import pakaCoding.flower.domain.entity.Type;
@@ -25,7 +27,7 @@ import static java.util.stream.Collectors.*;
 @RequiredArgsConstructor
 public class ItemService {
     private final ItemRepository itemRepository;
-    private final ItemImageService itemImageService;
+    private final ImageService imageService;
 
     @Transactional
     public Long saveItem(ItemFormDto itemFormDto) throws Exception {
@@ -42,15 +44,23 @@ public class ItemService {
             item = itemRepository.findById(itemFormDto.getId()).get();
         }
 
+        List<MultipartFile> multipartFile = itemFormDto.getMultipartFile();
+        MultipartFile thumbnails = itemFormDto.getThumbnails();
+
+        multipartFile.add(0, thumbnails);
+
         //파일저장
-        List<ImageDto> files = itemImageService.saveFile(itemFormDto);
-        List<ItemImage> fileImages = files.stream().map(ImageDto::toEntity).collect(toList());
+        List<ImageDto> files = imageService.saveImageFile(multipartFile);
+        List<ItemImage> fileImages = files.stream().map(ImageDto::toEntityItemImage).collect(toList());
         item.addFiles(fileImages);
 
         log.info("item.getId() = {}", item.getId());
 
         Type type = item.getType();
         type.addTypeCount();
+
+        Brand brand = item.getBrand();
+        brand.addBrandCount();
 
         return item.getId();
     }
@@ -59,7 +69,7 @@ public class ItemService {
     @Transactional(readOnly = true)
     public ItemFormDto getFetchItemDetail(Long itemId) {
 
-        Item findItem = itemRepository.findAllByItemImagesAndType(itemId);
+        Item findItem = itemRepository.findAllByItemImagesAndTypeAndBrand(itemId);
 
 
         List<ImageDto> imgDtoList = new ArrayList<>();
@@ -120,14 +130,11 @@ public class ItemService {
         log.info("updateItem 사용");
         Item findItem = itemRepository.findById(itemFormDto.getId()).orElseThrow(EntityNotFoundException::new);
 
-        log.info("itemFormDto.getPrice = {}", itemFormDto.getPrice());
-        log.info("itemFormDto.getType = {}", itemFormDto.getType());
-
         findItem.updateItem(itemFormDto);
 
         try {
-            List<ImageDto> imageDtoList = itemImageService.saveUpdateImageFile(itemFormDto);
-            List<ItemImage> fileImages = imageDtoList.stream().map(ImageDto::toEntity).collect(toList());
+            List<ImageDto> imageDtoList = imageService.saveUpdateImageFile(itemFormDto);
+            List<ItemImage> fileImages = imageDtoList.stream().map(ImageDto::toEntityItemImage).collect(toList());
             findItem.addFiles(fileImages);
         } catch (Exception e) {
             throw new RuntimeException(e);
