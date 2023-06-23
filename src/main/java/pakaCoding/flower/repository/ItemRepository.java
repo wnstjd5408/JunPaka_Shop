@@ -55,7 +55,8 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
      @Query("select i from Item i" +
              " join fetch i.type t " +
              " join fetch i.itemImages ii " +
+             " join fetch i.brand b" +
              " where i.id = :itemId")
-     Item findAllByItemImagesAndType(Long itemId);
+     Item findAllByItemImagesAndTypeAndBrand(Long itemId);
 
 }

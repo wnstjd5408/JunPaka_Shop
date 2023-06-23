@@ -69,7 +69,7 @@ public class ItemService {
     @Transactional(readOnly = true)
     public ItemFormDto getFetchItemDetail(Long itemId) {
 
-        Item findItem = itemRepository.findAllByItemImagesAndType(itemId);
+        Item findItem = itemRepository.findAllByItemImagesAndTypeAndBrand(itemId);
 
 
         List<ImageDto> imgDtoList = new ArrayList<>();
