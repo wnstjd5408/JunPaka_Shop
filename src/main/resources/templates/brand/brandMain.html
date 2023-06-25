@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+    <head>
+        <title th:text="${brandItemList[0].brandName}">1011</title>
+        <meta name="_csrf" th:content="${_csrf.token}"/>
+        <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+    </head>
+
+
+<th:block layout:fragment="navbar" class="py-5">
+    <th:block th:replace="~{fragments/header :: header}"></th:block>
+</th:block>
+<th:block layout:fragment="content" class="py-5">
+    <div id="item" class="row gx-3 gx-lg-3 row-cols-1 row-cols-md-1 justify-content-center">
+        <div>
+            <hr class="mt-2">
+            <div class="my-2">
+                <span class="fw-light fs-6" th:text="${brandItemList[0].brandName}" style="white-space: pre-line;"></span>
+            </div>
+            <div th:each="brandImage : ${brandImages}" class="text-center my-1 rounded">
+                <img class="  p-2 " th:src="'/display/fileImage='+${brandImage.imgUrl}"
+                     src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..."  width="800"/>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>
