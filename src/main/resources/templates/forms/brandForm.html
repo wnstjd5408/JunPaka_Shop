@@ -30,7 +30,7 @@
 
             <div class="mb-3">
                 <label for ="detailBrandComment" class="form-label">브랜드 상세 내용</label>
-                <textarea class="form-control h-50" aria-label="With textarea" style="white-space: pre-line;"
+                <textarea class="form-control h-50" rows="10" aria-label="With textarea" style="white-space: pre-line;"
                           th:field="*{detailBrandComment}" id="detailBrandComment"></textarea>
             </div>
             <p th:if="${#fields.hasErrors('detailBrandComment')}" th:errors="*{detailBrandComment}"

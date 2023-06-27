@@ -37,7 +37,7 @@ public class BrandController {
     private final ImageService imageService;
 
 
-    @GetMapping("/brand/create")
+    @GetMapping("/brands/create")
     public String newBrand(BrandFormDto brandFormDto, Model model){
 
 
@@ -46,7 +46,7 @@ public class BrandController {
         return "forms/brandForm";
     }
 
-    @PostMapping("/brand/create")
+    @PostMapping("/brands/create")
     public String saveBrand(@Valid BrandFormDto brandFormDto,
                             BindingResult bindingResult,
                             Model model,
