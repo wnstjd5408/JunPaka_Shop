@@ -60,14 +60,14 @@ public class BrandController {
         try{
             Long brandId = brandService.saveBrand(brandFormDto);
             redirectAttributes.addAttribute("brandId", brandId);
-            return "redirect:/brand/{brandId}";
+            return "redirect:/brands/{brandId}";
         }catch (Exception e){
             model.addAttribute("errorMessage","브랜드 등록 중 에러가 발생했습니다.");
             return "forms/brandForm";
         }
     }
 
-    @GetMapping("/brand/{brandId}")
+    @GetMapping("/brands/{brandId}")
     public String detailBrand(Principal principal,
                               @PathVariable long brandId,
                               Model model,
@@ -80,18 +80,18 @@ public class BrandController {
 
         Page<BrandItemListDto> brandItemList = brandService.getBrandItem(brandId, page);
 
-        List<ImageDto> imageDtoList = imageService.loadBrandImage(brandId);
+        ImageDto imageDto = imageService.loadBrandImage(brandId);
 
 
         List<Type> types = typeService.allType();
         List<Brand> brands = brandService.findAll();
 
-        log.info("brandItemList[0].getBrandName= {}", brandItemList.getContent().get(0).getBrandName() );
         model.addAttribute("maxPage", 5);
         model.addAttribute("types", types);
         model.addAttribute("brands", brands);
-        model.addAttribute("brandItemList",brandItemList.getContent());
-        model.addAttribute("brandImages", imageDtoList);
+        model.addAttribute("brandName", brandItemList.getContent().get(0).getBrandName());
+        model.addAttribute("brandItemList",brandItemList);
+        model.addAttribute("brandImage", imageDto);
 
         return "brand/brandMain";
     }

@@ -49,7 +49,17 @@ public class ImageService {
     }
 
     @Transactional(readOnly = true)
-    public List<ImageDto> loadBrandImage(Long brandId){
+    public ImageDto loadBrandImage(Long brandId) {
+
+        BrandImage brandImage = brandImageRepository.findByBrandIdAndRepImgYn(brandId, "Y");
+        return new ImageDto(brandImage);
+    }
+
+
+
+
+    @Transactional(readOnly = true)
+    public List<ImageDto> loadBrandImages(Long brandId){
         List<BrandImage> brandImages = brandImageRepository.findByBrandId(brandId);
 
         List<ImageDto> imageDtoList = new ArrayList<>();

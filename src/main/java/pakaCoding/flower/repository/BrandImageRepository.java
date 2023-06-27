@@ -8,6 +8,8 @@ import java.util.List;
 public interface BrandImageRepository extends JpaRepository<BrandImage, Long> {
 
 
+    BrandImage findByBrandIdAndRepImgYn(Long BrandId, String repImgYn);
+
     List<BrandImage> findByBrandId(Long brandId);
 
 }
