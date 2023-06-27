@@ -7,10 +7,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import pakaCoding.flower.domain.entity.BrandImage;
 import pakaCoding.flower.domain.entity.Item;
 import pakaCoding.flower.domain.entity.ItemImage;
 import pakaCoding.flower.dto.ItemFormDto;
 import pakaCoding.flower.dto.ImageDto;
+import pakaCoding.flower.repository.BrandImageRepository;
 import pakaCoding.flower.repository.ItemImageRepository;
 
 import java.io.File;
@@ -31,6 +33,8 @@ public class ImageService {
     private String uploadDir;
 
     private final ItemImageRepository itemImageRepository;
+
+    private final BrandImageRepository brandImageRepository;
     private ImageDto file;
 
     //이미지 삭제
@@ -42,6 +46,28 @@ public class ImageService {
         itemImageRepository.delete(itemImage);
 
         return item;
+    }
+
+    @Transactional(readOnly = true)
+    public ImageDto loadBrandImage(Long brandId) {
+
+        BrandImage brandImage = brandImageRepository.findByBrandIdAndRepImgYn(brandId, "Y");
+        return new ImageDto(brandImage);
+    }
+
+
+
+
+    @Transactional(readOnly = true)
+    public List<ImageDto> loadBrandImages(Long brandId){
+        List<BrandImage> brandImages = brandImageRepository.findByBrandId(brandId);
+
+        List<ImageDto> imageDtoList = new ArrayList<>();
+        brandImages.forEach(brandImage -> {
+            ImageDto imageDto = new ImageDto(brandImage);
+            imageDtoList.add(imageDto);
+        });
+        return imageDtoList;
     }
 
     //브랜드, 리뷰, 아이템 이미지 저장
@@ -81,6 +107,7 @@ public class ImageService {
         return files;
 
     }
+
 
     //아이템 추가 이미지 저장
     public List<ImageDto> saveUpdateImageFile(ItemFormDto itemFormDto) throws Exception{
@@ -139,6 +166,8 @@ public class ImageService {
                 .repImgYn(repImgYn)
                 .build();
     }
+
+
 
 
 

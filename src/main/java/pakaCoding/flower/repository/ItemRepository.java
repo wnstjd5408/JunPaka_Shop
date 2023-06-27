@@ -61,4 +61,13 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
              " where i.id = :itemId")
      Item findAllByItemImagesAndTypeAndBrand(Long itemId);
 
+
+
+     @Query(value = "select distinct i from Item i " +
+             " join fetch i.brand b" +
+             " join i.itemImages ii" +
+             " where b.id = :brandId and ii.repImgYn='Y'",
+     countQuery = "select count(i) from Item i where i.brand.id =: brandId")
+     Page<Item> findBrandItems(Long brandId, Pageable pageable);
+
 }

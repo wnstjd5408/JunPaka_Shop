@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+    <head>
+        <title th:text="${brandName}">1011</title>
+        <meta name="_csrf" th:content="${_csrf.token}"/>
+        <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+
+        <style>
+
+            .profile_image{
+                margin: auto;
+                box-sizing: border-box;
+                position: relative;
+                min-width: 1000px;
+                min-height: 500px;
+                padding: 70px 90px 150px 70px;
+                display: -webkit-box;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-box-pack: justify;
+                -webkit-justify-content: space-between;
+                justify-content: space-between;
+                border-radius: 100px;
+                background-size: cover;
+            }
+
+            .detailComment{
+                word-break: break-all;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                pointer-events: none;
+                overflow-y: scroll;
+            }
+        </style>
+    </head>
+
+
+<th:block layout:fragment="navbar" class="py-5">
+    <th:block th:replace="~{fragments/header :: header}"></th:block>
+</th:block>
+<th:block layout:fragment="section" class="py-5">
+    <div id="item" class="row gx-3 gx-lg-3 row-cols-1 row-cols-md-1 justify-content-center">
+        <div>
+            <hr class="mt-2">
+            <div class="row mt-2 bgImg">
+                <div class="text-center my-1 rounded col-3 profile_image " th:style="'background-image: url('+ @{'/display/fileImage=' + ${brandImage.imgUrl}} +');'">
+                    <strong class="block fw-bold fs-2 mt-5 fs-5 text-white" th:text="${brandName}"></strong>
+                    <div class="block mt-5 fw-bold text-white detailComment" th:text="${brandItemList.getContent().get(0).detailBrandComment}">
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+    <!-- Section-->
+    <th:block layout:fragment="content" class="py-5">
+        <div class="container px-4 px-lg-5 mt-5">
+            <hr class="mt-2">
+
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+                <div class="col mb-5" th:each="item : ${brandItemList}">
+                    <div class="card h-100">
+                        <!-- Product image-->
+                        <img class="card-img-top" th:src="'/display/fileImage='+${item.itemImgURL}" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..." />
+                        <!-- Product details-->
+                        <div class="card-body p-4">
+                            <div class="text-center">
+                                <!-- Product name-->
+                                <h5 class="fw-bolder" th:text="${item.itemName}">Fancy Product</h5>
+                                <!-- Product price-->
+                                <h6 class="fw-light"th:text="|\${item.price}|"></h6>
+                            </div>
+                        </div>
+                        <!-- Product actions-->
+                        <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                            <div class="text-center"><a class="btn btn-outline-dark mt-auto" th:href="@{'/items/' + ${item.itemId}}">View options</a></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <th:block layout:fragment="paging" class="py-5">
+                <!-- page-->
+                <div th:if="${!brandItemList.isEmpty()}">
+                    <nav class="container d-flex align-items-center justify-content-center navbar-light" aria-label="Page navigation example"
+                         th:with="start=${(brandItemList.number/maxPage)*maxPage + 1},
+                  end=(${(brandItemList.totalPages == 0) ? 1 : (start + (maxPage - 1) < brandItemList.totalPages ? start + (maxPage - 1) : brandItemList.totalPages)})">
+
+                        <ul class="pagination justify-content-center">
+                            <li th:classappend="${start > 1}" class="page-item">
+                                <a class="page-link"
+                                   th:href="@{?(page=0)}" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;&laquo;</span>
+                                </a>
+                            </li>
+                            <li th:classappend="${start > 1}" class="page-item">
+                                <a class="page-link"
+                                   th:href="@{?(page=${start - maxPage-1})}" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                            <li th:each="page : ${#numbers.sequence(start, end)}"
+                                th:classappend="${page == brandItemList.number+1} ? 'active'"
+                                class="page-item">
+                                <a th:text="${page}" class="page-link" th:href="@{|?page=${page-1}|}">1</a>
+                            </li>
+                            <li th:if="${end < brandItemList.totalPages}" class ="page-item">
+                                <a class="page-link" th:href="@{?(page=${start + maxPage - 1})}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                            <li th:if="${end < brandItemList.totalPages}" class ="page-item">
+                                <a class="page-link" th:href="@{?(page=${brandItemList.totalPages - 1})}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;&raquo;</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </th:block>
+</html>

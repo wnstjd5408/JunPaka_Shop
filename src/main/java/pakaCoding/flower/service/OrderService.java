@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.stream.Collectors.*;
+
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -94,7 +96,7 @@ public class OrderService {
                         orderMyPageDto.addOrderItemDto(orderItemDto);
                     }
                     return orderMyPageDto;
-                }).collect(Collectors.toList());
+                }).collect(toList());
 
         log.info("주문의 수 : {}", orders.getTotalElements());
         return new PageImpl<>(orderMyPageDtos, pageable, orders.getTotalElements());

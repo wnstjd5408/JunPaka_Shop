@@ -19,4 +19,9 @@ public class MainItemDto {
         this.imgURL = imgURL;
         this.price = price;
     }
+
+
+    public void addImgUrl(String imgURL){
+        this.setImgURL(imgURL);
+    }
 }
