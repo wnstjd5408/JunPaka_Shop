@@ -32,7 +32,6 @@
                 -webkit-box-orient: vertical;
                 overflow: hidden;
                 pointer-events: none;
-                overflow-y: scroll;
             }
         </style>
     </head>
@@ -49,8 +48,6 @@
                 <div class="text-center my-1 rounded col-3 profile_image " th:style="'background-image: url('+ @{'/display/fileImage=' + ${brandImage.imgUrl}} +');'">
                     <strong class="block fw-bold fs-2 mt-5 fs-5 text-white" th:text="${brandName}"></strong>
                     <div class="block mt-5 fw-bold text-white detailComment" th:text="${brandItemList.getContent().get(0).detailBrandComment}">
-
-
                     </div>
                 </div>
             </div>
