@@ -69,7 +69,7 @@
                 <p th:if="${#fields.hasErrors('stockQuantity')}" th:errors="*{stockQuantity}" class="alert-danger alert">Incorrect data</p>
                 <div class="mb-3">
                     <label for ="detailComment" class="form-label">상품 상세 내용</label>
-                    <textarea class="form-control" aria-label="With textarea" style="white-space: pre-line;"
+                    <textarea class="form-control h-50" aria-label="With textarea" style="white-space: pre-line;"
                               th:field="*{detailComment}" id="detailComment"></textarea>
                 </div>
                 <p th:if="${#fields.hasErrors('detailComment')}" th:errors="*{detailComment}" class="alert-danger alert">Incorrect data</p>
