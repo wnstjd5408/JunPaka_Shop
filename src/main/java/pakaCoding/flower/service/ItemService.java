@@ -125,7 +125,7 @@ public class ItemService {
 
 
     @Transactional
-    public Long updateItem(ItemFormDto itemFormDto) {
+    public void updateItem(ItemFormDto itemFormDto) {
 
         log.info("updateItem 사용");
         Item findItem = itemRepository.findById(itemFormDto.getId()).orElseThrow(EntityNotFoundException::new);
@@ -139,15 +139,12 @@ public class ItemService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-
-
-        return findItem.getId();
     }
-
+    @Transactional
     public void deleteItem(Long itemId) {
+        log.info("delete Item Service");
         Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
-
-
-        itemRepository.delete(item);
+        log.info("item.getItemName() = {}",item.getName());
+        item.delete();
     }
 }

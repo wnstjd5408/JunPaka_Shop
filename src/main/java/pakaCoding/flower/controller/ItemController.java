@@ -107,19 +107,17 @@ public class ItemController {
     @PostMapping("/admin/items/{itemId}/delete")
     public String itemDelete(
             @PathVariable(name = "itemId") Long itemId ,
-            BindingResult bindingResult,
             Model model){
 
-        if (bindingResult.hasErrors()) {
-            return "forms/itemForm";
-        }
+
+        log.info("itemDelete 실행");
+
         try{
             itemService.deleteItem(itemId);
 
         }catch (Exception e){
             model.addAttribute("errorMessage", "상품 수정 에러가 발생하였습니다");
             return "forms/itemForm";
-
         }
         return "redirect:/admin/items";
     }

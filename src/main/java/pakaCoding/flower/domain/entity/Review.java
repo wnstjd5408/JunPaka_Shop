@@ -22,7 +22,6 @@ public class Review extends TimeEntity{
     @Column(name = "review_id")
     private Long id;
 
-
     @Column(columnDefinition = "TEXT")
     @NotNull
     private String comment;
@@ -30,7 +29,7 @@ public class Review extends TimeEntity{
     @Column(nullable = false)
     private int rating;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="item_id") //외래키
     private Item item;
 

@@ -51,22 +51,17 @@ public class Item extends BaseEntity {
     @NotNull
     private String delYn;       //삭제여부
 
-    @OneToMany(mappedBy = "item", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "item", cascade = CascadeType.PERSIST)
     private List<ItemImage> itemImages = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private ItemSellStatus itemSellStatus;
 
 
-    public Item delete(String delYn){
-        this.delYn = delYn;
-        return this;
+    public void delete(){
+        this.delYn = "Y";
     }
 
-//    public Flower update(List<FileImage> files){
-//        this.files = files;
-//        return this;
-//    }
 
 
     public void addFiles(List<ItemImage> itemImages){
