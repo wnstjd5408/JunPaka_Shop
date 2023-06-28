@@ -23,6 +23,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
              "from Item i join i.itemImages ii " +
              "where i.type.id = :typeId " +
              "and ii.repImgYn = 'Y' " +
+             "and i.delYn != 'Y'" +
              "and i.id = ii.item.id " +
              "order by i.createDate desc")
      Page<MainItemDto> findAllByTypeIdListDtos(@Param("typeId") int typeId, Pageable pageable);
@@ -35,23 +36,19 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
      @Query ("select new pakaCoding.flower.dto.MainItemDto(i.id, i.name, ii.savedFileImgName, i.price) " +
              "from Item i join i.itemImages ii " +
-             "where ii.repImgYn= 'Y' " +
+             "where ii.repImgYn= 'Y'" +
+             "and i.delYn != 'Y' " +
              "and i.id = ii.item.id " +
              "order by  i.createDate DESC")
      Page<MainItemDto> findItemListDto(Pageable pageable);
 
 
-     @Query("select i from Item i" +
+     @Query("select i from Item i " +
+             "where i.delYn != 'Y'" +
              " order by i.createDate DESC")
      Page<Item> findAdminItems(Pageable pageable);
 
 
-
-
-     @Query("select distinct i from Item i" +
-             " join fetch i.type t " +
-             " where i.id = :itemId")
-     Optional<Item> findAllByType(Long itemId);
 
 
      @Query("select i from Item i" +
@@ -66,7 +63,9 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
      @Query(value = "select distinct i from Item i " +
              " join fetch i.brand b" +
              " join i.itemImages ii" +
-             " where b.id = :brandId and ii.repImgYn='Y'",
+             " where b.id = :brandId" +
+             " and ii.repImgYn='Y' " +
+             " and i.delYn != 'Y' ",
      countQuery = "select count(i) from Item i where i.brand.id =: brandId")
      Page<Item> findBrandItems(Long brandId, Pageable pageable);
 
