@@ -5,8 +5,6 @@
     <title>Item 등록</title>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-
-
     <style>
 
         .real-upload {
@@ -22,7 +20,6 @@
         <div class="py-5 text-center">
             <h3>브랜드 등록</h3>
         </div>
-
         <form th:object="${brandFormDto}" method="post" enctype="multipart/form-data">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
             <div class="mb-3">
@@ -33,7 +30,7 @@
 
             <div class="mb-3">
                 <label for ="detailBrandComment" class="form-label">브랜드 상세 내용</label>
-                <textarea class="form-control" aria-label="With textarea" style="white-space: pre-line;"
+                <textarea class="form-control h-50" rows="10" aria-label="With textarea" style="white-space: pre-line;"
                           th:field="*{detailBrandComment}" id="detailBrandComment"></textarea>
             </div>
             <p th:if="${#fields.hasErrors('detailBrandComment')}" th:errors="*{detailBrandComment}"
@@ -44,9 +41,7 @@
                 <input type="button" class="btn btn-sm btn-outline-secondary form-control" value="이미지 추가"
                        onclick="document.getElementById('brandImages').click();"/>
             </div>
-
             <div class="mb-3 file_input">
-                <label class="form-label" for="addFile">추가 된 이미지</label>
                 <ul class="addFileName" id="addFile">
 
 
