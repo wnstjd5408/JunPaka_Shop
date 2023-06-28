@@ -30,7 +30,6 @@ import java.util.concurrent.CompletableFuture;
 public class ReviewController {
 
     private final TypeService typeService;
-    private final CartService cartService;
     private final ReviewService reviewService;
     private final BrandService brandService;
     private final OrderService orderService;
@@ -39,6 +38,9 @@ public class ReviewController {
     public String review(Principal principal, @RequestParam long orderItemNo, Model model){
 
         if(!orderService.reviewCheck(principal, orderItemNo)){
+            log.info("타로그인으로 사이트 접속");
+            model.addAttribute("errorMessage", "리뷰 권한이 없습니다.");
+
             return "redirect:/";
         }
 
