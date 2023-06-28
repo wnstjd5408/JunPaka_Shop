@@ -18,6 +18,7 @@ import pakaCoding.flower.repository.ItemRepository;
 import pakaCoding.flower.repository.MemberRepository;
 import pakaCoding.flower.repository.OrderRepository;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,6 +36,14 @@ public class OrderService {
     private final ItemImageRepository itemImageRepository;
     private final ItemRepository itemRepository;
 
+
+    public boolean reviewCheck(Principal principal, Long orderItemId){
+        log.info("OrderService reviewCheck 실행");
+
+        Order order = orderRepository.findCheck(orderItemId);
+
+        return order.getMember().getUserid().equals(principal.getName());
+    }
 
     @Transactional
     public Long order(OrderDto orderDto, String userid) {
