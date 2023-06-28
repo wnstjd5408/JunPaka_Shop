@@ -9,24 +9,94 @@
 
         <style>
 
-            .profile_image{
-                margin: auto;
-                box-sizing: border-box;
+            #comment_box{
+                width:100%;
+                max-width:780px;
+                box-sizing:border-box;
+                margin-right: 70px;
+                z-index: 10;
                 position: relative;
-                min-width: 1000px;
-                min-height: 500px;
-                padding: 70px 90px 150px 70px;
-                display: -webkit-box;
-                display: -ms-flexbox;
-                display: flex;
-                -webkit-box-pack: justify;
-                -webkit-justify-content: space-between;
-                justify-content: space-between;
-                border-radius: 100px;
-                background-size: cover;
+                color:#ffffff;
+            }@media (max-width: 540px){
+
+                #comment_box{
+                    display: -webkit-box;
+                    display: -webkit-flex;
+                    display: -ms-flexbox;
+                    display: flex;
+                    margin: 0 22px;
+                    padding-right:35px;
+                }
+            }
+
+            #brand_title{
+                display:block;
+                margin-top:16px;
+                font-size:68px;
+                font-weight:500;
+                line-height:74px;
+                text
+            }
+            @media (max-width: 540px) {
+                #brand_title{
+                    width:100%;
+                    box-sizing:border-box;
+                    margin-top:5px;
+                    font-weight:600;
+                    font-size:36px;
+                    line-height:38px;
+                    word-break:keep-all;
+                    overflow-wrap:break-word;
+                }}@media (max-width:360px){
+                #brand_title{
+                    font-size:30px;
+                    letter-spacing:-0.025em;
+                }
+            }
+
+            #profile_image{
+                box-sizing:border-box;
+                position:relative;
+                z-index:1;
+                min-width:1100px;
+                min-height:500px;
+                padding:70px 90px 150px 70px;
+                background-position:50% 50%;
+                -webkit-background-size:cover;
+                background-size:cover;
+                display:-webkit-box;
+                display:-webkit-flex;
+                display:-ms-flexbox;
+                display:flex;
+                -webkit-box-pack:justify;
+                -webkit-justify-content:space-between;
+                justify-content:space-between;
+            }
+            #profile_image::after{
+                position:absolute;
+                top:0;
+                left:0;
+                right:0;
+                bottom:0;
+                background-color:rgba(0, 0, 0, 0.5);
+                content:'';
+            }
+            @media (max-width: 540px){
+                #profile_image{
+                    width:100%;
+                    min-width:unset;
+                    min-height:unset;
+                    -webkit-flex-direction:column;
+                    -ms-flex-direction:column;
+                    flex-direction:column;
+                    padding:50px 0 0 0;
+                    overflow:hidden;
+                }
             }
 
             .detailComment{
+                margin-top:16px;
+                position: relative;
                 word-break: break-all;
                 display: -webkit-box;
                 -webkit-box-orient: vertical;
@@ -44,10 +114,13 @@
     <div id="item" class="row gx-3 gx-lg-3 row-cols-1 row-cols-md-1 justify-content-center">
         <div>
             <hr class="mt-2">
-            <div class="row mt-2 bgImg">
-                <div class="text-center my-1 rounded col-3 profile_image " th:style="'background-image: url('+ @{'/display/fileImage=' + ${brandImage.imgUrl}} +');'">
-                    <strong class="block fw-bold fs-2 mt-5 fs-5 text-white" th:text="${brandName}"></strong>
-                    <div class="block mt-5 fw-bold text-white detailComment" th:text="${brandItemList.getContent().get(0).detailBrandComment}">
+            <div class="mt-2">
+                <div id="profile_image" class="text-center my-1 rounded"
+                     th:style="'background-image: url('+ @{'/display/fileImage=' + ${brandImage.imgUrl}} +');'">
+                    <div id="comment_box">
+                        <strong class="text-white text-start" th:text="${brandItemList.getContent().get(0).brandName}" id="brand_title"></strong>
+                        <div class=" text-start mt-5 ms-3 fw-bold text-white detailComment" th:text="${brandItemList.getContent().get(0).detailBrandComment}">
+                        </div>
                     </div>
                 </div>
             </div>

@@ -89,7 +89,6 @@ public class BrandController {
         model.addAttribute("maxPage", 5);
         model.addAttribute("types", types);
         model.addAttribute("brands", brands);
-        model.addAttribute("brandName", brandItemList.getContent().get(0).getBrandName());
         model.addAttribute("brandItemList",brandItemList);
         model.addAttribute("brandImage", imageDto);
 
