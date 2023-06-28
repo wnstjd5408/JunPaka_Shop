@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.async.DeferredResult;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pakaCoding.flower.domain.entity.Brand;
+import pakaCoding.flower.domain.entity.Order;
 import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.dto.OrderMyPageDto;
 import pakaCoding.flower.dto.ReviewDto;
@@ -32,16 +33,15 @@ public class ReviewController {
     private final CartService cartService;
     private final ReviewService reviewService;
     private final BrandService brandService;
+    private final OrderService orderService;
 
     @GetMapping("/reviews/form")
     public String review(Principal principal, @RequestParam long orderItemNo, Model model){
-        if(principal != null){
-            model.addAttribute("member", principal.getName());
-            addCartCount(cartService.getCartListCount(principal.getName()), model);
+
+        if(!orderService.reviewCheck(principal, orderItemNo)){
+            return "redirect:/";
         }
-        else{
-            model.addAttribute("cartCount", 0);
-        }
+
         List<Type> types = typeService.allType();
         List<Brand> brands = brandService.findAll();
 
@@ -59,9 +59,6 @@ public class ReviewController {
                          BindingResult bindingResult,
                          Principal principal,
                          Model model){
-
-
-
         if(bindingResult.hasErrors()){
             List<Type> types = typeService.allType();
             List<Brand> brands = brandService.findAll();
@@ -91,6 +88,7 @@ public class ReviewController {
         return "review/reviewList";
 
     }
+
 
     //CartCount 추가
     private void addCartCount(Integer cartService, Model model) {
