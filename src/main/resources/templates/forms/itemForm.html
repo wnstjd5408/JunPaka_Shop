@@ -136,6 +136,9 @@
                 <div class="mb-3" th:unless="${#strings.isEmpty(itemFormDto.id)}">
                     <button th:formaction="@{'/admin/items/' + ${itemFormDto.id} }" type="submit" class="btn btn-sm btn-secondary form-control">수정하기</button>
                 </div>
+                <div class="mb-3" th:unless="${#strings.isEmpty(itemFormDto.id)}">
+                    <button type="submit" th:formaction="@{'/admin/items/' + ${itemFormDto.id}  +'/delete'}"  id="btnDeleteItem" class="btn btn-sm btn-danger form-control">삭제하기</button>
+                </div>
             </form>
         </div>
     </th:block>
@@ -161,6 +164,12 @@
 
 
                 const docFrag = new DocumentFragment();
+
+                $('#btnDeleteItem').click(function (){
+                    if(!confirm('삭제하시면 복구할수 없습니다. \n 정말로 삭제하시겠습니까??')){
+                        return false;
+                    }
+                })
 
                 function fileCheck(e){
                     const files = e.currentTarget.files;

@@ -14,7 +14,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pakaCoding.flower.domain.entity.Brand;
 import pakaCoding.flower.domain.entity.Item;
 import pakaCoding.flower.domain.entity.Type;
-import pakaCoding.flower.dto.*;
+import pakaCoding.flower.dto.AdminItemListDto;
+import pakaCoding.flower.dto.ItemFormDto;
+import pakaCoding.flower.dto.MainItemDto;
 import pakaCoding.flower.service.*;
 
 import java.security.Principal;
@@ -87,22 +89,40 @@ public class ItemController {
     @PostMapping("/admin/items/{itemId}")
     public String itemUpdate(@Valid @ModelAttribute ItemFormDto itemFormDto,
                              BindingResult bindingResult,
-                             Model model){
+                             Model model, @PathVariable String itemId){
         if (bindingResult.hasErrors()) {
             return "forms/itemForm";
         }
-
         try{
             itemService.updateItem(itemFormDto);
+            return "redirect:/admin/items";
         }catch (Exception e){
             model.addAttribute("errorMessage", "상품 수정 에러가 발생하였습니다");
             model.addAttribute("itemFormDto", itemFormDto);
             return "forms/itemForm";
         }
-        model.addAttribute("itemFormDto", itemFormDto);
 
+    }
+
+    @PostMapping("/admin/items/{itemId}/delete")
+    public String itemDelete(
+            @PathVariable(name = "itemId") Long itemId ,
+            Model model){
+
+
+        log.info("itemDelete 실행");
+
+        try{
+            itemService.deleteItem(itemId);
+
+        }catch (Exception e){
+            model.addAttribute("errorMessage", "상품 수정 에러가 발생하였습니다");
+            return "forms/itemForm";
+        }
         return "redirect:/admin/items";
     }
+
+
 
 
 
@@ -147,6 +167,8 @@ public class ItemController {
 
         return "items/itemDetail";
     }
+
+
 
 
 
