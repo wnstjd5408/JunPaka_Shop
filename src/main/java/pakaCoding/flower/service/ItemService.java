@@ -143,4 +143,11 @@ public class ItemService {
 
         return findItem.getId();
     }
+
+    public void deleteItem(Long itemId) {
+        Item item = itemRepository.findById(itemId).orElseThrow(EntityNotFoundException::new);
+
+
+        itemRepository.delete(item);
+    }
 }
