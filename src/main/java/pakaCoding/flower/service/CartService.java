@@ -33,14 +33,13 @@ public class CartService {
 
     //장바구니 담기
     public Long addCart(CartItemDto cartItemDto, String userId){
-        Member member = memberRepository.findByUserid(userId).get();
-        Cart cart = cartRepository.findByMemberId(member.getId());
+        Cart cart = cartRepository.findByMemberUserid(userId);
         //장바구니가 존재하지 않는다면 생성
         if(cart == null){
+            Member member = memberRepository.findByUserid(userId).orElseThrow(EntityNotFoundException::new);
             cart = Cart.createCart(member);
             cartRepository.save(cart);
         }
-        log.info("cart.getMember().getName() ={}", cart.getMember().getUsername());
         Item item = itemRepository.findById(cartItemDto.getItemId())
                 .orElseThrow(EntityNotFoundException::new);
         CartItem cartItem = cartItemRepository.findByCartIdAndItemId(cart.getId(), item.getId());
@@ -65,7 +64,7 @@ public class CartService {
 
         List<CartListDto> cartListDtos = new ArrayList<>();
 
-        Cart cart = cartRepository.findByMemberId(memberRepository.getMemberId(userId));
+        Cart cart = cartRepository.findByMemberUserid(userId);
 
 
         if (cart == null){
@@ -78,7 +77,7 @@ public class CartService {
     @Transactional(readOnly = true)
     public Integer getCartListCount(String userId){
 
-        Cart cart = cartRepository.findByMemberId(memberRepository.getMemberId(userId));
+        Cart cart = cartRepository.findByMemberUserid(userId);
 
         if(cart == null){
             return 0;
