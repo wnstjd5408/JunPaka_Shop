@@ -1,9 +1,6 @@
 package pakaCoding.flower.dto;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,6 +27,7 @@ public class MemberDto {
     private String password;
 
     @NotBlank(message = "이름을 입력해주세요")
+    @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9_-]{3,5}$")
     private String username;
     private Gender gender;
     
