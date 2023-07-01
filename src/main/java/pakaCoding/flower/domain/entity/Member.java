@@ -17,9 +17,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@EqualsAndHashCode(of = {"id"}, callSuper = true)
 @Entity
 @Data
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseEntity {
 
 
@@ -38,6 +40,7 @@ public class Member extends BaseEntity {
     private String password;
 
     @NotNull
+    @Column(unique = true)
     private String username;
 
     @NotNull
