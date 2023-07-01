@@ -22,7 +22,7 @@ public class MemberDto {
     @NotBlank(message = "아이디를 입력해주세요")
     private String userid;
 
-    @Length(min=5, message = "최소 5글자 이상 입력해주세요")
+    @Length(min=5, max = 30, message = "최소 5글자 이상 입력해주세요")
     @NotEmpty(message = "*비밀번호를 다시 입력해주세요")
     private String password;
 
@@ -35,7 +35,7 @@ public class MemberDto {
     private LocalDate birthDate;
 
     @Email(message = "이메일 형식으로 입력해주세요")
-    @NotEmpty(message = "이메일을 입력해주세요")
+    @NotBlank(message = "이메일을 입력해주세요")
     private String email;
     private String zipcode;
     private String streetAdr;
