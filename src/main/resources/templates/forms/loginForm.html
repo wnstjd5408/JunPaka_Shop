@@ -42,20 +42,20 @@
 
             <div class="mb-4">
                 <label class="form-label" for="username">MemberId</label>
-                <input type="text" id="username" placeholder="아이디" th:field="*{username}" class="form-control">
+                <input type="text" id="username" placeholder="아이디" th:field="*{username}" class="form-control" required>
             </div>
             <!--    PWD       -->
             <div class="mb-4">
                 <label class="form-label" for="password">Password</label>
-                <input type="password" id="password" autocomplete="on" th:field="*{password}" class="form-control" placeholder="비밀번호"/>
+                <input type="password" id="password" autocomplete="on" th:field="*{password}" class="form-control" required placeholder="비밀번호"/>
             </div>
 
             <div class="row mb-4">
                 <div class="col d-flex justify-content-center">
                 <!--      checkBoX         -->
                     <div class="form-check">
-                        <input class="test" type="checkbox" id="rememberCheckBox" checked/>
-                        <label class="form-check-label" for="rememberCheckBox">Remember Me</label>
+                        <input class="test form-check-input" type="checkbox" id="rememberMe" name="remember-me" checked/>
+                        <label class="form-check-label" for="rememberMe">Remember ME</label>
                     </div>
 <!--                    -->
                 </div>
@@ -71,9 +71,9 @@
             </div>
 
         </form>
-            <span th:if="${error}" class="text-center">
+            <div th:if="${error}" class="text-center">
                 <p id="valid" class="alert alert-danger" th:text="${exception}"></p>
-            </span>
+            </div>
 
         </div>
     </th:block>
