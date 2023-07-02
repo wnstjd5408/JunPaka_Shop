@@ -15,7 +15,7 @@
                 <h3>회원가입</h3>
             </div>
 
-            <form th:object="${memberDto}" method="post">
+            <form th:object="${memberDto}" id="joinForm" method="post">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 
                 <div class="my-3">
@@ -29,6 +29,12 @@
                     <input type="password" class="form-control" th:field="*{password}" id="userPassword">
                 </div>
                 <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="alert-danger alert">Incorrect data</p>
+                <div class="my-3">
+                    <label for="confirmPassword" class="form-label">비밀번호 확인</label>
+                    <input type="password" class="form-control" id="confirmPassword">
+                </div>
+                <div class="alert alert-success" id="alert-success">비밀번호가 일치합니다.</div>
+                <div class="alert alert-danger" id="alert-danger">비밀번호가 일치하지 않습니다..</div>
                 <div class="my-3">
                     <label for="username" class="form-label">성함</label>
                     <input type="text" class="form-control" th:field="*{username}" id="username">
@@ -73,14 +79,52 @@
                     <input type="text" th:field="*{detailAdr}" class="form-control" >
                 </div>
                 <div class="my-3">
-                    <button type="submit" class="btn btn-secondary form-control">등록하기</button>
+                    <button type="submit" id="join" class="btn btn-secondary form-control">등록하기</button>
                 </div>
             </form>
         </div>
     </th:block>
     <th:block layout:fragment="script">
         <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-        <script>
+        <script th:inline = "javascript" >
+
+            $(function (){
+                $("#alert-success").hide();
+                $("#alert-danger").hide();
+                $("#confirmPassword").keyup(function (){
+                    var pwd1=$("#userPassword").val()
+                    var pwd2=$("#confirmPassword").val()
+
+
+                    if(pwd1 !== "" || pwd2 !== ""){
+                        if(pwd1 == pwd2){
+
+                            $("#alert-success").show();
+                            $("#alert-danger").hide();
+                            compare_result = true;
+                        }
+                        else{
+                            $("#alert-success").hide();
+                            $("#alert-danger").show();
+                            compare_result=false;
+                        }
+                    }
+                });
+            });
+
+            let compare_result = false;
+
+            $(document).ready(function (){
+                $("#join").click(function (){
+
+                    if(!compare_result){
+                        alert("비밀번호가 일치하지 않습니다.")
+                        return;
+                    }
+                    $("#joinForm").submit();
+                })
+            });
+
             function findAddr(){
                 new daum.Postcode({
                     oncomplete: function (data){
