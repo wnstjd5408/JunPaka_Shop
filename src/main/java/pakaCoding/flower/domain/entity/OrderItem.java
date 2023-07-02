@@ -33,6 +33,7 @@ public class OrderItem {
 
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 50)
     @NotNull
     private ReviewStatus reviewStatus; //리뷰여부
 

@@ -51,6 +51,7 @@ public class Item extends BaseEntity {
     private Long hitCount;      //조회수
 
     @NotNull
+    @Column(length = 50)
     private String delYn;       //삭제여부
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.PERSIST)
