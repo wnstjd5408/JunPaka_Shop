@@ -25,6 +25,7 @@ public class Item extends BaseEntity {
     private Long id;            //번호
 
     @Column(name = "item_name", length = 100)
+    @NotNull
     private String name;        //이름
 
     @Column(nullable = false)
@@ -35,6 +36,7 @@ public class Item extends BaseEntity {
 
 
     @Column(length = 1000)
+    @NotNull
     private String detailComment;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -55,6 +57,7 @@ public class Item extends BaseEntity {
     private List<ItemImage> itemImages = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
+    @NotNull
     private ItemSellStatus itemSellStatus;
 
 

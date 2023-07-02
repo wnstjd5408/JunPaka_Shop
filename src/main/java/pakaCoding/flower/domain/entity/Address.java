@@ -2,6 +2,7 @@ package pakaCoding.flower.domain.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -10,10 +11,14 @@ import lombok.Getter;
 @AllArgsConstructor
 public class Address {
 
+    @NotNull
     private String streetAdr;
+
+    @NotNull
     private String detailAdr;
 
     @Column(length = 100)
+    @NotNull
     private String zipcode;
 
 

@@ -1,6 +1,8 @@
 package pakaCoding.flower.domain.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import pakaCoding.flower.domain.constant.ReviewStatus;
@@ -27,6 +29,7 @@ public class Review extends TimeEntity{
     private String comment;
 
     @Column(nullable = false)
+    @NotEmpty
     private int rating;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -3,6 +3,7 @@ package pakaCoding.flower.domain.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -17,8 +18,10 @@ public abstract class TimeEntity {
 
     @CreatedDate
     @Column(updatable = false)
+    @NotNull
     private LocalDateTime createDate;
 
     @LastModifiedDate
+    @NotNull
     private LocalDateTime modifiedDate;
 }
