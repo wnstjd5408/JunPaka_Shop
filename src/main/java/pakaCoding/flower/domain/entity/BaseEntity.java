@@ -4,6 +4,7 @@ package pakaCoding.flower.domain.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -16,11 +17,13 @@ public abstract class BaseEntity extends  TimeEntity{
 
     @CreatedBy
     @Column(updatable = false, length = 100)
+    @NotNull
     private String createdBy;
 
 
     @LastModifiedBy
     @Column(length = 100)
+    @NotNull
     private String modifiedBy;
 
 

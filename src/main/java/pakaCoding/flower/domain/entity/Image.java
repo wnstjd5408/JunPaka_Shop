@@ -1,6 +1,7 @@
 package pakaCoding.flower.domain.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 @Entity
@@ -19,12 +20,15 @@ public abstract class Image extends TimeEntity{
 
     //고객이 업로드한 파일명
     @Column(nullable = false)
+    @NotNull
     private String originFileImgName;
 
     //서버 내부에서 관리하는 파일명명
     @Column(nullable = false)
+    @NotNull
     private String savedFileImgName;
 
+    @NotNull
     private String uploadDir;   //경로명
 
     private String extension;   //확장자
@@ -33,6 +37,7 @@ public abstract class Image extends TimeEntity{
 
     private String contentType; //ContentType
 
+    @NotNull
     private String repImgYn; //대표이미지 여부
 
 

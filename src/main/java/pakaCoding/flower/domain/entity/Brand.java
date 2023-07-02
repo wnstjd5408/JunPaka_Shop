@@ -1,6 +1,7 @@
 package pakaCoding.flower.domain.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,9 +23,11 @@ public class Brand extends TimeEntity{
     private Long id;
 
     @Column(name = "brand_name")
+    @NotNull
     private String name;
 
     @Column(length = 700)
+    @NotNull
     private String brandComment;
 
     @ColumnDefault("0")

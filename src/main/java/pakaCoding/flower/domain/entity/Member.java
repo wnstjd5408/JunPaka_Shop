@@ -40,7 +40,7 @@ public class Member extends BaseEntity {
     private String password;
 
     @NotNull
-    @Column(unique = true)
+    @Column(unique = true, length = 15)
     private String username;
 
     @NotNull
