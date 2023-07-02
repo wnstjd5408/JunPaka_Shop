@@ -23,11 +23,11 @@ public class MemberDto {
     private String userid;
 
     @Length(min=5, max = 30, message = "최소 5글자 이상 입력해주세요")
-    @NotEmpty(message = "*비밀번호를 다시 입력해주세요")
+    @NotEmpty(message = "비밀번호를 다시 입력해주세요")
     private String password;
 
     @NotBlank(message = "이름을 입력해주세요")
-    @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9_-]{3,5}$")
+    @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9_-]{2,5}$", message = "이름은 한글로 2~5자리여야 합니다.")
     private String username;
     private Gender gender;
     
