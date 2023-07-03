@@ -14,4 +14,12 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
 
     @Query("select m.id from Member m where m.userid = :userid")
     Long getMemberId(String userid);
+
+    /* 유효성 검사 - 중복 체크
+     * 중복 : true
+     * 중복이 아닌 경우 : false
+     */
+    boolean existsByUserid(String userId);
+
+    boolean existsByEmail(String email);
 }

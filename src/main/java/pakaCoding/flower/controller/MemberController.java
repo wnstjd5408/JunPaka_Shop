@@ -6,10 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
+import pakaCoding.flower.controller.validator.CheckEmailValidator;
 import pakaCoding.flower.domain.entity.Address;
 import pakaCoding.flower.domain.entity.Brand;
 import pakaCoding.flower.domain.entity.Member;
@@ -22,7 +22,9 @@ import pakaCoding.flower.service.MemberService;
 import pakaCoding.flower.service.TypeService;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -33,6 +35,15 @@ public class MemberController {
     private final TypeService typeService;
     private final MemberService memberService;
     private final BrandService brandService;
+
+    private final CheckEmailValidator checkEmailValidator;
+
+    @InitBinder
+    public void validatorBinder(WebDataBinder binder) {
+
+        binder.addValidators(checkEmailValidator);
+    }
+
 
     @GetMapping("/members/login")
     public String login(@RequestParam(value="error", required = false)String error,
@@ -74,15 +85,27 @@ public class MemberController {
         LocalDate now = LocalDate.now();
 
         if(bindingResult.hasErrors()){
+            /* 회원가입 실패 시 입력 데이터 값 유지 */
+            model.addAttribute("memberDto", memberDto);
+
+            Map<String, String> errorMap = new HashMap<>();
+
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errorMap.put("valid_" + error.getField(), error.getDefaultMessage());
+                log.info("error message : " + error.getDefaultMessage());
+            }
+
             List<Type> types = typeService.allType();
             List<Brand> brands = brandService.findAll();
 
             model.addAttribute("types", types);
             model.addAttribute("brands", brands);
-
             model.addAttribute("now", now);
+            /* 회원가입 페이지로 리턴 */
             return "forms/joinForm";
         }
+
+        // 회원가입 성공 시
         memberService.join(memberDto);
 
         return "redirect:/members/login";
