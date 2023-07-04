@@ -19,16 +19,18 @@ import java.time.LocalDate;
 @Builder
 public class MemberDto {
 
-    @NotBlank(message = "아이디를 입력해주세요")
+    @NotBlank
     private String userid;
 
     @Length(min=5, max = 30, message = "최소 5글자 이상 입력해주세요")
-    @NotEmpty(message = "비밀번호를 다시 입력해주세요")
+    @NotEmpty
     private String password;
 
-    @NotBlank(message = "이름을 입력해주세요")
+    @NotBlank
     @Pattern(regexp = "^[ㄱ-ㅎ가-힣a-z0-9_-]{2,5}$", message = "이름은 한글로 2~5자리여야 합니다.")
     private String username;
+    
+    @NotNull(message = "성별을 입력해주세요")
     private Gender gender;
     
     @NotNull(message = "날짜를 입력해주세요")
