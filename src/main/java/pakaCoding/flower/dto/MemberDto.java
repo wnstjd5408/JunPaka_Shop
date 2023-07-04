@@ -20,10 +20,12 @@ import java.time.LocalDate;
 public class MemberDto {
 
     @NotBlank
+    @Pattern(regexp = "^[a-z0-9]{4,20}$", message = "아이디는 영어 소문자와 숫자만 사용하여 4~20자리여야 합니다.")
     private String userid;
+  
+  
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{5,16}$", message = "비밀번호는 8~16자리수여야 합니다. 영문 대소문자, 숫자, 특수문자를 1개 이상 포함해야 합니다.")
 
-    @Length(min=5, max = 30, message = "최소 5글자 이상 입력해주세요")
-    @NotEmpty
     private String password;
 
     @NotBlank
@@ -36,9 +38,10 @@ public class MemberDto {
     @NotNull(message = "날짜를 입력해주세요")
     private LocalDate birthDate;
 
-    @Email(message = "이메일 형식으로 입력해주세요")
     @NotBlank(message = "이메일을 입력해주세요")
+    @Email
     private String email;
+
     private String zipcode;
     private String streetAdr;
     private String detailAdr;

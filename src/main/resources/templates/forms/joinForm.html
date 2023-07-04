@@ -20,13 +20,24 @@
 
                 <div class="my-3">
                     <label for="userId" class="form-label">아이디</label>
-                    <input type="text" class="form-control" th:field="*{userid}" id="userid">
+                    <div class="d-flex">
+                        <div class="pe-2 flex-grow-1">
+                            <input type="text" class="form-control" th:field="*{userid}" id="userId">
+                        </div>
+                        <div class="ps-2">
+                            <input type="button" class="btn btn-secondary form-control" id="idCheck" onclick="IdCheck()" value="ID Check">
+                        </div>
+                    </div>
+                    <span class="form-text text-muted">아이디는 영어 소문자와 숫자만 사용하여 4~20자리여야 합니다.</span>
                 </div>
+                <div class="alert alert-success" id="id-success"> 아이디가 사용이 가능합니다.</div>
+                <div class="alert alert-warning" id="id-warning"> 아이디가 사용이 불가능합니다.</div>
                 <p th:if="${#fields.hasErrors('userid')}" th:errors="*{userid}" class="alert-danger alert">Incorrect data</p>
 
                 <div class="my-3">
                     <label for="userPassword" class="form-label">비밀번호</label>
                     <input type="password" class="form-control" th:field="*{password}" id="userPassword">
+                    <span class="form-text text-muted">비밀번호는 8~16자리수여야 합니다. 영문 대소문자, 숫자, 특수문자를 1개 이상 포함해야 합니다.</span>
                 </div>
                 <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="alert-danger alert">Incorrect data</p>
                 <div class="my-3">
@@ -87,17 +98,44 @@
     <th:block layout:fragment="script">
         <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
         <script th:inline = "javascript" >
+            $("#id-success").hide();
+            $("#id-warning").hide();
+            const idRegex = /^[a-z0-9]{4,20}$/;
+            let compare_result = false;
+            let idCheck_result = false;
+
+            $(document).ready(function (){
+                $("#join").click(function (){
+                    if(!idCheck_result){
+                        alert("아이디 중복체크는 필수입니다.")
+                        return;
+                    }
+
+                    if(!compare_result){
+                        alert("비밀번호가 일치하지 않습니다.")
+                        return;
+                    }
+
+
+                    $("#joinForm").submit();
+                })
+            });
+
 
             $(function (){
+
                 $("#alert-success").hide();
                 $("#alert-danger").hide();
+
+
+
                 $("#confirmPassword").keyup(function (){
                     var pwd1=$("#userPassword").val()
                     var pwd2=$("#confirmPassword").val()
 
 
                     if(pwd1 !== "" || pwd2 !== ""){
-                        if(pwd1 == pwd2){
+                        if(pwd1 === pwd2){
 
                             $("#alert-success").show();
                             $("#alert-danger").hide();
@@ -112,18 +150,60 @@
                 });
             });
 
-            let compare_result = false;
+            function IdCheck(){
 
-            $(document).ready(function (){
-                $("#join").click(function (){
 
-                    if(!compare_result){
-                        alert("비밀번호가 일치하지 않습니다.")
-                        return;
+                const userId = $("#userId").val();
+                if(userId === ""){
+                    alert("아이디를 입력해주세요!! 필수 항목입니다.")
+                    $("#userId").focus();
+                    return false;
+                }
+                else if (!idRegex.test(userId)){
+                    alert("아이디는 영어 소문자와 숫자만 사용하여 4~20자리여야 합니다.")
+                    $("#userId").focus();
+                    return false;
+                }
+                var url ="/members/"+ userId + "/IdCheck";
+                $.ajax({
+                    url : url,
+                    type: "GET",
+                    contentType : "application/json",
+                    dataType : "json",
+                    cache : false,
+
+                    success : function (result){
+                        if (!result){
+                            $("#id-success").show();
+                            $("#id-warning").hide();
+                            console.log("idCheck_result : ", result);
+                            idCheck_result=true;
+                        }else if(result){
+                            $("#id-success").hide();
+                            $("#id-warning").show();
+                            alert("중복 계정입니다.")
+                            console.log("idCheck_result : ", result);
+                            $("#userId").focus();
+                            idCheck_result=false;
+                        }else{
+                            alert("success이지만 result 값이 undefined 잘못됨");
+                        }
+                        console.log("아이디 중복체크 완료");
+                    },
+                    error : function (jqXHR, status, error){
+                        if (jqXHR.status === '400') {
+                            alert("값을 입력해주세여");
+                        }else{
+                            alert(jqXHR.responseText);
+                        }
                     }
-                    $("#joinForm").submit();
-                })
-            });
+                });
+            }
+
+
+
+            //아이디 Check
+
 
             function findAddr(){
                 new daum.Postcode({
