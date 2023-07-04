@@ -55,14 +55,7 @@ public class ItemController {
                        RedirectAttributes redirectAttributes, Model model) throws Exception {
 
         if(bindingResult.hasErrors()){
-
-
-            Map<String, String> errorMap = new HashMap<>();
-
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errorMap.put("valid_" + error.getField(), error.getDefaultMessage());
-                log.info("error message : " + error.getDefaultMessage());
-            }
+            log.info("{}", bindingResult.getErrorCount());
 
             List<Type> types = typeService.allType();
             List<Brand> brands = brandService.findAll();

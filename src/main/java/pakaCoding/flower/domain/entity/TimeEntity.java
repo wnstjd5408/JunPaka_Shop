@@ -18,10 +18,8 @@ public abstract class TimeEntity {
 
     @CreatedDate
     @Column(updatable = false)
-    @NotNull
     private LocalDateTime createDate;
 
     @LastModifiedDate
-    @NotNull
     private LocalDateTime modifiedDate;
 }
