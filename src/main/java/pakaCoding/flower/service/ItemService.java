@@ -15,10 +15,12 @@ import pakaCoding.flower.domain.entity.Item;
 import pakaCoding.flower.domain.entity.ItemImage;
 import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.dto.*;
+import pakaCoding.flower.repository.ItemImageRepository;
 import pakaCoding.flower.repository.ItemRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 
@@ -28,6 +30,7 @@ import static java.util.stream.Collectors.*;
 public class ItemService {
     private final ItemRepository itemRepository;
     private final ImageService imageService;
+    private final ItemImageRepository itemImageRepository;
 
     @Transactional
     public Long saveItem(ItemFormDto itemFormDto) throws Exception {
@@ -115,11 +118,33 @@ public class ItemService {
     public Page<MainItemDto> findItemsType(int typeId, int page){
         Pageable pageable = PageRequest.of(page, 16);
         log.info("Item Service findItemsType 시작");
-        log.info("findItemsType 함수를 사용한 service repository 개수 ={}",
-                itemRepository.findAllByTypeIdListDtos(typeId, pageable).stream().count());
         Page<MainItemDto> itemList = itemRepository.findAllByTypeIdListDtos(typeId, pageable);
         List<MainItemDto> itemDtoList = itemList.getContent();
         return new PageImpl<>(itemDtoList, pageable, itemList.getTotalElements());
+    }
+
+    @Transactional(readOnly = true)
+    public Page<MainItemDto> findItemsTypeOrgin(int typeId, int page){
+        Pageable pageable = PageRequest.of(page, 16);
+        log.info("Item Service findItemsTypeOrgin 시작");
+
+        Page<Item> items = itemRepository.findAllByTypeId(typeId, pageable);
+
+
+        List<MainItemDto> mainItemDtos = items.stream()
+                .map(item -> {
+                    MainItemDto mainItemDto = MainItemDto.builder()
+                            .id(item.getId())
+                            .price(item.getPrice())
+                            .itemName(item.getName())
+                            .build();
+
+                    ItemImage image = itemImageRepository.findByItemIdAndRepImgYn(item.getId(), "Y");
+                    mainItemDto.addImgUrl(image.getSavedFileImgName());
+                    return mainItemDto;
+                }).collect(toList());
+
+        return new PageImpl<>(mainItemDtos, pageable, items.getTotalElements());
     }
 
 
