@@ -32,9 +32,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
      @Query(value = "select i from Item i" +
              " join i.itemImages ii" +
              " where i.type.id = :typeId" +
-             " and ii.repImgYn = 'Y' " +
              " and i.delYn != 'Y'" +
-             " and i.id = ii.item.id " +
              " order by i.createDate desc ",
              countQuery = "select count(i) from Item i where i.type.id = :typeId and i.delYn != 'Y'")
      Page<Item> findAllByTypeId(@Param("typeId") int typeId, Pageable pageable);
