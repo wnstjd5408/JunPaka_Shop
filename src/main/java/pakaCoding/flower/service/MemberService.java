@@ -30,6 +30,11 @@ public class MemberService{
 
     }
 
+    @Transactional(readOnly = true)
+    public boolean checkUserIdDuplication(String userId){
+        return memberRepository.existsByUserid(userId);
+    }
+
 
     @Transactional(readOnly = true)
     public boolean checkEmailDuplication(String email){
