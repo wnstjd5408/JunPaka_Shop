@@ -24,8 +24,8 @@ public class MemberDto {
     private String userid;
   
   
-    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{5,16}$", message = "비밀번호는 8~16자리수여야 합니다. 영문 대소문자, 숫자, 특수문자를 1개 이상 포함해야 합니다.")
-
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[$@$!%*#?&])[A-Za-z\\d$@$!%*#?&]{5,16}$",
+            message = "비밀번호는 8~16자리수여야 합니다. 영문 대소문자, 숫자, 특수문자를 1개 이상 포함해야 합니다.")
     private String password;
 
     @NotBlank
@@ -50,7 +50,6 @@ public class MemberDto {
 
     /* DTO -> Entity*/
     public Member toEntity(){
-
         return Member.builder()
                 .userid(userid)
                 .password(password)
@@ -59,7 +58,7 @@ public class MemberDto {
                 .birthDate(birthDate)
                 .address(new Address(streetAdr, detailAdr, zipcode))
                 .email(email)
-                .role(role.USER)
+                .role(Role.USER)
                 .build();
     }
 }
