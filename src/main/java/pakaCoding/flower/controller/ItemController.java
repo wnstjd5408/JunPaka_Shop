@@ -185,7 +185,7 @@ public class ItemController {
 
         isPrincipal(principal, model);
 
-        Page<MainItemDto> items = itemService.findAllItems(page);
+        Page<MainItemDto> items = itemService.findAllItemsOrigin(page);
         log.info("Item 전체 수 = {}", items.getTotalElements());
         List<Type> types = typeService.allType();
         List<Brand> brands = brandService.findAll();

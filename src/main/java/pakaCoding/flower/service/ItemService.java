@@ -20,7 +20,6 @@ import pakaCoding.flower.repository.ItemRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.*;
 
@@ -113,6 +112,29 @@ public class ItemService {
         return new PageImpl<>(itemDtoList, pageable, itemList.getTotalElements());
     }
 
+    public Page<MainItemDto> findAllItemsOrigin(int page){
+        Pageable pageable = PageRequest.of(page, 8);
+
+        Page<Item> itemList = itemRepository.findItems(pageable);
+
+        List<MainItemDto> mainItemDtos = itemList.stream()
+                .map(item -> {
+                    MainItemDto mainItemDto = MainItemDto.builder()
+                            .id(item.getId())
+                            .price(item.getPrice())
+                            .itemName(item.getName())
+                            .build();
+
+                    mainItemDto.addImgUrl(item.getItemImages().get(0).getSavedFileImgName());
+                    return mainItemDto;
+                }).toList();
+
+        return new PageImpl<>(mainItemDtos, pageable, itemList.getTotalElements());
+
+    }
+
+
+
     @Transactional(readOnly = true)
     //type별로 출력
     public Page<MainItemDto> findItemsType(int typeId, int page){
@@ -139,13 +161,15 @@ public class ItemService {
                             .itemName(item.getName())
                             .build();
 
-                    ItemImage image = itemImageRepository.findByItemIdAndRepImgYn(item.getId(), "Y");
-                    mainItemDto.addImgUrl(image.getSavedFileImgName());
+                    mainItemDto.addImgUrl(item.getItemImages().get(0).getSavedFileImgName());
                     return mainItemDto;
                 }).collect(toList());
 
         return new PageImpl<>(mainItemDtos, pageable, items.getTotalElements());
     }
+
+
+
 
 
 
