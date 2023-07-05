@@ -17,6 +17,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
              "where i.type.id = :typeId " +
              "and ii.repImgYn = 'Y' " +
              "and i.delYn = 'N'" +
+             "and i.id = ii.item.id " +
              "order by i.createDate desc")
      Page<MainItemDto> findAllByTypeIdListDtos(int typeId, Pageable pageable);
 
@@ -35,6 +36,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
              "from Item i join i.itemImages ii " +
              "where ii.repImgYn= 'Y'" +
              "and i.delYn = 'N' " +
+             "and i.id = ii.item.id " +
              "order by  i.createDate DESC")
      Page<MainItemDto> findItemListDto(Pageable pageable);
 

@@ -42,7 +42,7 @@ public class CartController {
             model.addAttribute("types", types);
             model.addAttribute("brands", brands);
 
-            List<CartListDto> cartListDtos = cartService.getCartList(principal.getName());
+            List<CartListDto> cartListDtos = cartService.findCartItemList(principal.getName());
             log.info("carListDtos의 사이즈 = {}", cartListDtos.size());
             model.addAttribute("member", principal.getName());
             if (cartListDtos.size() != 0){

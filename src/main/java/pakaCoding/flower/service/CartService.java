@@ -75,6 +75,33 @@ public class CartService {
     }
 
     @Transactional(readOnly = true)
+    public List<CartListDto> findCartItemList(String userId){
+
+        List<CartListDto> cartListDtos = new ArrayList<>();
+
+        Cart cart = cartRepository.findByMemberUserid(userId);
+
+        if (cart == null){
+            return cartListDtos;
+        }
+        List<CartItem> cartItems = cartItemRepository.findCartItems(cart.getId());
+
+        cartItems.forEach(cartItem -> {
+            CartListDto cartListDto = CartListDto.builder()
+                    .cartItemId(cartItem.getId())
+                    .price(cartItem.getItem().getPrice())
+                    .itemName(cartItem.getItem().getName())
+                    .count(cartItem.getCount())
+                    .imgUrl(cartItem.getItem().getItemImages().get(0).getSavedFileImgName())
+                    .build();
+            cartListDtos.add(cartListDto);
+        });
+
+        return cartListDtos;
+    }
+
+
+    @Transactional(readOnly = true)
     public Integer getCartListCount(String userId){
 
         Cart cart = cartRepository.findByMemberUserid(userId);
