@@ -10,10 +10,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import pakaCoding.flower.domain.entity.Brand;
+import pakaCoding.flower.domain.entity.Type;
 import pakaCoding.flower.dto.CartItemDto;
 import pakaCoding.flower.dto.CartListDto;
 import pakaCoding.flower.dto.CartOrderDto;
+import pakaCoding.flower.service.BrandService;
 import pakaCoding.flower.service.CartService;
+import pakaCoding.flower.service.TypeService;
 
 import java.security.Principal;
 import java.util.List;
@@ -25,11 +29,19 @@ public class CartController {
 
 
     private final CartService cartService;
+    private final BrandService brandService;
+    private final TypeService typeService;
 
     //장바구니 조회
     @GetMapping("/cart")
     public String cartList(Principal principal, Model model){
         if (principal != null){
+            List<Type> types = typeService.allType();
+            List<Brand> brands = brandService.findAll();
+
+            model.addAttribute("types", types);
+            model.addAttribute("brands", brands);
+
             List<CartListDto> cartListDtos = cartService.getCartList(principal.getName());
             log.info("carListDtos의 사이즈 = {}", cartListDtos.size());
             model.addAttribute("member", principal.getName());
