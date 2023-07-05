@@ -34,7 +34,6 @@ public class BrandService {
 
     private final BrandRepository brandRepository;
     private final ItemRepository itemRepository;
-    private final BrandImageRepository brandImageRepository;
     private final ImageService imageService;
 
     public List<Brand> findAll(){
