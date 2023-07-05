@@ -12,11 +12,17 @@ public class MainItemDto {
     private String imgURL;
     private Integer price;
 
-    @Builder
     public MainItemDto(Long id, String itemName, String imgURL, Integer price) {
         this.id = id;
         this.itemName = itemName;
         this.imgURL = imgURL;
+        this.price = price;
+    }
+
+    @Builder
+    public MainItemDto(Long id, String itemName,Integer price) {
+        this.id = id;
+        this.itemName = itemName;
         this.price = price;
     }
 

@@ -9,6 +9,5 @@ import java.util.Optional;
 
 public interface CartRepository extends JpaRepository<Cart, Long> {
 
-    @Query("select c from Cart c join fetch c.member m where m.userid = :userId")
     Cart findByMemberUserid(String userId);
 }

@@ -29,7 +29,6 @@ public class Review extends TimeEntity{
     private String comment;
 
     @Column(nullable = false)
-    @NotEmpty
     private int rating;
 
     @ManyToOne(fetch = FetchType.LAZY)
