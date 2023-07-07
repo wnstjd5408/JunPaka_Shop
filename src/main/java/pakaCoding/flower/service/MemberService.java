@@ -22,7 +22,6 @@ public class MemberService{
 
     @Transactional
     public Long join(MemberDto dto){
-
         dto.setPassword(encoder.encode(dto.getPassword()));
 
         log.info("DB에 회원 저장 성공");

@@ -11,6 +11,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import pakaCoding.flower.controller.validator.CheckEmailValidator;
+import pakaCoding.flower.controller.validator.CheckPhoneNumberValidator;
 import pakaCoding.flower.domain.entity.Address;
 import pakaCoding.flower.domain.entity.Brand;
 import pakaCoding.flower.domain.entity.Member;
@@ -38,11 +39,13 @@ public class MemberController {
     private final BrandService brandService;
 
     private final CheckEmailValidator checkEmailValidator;
+    private final CheckPhoneNumberValidator checkPhoneNumberValidator;
 
     @InitBinder
     public void validatorBinder(WebDataBinder binder) {
 
         binder.addValidators(checkEmailValidator);
+        binder.addValidators(checkPhoneNumberValidator);
     }
 
 
