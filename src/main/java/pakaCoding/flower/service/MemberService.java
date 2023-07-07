@@ -25,6 +25,12 @@ public class MemberService{
 
         dto.setPassword(encoder.encode(dto.getPassword()));
 
+        String pn = dto.getPhoneNumber();
+        String phoneNumberPlusBar = pn.substring(0,3) + "-" +  pn.substring(3,7) + "-" + pn.substring(7,11);
+        log.info("phoneNumber = {}", phoneNumberPlusBar);
+
+        dto.setPhoneNumber(phoneNumberPlusBar);
+
         log.info("DB에 회원 저장 성공");
         return memberRepository.save(dto.toEntity()).getId();
 

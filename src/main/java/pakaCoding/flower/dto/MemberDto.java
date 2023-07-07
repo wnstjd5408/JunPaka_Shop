@@ -50,7 +50,6 @@ public class MemberDto {
     private String zipcode;
     private String streetAdr;
     private String detailAdr;
-    private Role role;
 
 
     /* DTO -> Entity*/

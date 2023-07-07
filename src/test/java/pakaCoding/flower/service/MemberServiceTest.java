@@ -1,5 +1,6 @@
 package pakaCoding.flower.service;
 
+import jakarta.persistence.EntityExistsException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,8 +11,13 @@ import org.springframework.transaction.annotation.Transactional;
 import pakaCoding.flower.domain.constant.Gender;
 import pakaCoding.flower.domain.constant.Role;
 import pakaCoding.flower.domain.entity.Address;
+import pakaCoding.flower.domain.entity.Brand;
 import pakaCoding.flower.domain.entity.Member;
+import pakaCoding.flower.domain.entity.Type;
+import pakaCoding.flower.dto.MemberDto;
+import pakaCoding.flower.repository.BrandRepository;
 import pakaCoding.flower.repository.MemberRepository;
+import pakaCoding.flower.repository.TypeRepository;
 
 import java.time.LocalDate;
 
@@ -22,27 +28,37 @@ class MemberServiceTest {
 
 
     @Autowired
+    MemberService memberService;
+
+    @Autowired
     MemberRepository memberRepository;
 
 
-    @DisplayName("insert time 확인")
     @Test
-    void insertTime(){
-        Member member = getMember();
-        member.setEmail("ABC@naver.com");
+    @DisplayName("Join Test")
+    void joinTest(){
 
-        Member findMember = memberRepository.findById(member.getId()).orElseThrow(RuntimeException::new);
+        MemberDto newMember = MemberDto.builder().birthDate(LocalDate.of(1997, 7, 19))
+                .email("abcd@gmail.com")
+                .detailAdr("나")
+                .streetAdr("가")
+                .zipcode("다")
+                .userid("test")
+                .password("1234")
+                .username("테스트")
+                .gender(Gender.MAN)
+                .phoneNumber("01029501671")
+                .build();
 
-        //then
-        Assertions.assertThat(findMember.getCreateDate()).isNotNull();
-        Assertions.assertThat(findMember.getModifiedDate()).isNotNull();
-    }
+
+        Long joinId = memberService.join(newMember);
 
 
+        Member findMember = memberRepository.findById(joinId).orElseThrow(EntityExistsException::new);
 
-    private Member getMember() {
-        Member member = new Member("wnstjd5408@naver.com", "12345", "admin", "테스트", Gender.MAN, LocalDate.now(), Role.ADMIN, new Address("가", "나", "다"));
-        memberRepository.save(member);
-        return member;
+
+        System.out.println("findMember.getPhoneNumber :" + findMember.getPhoneNumber());
+
+
     }
 }
