@@ -49,7 +49,7 @@ public class Member extends BaseEntity {
 
 
     @NotNull
-    @Size(min = 11, max = 11)
+    @Size(min = 13, max = 13)
     @Column(name = "phone_number")
     private String phoneNumber;
 
@@ -75,7 +75,8 @@ public class Member extends BaseEntity {
     private List<Order> orders = new ArrayList<>();
 
     @Builder
-    public Member(String email, String password, String userid, String username, Gender gender, LocalDate birthDate, Role role, Address address) {
+    public Member(String email, String password, String userid, String username, Gender gender, LocalDate birthDate,
+                  Role role, Address address, String phoneNumber) {
         this.email = email;
         this.password = password;
         this.username = username;
@@ -84,5 +85,6 @@ public class Member extends BaseEntity {
         this.birthDate = birthDate;
         this.role = role;
         this.address = address;
+        this.phoneNumber=phoneNumber;
     }
 }

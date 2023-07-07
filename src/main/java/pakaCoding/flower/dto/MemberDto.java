@@ -42,6 +42,11 @@ public class MemberDto {
     @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$", message = "이메일 형식이 올바르지 않습니다.")
     private String email;
 
+    @NotNull
+    @Pattern(regexp = "^\\d{11}$", message = "핸드폰 형식이 올바르지 않습니다.")
+    private String phoneNumber;
+
+
     private String zipcode;
     private String streetAdr;
     private String detailAdr;
@@ -58,6 +63,7 @@ public class MemberDto {
                 .birthDate(birthDate)
                 .address(new Address(streetAdr, detailAdr, zipcode))
                 .email(email)
+                .phoneNumber(phoneNumber)
                 .role(Role.USER)
                 .build();
     }
