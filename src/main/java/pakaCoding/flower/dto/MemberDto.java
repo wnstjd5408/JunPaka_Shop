@@ -38,7 +38,7 @@ public class MemberDto {
     @NotNull(message = "날짜를 입력해주세요")
     private LocalDate birthDate;
 
-    @NotBlank(message = "이메일을 입력해주세요")
+    @NotBlank
     @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+.[A-Za-z]{2,6}$", message = "이메일 형식이 올바르지 않습니다.")
     private String email;
 
@@ -62,7 +62,8 @@ public class MemberDto {
                 .birthDate(birthDate)
                 .address(new Address(streetAdr, detailAdr, zipcode))
                 .email(email)
-                .phoneNumber(phoneNumber)
+                .phoneNumber(phoneNumber.substring(0,3) + "-" +  phoneNumber.substring(3,7)
+                        + "-" + phoneNumber.substring(7,11))
                 .role(Role.USER)
                 .build();
     }
