@@ -24,16 +24,6 @@ public class ReviewFormDto {
     private List<MultipartFile> multipartFile;
 
 
-    /*
-     리뷰 이미지 파일 저장시 사용
-     */
-    //DTO -> Review
-    public Review toEntity() {
-        return Review.builder()
-                .rating(rating)
-                .comment(comment)
-                .build();
 
-    }
 
 }

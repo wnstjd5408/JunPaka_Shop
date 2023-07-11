@@ -10,7 +10,6 @@ import pakaCoding.flower.domain.constant.ReviewStatus;
 import java.util.ArrayList;
 import java.util.List;
 
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

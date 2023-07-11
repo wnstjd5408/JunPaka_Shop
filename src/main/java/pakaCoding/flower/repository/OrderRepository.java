@@ -14,7 +14,7 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             " join o.orderItems oi" +
             " where o.member.userid= :userId" +
             " order by o.createDate desc")
-    Page<Order> findOrders(String userId, Pageable pageable);
+    Page<Order> findOrders(@Param("userId") String userId, Pageable pageable);
 
 
     @Query(value = "select o from Order o " +
