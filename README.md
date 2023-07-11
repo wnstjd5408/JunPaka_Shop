@@ -16,5 +16,5 @@ For builiding and running the application you need
 
 ## ERD
 
-<img src="https://github.com/wnstjd5408/JunPaka_Shop/assets/73061276/af3d17dd-07c4-4ddb-a4c5-d38278451860"  width="700" height="500">
+<img src="https://github.com/wnstjd5408/JunPaka_Shop/assets/73061276/8fde9b1a-7d78-4b25-a5e5-7ba5f7a62796"  width="700" height="500">
 
