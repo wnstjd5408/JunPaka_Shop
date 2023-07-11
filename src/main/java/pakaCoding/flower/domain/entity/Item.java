@@ -15,8 +15,6 @@ import java.util.List;
 @Entity
 @Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
-@Builder
 public class Item extends BaseEntity {
 
     @Id
@@ -50,7 +48,6 @@ public class Item extends BaseEntity {
     @ColumnDefault("0")
     private Long hitCount;      //조회수
 
-    @NotNull
     @Column(length = 50)
     private String delYn;       //삭제여부
 
@@ -58,7 +55,6 @@ public class Item extends BaseEntity {
     private List<ItemImage> itemImages = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
-    @NotNull
     private ItemSellStatus itemSellStatus;
 
 
@@ -73,6 +69,20 @@ public class Item extends BaseEntity {
         itemImages.forEach(ii -> ii.setItem(this));
     }
 
+    @Builder
+    public Item(Long id, String name, int price, int stockQuantity, String detailComment,
+                Type type, Brand brand, Long hitCount, String delYn, List<ItemImage> itemImages, ItemSellStatus itemSellStatus) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+        this.detailComment = detailComment;
+        this.type = type;
+        this.brand = brand;
+        this.hitCount = hitCount;
+        this.delYn = delYn;
+        this.itemSellStatus = itemSellStatus;
+    }
 
     @Builder
     public Item(ItemFormDto itemFormDto) {
@@ -81,6 +91,7 @@ public class Item extends BaseEntity {
         this.stockQuantity = itemFormDto.getStockQuantity();
         this.detailComment = itemFormDto.getDetailComment();
         this.type = itemFormDto.getType();
+        this.brand = itemFormDto.getBrand();
         this.itemSellStatus =itemFormDto.getItemSellStatus();
         this.hitCount = 0L;
         this.delYn = "N";

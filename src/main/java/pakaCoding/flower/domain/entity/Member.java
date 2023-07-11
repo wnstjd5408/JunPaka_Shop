@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -46,6 +47,12 @@ public class Member extends BaseEntity {
     @NotNull
     private String userid;
 
+
+    @NotNull
+    @Size(min = 13, max = 13)
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
     @Enumerated(EnumType.STRING)
     @Column(length = 20)
     @NotNull
@@ -68,7 +75,8 @@ public class Member extends BaseEntity {
     private List<Order> orders = new ArrayList<>();
 
     @Builder
-    public Member(String email, String password, String userid, String username, Gender gender, LocalDate birthDate, Role role, Address address) {
+    public Member(String email, String password, String userid, String username, Gender gender, LocalDate birthDate,
+                  Role role, Address address, String phoneNumber) {
         this.email = email;
         this.password = password;
         this.username = username;
@@ -77,5 +85,6 @@ public class Member extends BaseEntity {
         this.birthDate = birthDate;
         this.role = role;
         this.address = address;
+        this.phoneNumber=phoneNumber;
     }
 }

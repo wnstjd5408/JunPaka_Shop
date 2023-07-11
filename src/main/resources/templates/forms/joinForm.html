@@ -51,6 +51,12 @@
                     <input type="text" class="form-control" th:field="*{username}" id="username">
                 </div>
                 <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="alert-danger alert">Incorrect data</p>
+                <div class="my-3">
+                    <label for="phoneNumber" class="form-label">핸드폰번호</label>
+                    <input type="text" class="form-text form-control" id="phoneNumber" th:field="*{phoneNumber}">
+                    <span class="form-text text-muted">핸드폰번호는 '-' 빼고 11자리를 입력해주세요</span>
+                </div>
+                <p th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="alert-danger alert">Incorrect data</p>
 
                 <div class="my-3">
                     <label for="gender" class="form-label">성별</label>

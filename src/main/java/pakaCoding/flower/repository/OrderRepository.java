@@ -11,11 +11,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
 
 
     @Query(value = "select o from Order o" +
-            " join fetch o.member " +
             " join o.orderItems oi" +
             " where o.member.userid= :userId" +
-            " order by o.createDate desc",
-    countQuery = "select count(o) from Order o where o.member.userid = :userId")
+            " order by o.createDate desc")
     Page<Order> findOrders(String userId, Pageable pageable);
 
 

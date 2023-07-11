@@ -125,7 +125,8 @@ class OrderServiceTest {
 
 
     private Member getMember() {
-        Member member = new Member("wnstjd5408@naver.com", "12345", "test", "테스트", Gender.MAN, LocalDate.now(), Role.ADMIN, new Address("가", "나", "다"));
+        Member member = new Member("wnstjd5408@naver.com", "12345", "test",
+                "테스트", Gender.MAN, LocalDate.now(), Role.ADMIN, new Address("가", "나", "다"),"010");
         memberRepository.save(member);
         return member;
     }

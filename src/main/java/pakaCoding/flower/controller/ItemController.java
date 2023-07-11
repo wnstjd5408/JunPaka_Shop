@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pakaCoding.flower.domain.entity.Brand;
@@ -20,7 +21,9 @@ import pakaCoding.flower.dto.MainItemDto;
 import pakaCoding.flower.service.*;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @Slf4j
@@ -52,6 +55,8 @@ public class ItemController {
                        RedirectAttributes redirectAttributes, Model model) throws Exception {
 
         if(bindingResult.hasErrors()){
+            log.info("{}", bindingResult.getErrorCount());
+
             List<Type> types = typeService.allType();
             List<Brand> brands = brandService.findAll();
 
@@ -91,6 +96,7 @@ public class ItemController {
                              BindingResult bindingResult,
                              Model model, @PathVariable String itemId){
         if (bindingResult.hasErrors()) {
+            log.info("바인딩 에러");
             return "forms/itemForm";
         }
         try{
@@ -179,7 +185,7 @@ public class ItemController {
 
         isPrincipal(principal, model);
 
-        Page<MainItemDto> items = itemService.findAllItems(page);
+        Page<MainItemDto> items = itemService.findAllItemsOrigin(page);
         log.info("Item 전체 수 = {}", items.getTotalElements());
         List<Type> types = typeService.allType();
         List<Brand> brands = brandService.findAll();
@@ -213,7 +219,7 @@ public class ItemController {
 
         log.info("ItemController 실행");
 
-        Page<MainItemDto> itemsType = itemService.findItemsType(typeId, page);
+        Page<MainItemDto> itemsType = itemService.findItemsTypeOrgin(typeId, page);
         List<Type> types = typeService.allType();
         List<Brand> brands = brandService.findAll();
 
